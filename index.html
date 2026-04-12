@@ -5,778 +5,789 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Weekly Content Machine</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   :root {
-    --navy: #1a2744;
-    --cream: #f8f7f4;
-    --gold: #d4a574;
-    --light-gold: #f5ead8;
+    --navy: #0f1a2e;
+    --deep: #0a1220;
+    --cream: #faf9f6;
+    --gold: #c9975b;
+    --gold-light: rgba(201,151,91,.15);
+    --gold-glow: rgba(201,151,91,.35);
     --lavender: #7c8dc8;
-    --slate: #4a5568;
-    --warm-gray: #6b7280;
-    --white: #fff;
-    --green: #38a169;
-    --yellow: #d69e2e;
-    --red: #e53e3e;
-    --blue: #3182ce;
+    --lav-light: rgba(124,141,200,.15);
+    --slate: #94a3b8;
+    --green: #4ade80;
+    --green-light: rgba(74,222,128,.12);
+    --white: #ffffff;
+    --glass: rgba(255,255,255,.06);
+    --glass-border: rgba(255,255,255,.1);
+    --glass-bright: rgba(255,255,255,.1);
+    --red: #f87171;
+    --red-light: rgba(248,113,113,.12);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--navy); }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--deep);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: -40%; left: -20%;
+    width: 80%; height: 80%;
+    background: radial-gradient(circle, rgba(124,141,200,.08) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -30%; right: -10%;
+    width: 60%; height: 60%;
+    background: radial-gradient(circle, rgba(201,151,91,.06) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
 
-  /* --- TOP BAR --- */
-  .top { background: var(--navy); color: var(--cream); padding: 14px 28px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-  .top h1 { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
-  .top .right { display: flex; gap: 12px; align-items: center; }
-  .top .right a { color: var(--gold); text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--gold); border-radius: 5px; }
-  .top .right a:hover { background: var(--gold); color: var(--navy); }
-  .top .date { font-size: 13px; opacity: .7; }
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+  }
+  .glass-bright {
+    background: var(--glass-bright);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 16px;
+  }
 
-  /* --- VIEWS --- */
-  .view-toggle { display: flex; background: var(--white); border-bottom: 2px solid var(--navy); padding: 0 20px; }
-  .vtab { padding: 12px 22px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; color: var(--warm-gray); }
-  .vtab:hover { color: var(--navy); }
-  .vtab.active { color: var(--navy); border-bottom-color: var(--gold); }
+  /* TOP */
+  .top {
+    position: sticky; top: 0; z-index: 100;
+    padding: 14px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,18,32,.9);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .top h1 { font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--gold); }
+  .top .links { display: flex; gap: 8px; }
+  .top .links a {
+    color: var(--slate); text-decoration: none; font-size: 12px; font-weight: 600;
+    padding: 6px 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; transition: all .2s;
+  }
+  .top .links a:hover { color: var(--gold); border-color: var(--gold); }
 
-  .view { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
-  .view.active { display: block; }
+  .main { max-width: 960px; margin: 0 auto; padding: 32px 24px; position: relative; z-index: 1; }
 
-  /* --- FLOW DIAGRAM --- */
-  .flow { display: flex; gap: 0; align-items: stretch; margin: 20px 0; overflow-x: auto; padding-bottom: 8px; }
-  .flow-step { flex: 1; min-width: 180px; position: relative; }
-  .flow-card {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 20px 16px;
+  /* STEPS BAR */
+  .steps-bar { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 32px; }
+  .step-dot {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; cursor: pointer; transition: all .3s;
+    border: 2px solid rgba(255,255,255,.1); color: var(--slate);
+    background: var(--glass); backdrop-filter: blur(10px); position: relative;
+  }
+  .step-dot.active { border-color: var(--gold); color: var(--navy); background: var(--gold); box-shadow: 0 0 24px var(--gold-glow); }
+  .step-dot.completed { border-color: var(--green); color: var(--deep); background: var(--green); }
+  .step-dot .step-label {
+    position: absolute; top: 48px; font-size: 10px; font-weight: 600;
+    letter-spacing: .5px; white-space: nowrap; color: var(--slate);
+  }
+  .step-dot.active .step-label { color: var(--gold); }
+  .step-line { width: 48px; height: 2px; background: rgba(255,255,255,.08); }
+  .step-line.done { background: var(--green); }
+
+  .step-panel { display: none; animation: fadeUp .4s ease; }
+  .step-panel.active { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+  h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .subtitle { font-size: 13px; color: var(--slate); margin-bottom: 24px; line-height: 1.5; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin: 28px 0 12px; }
+
+  .card { padding: 24px; margin-bottom: 16px; }
+  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+
+  /* ARC BUILDER */
+  .arc-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .arc-tag {
+    width: 100px; flex-shrink: 0; padding: 8px 0; text-align: center; border-radius: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+  }
+  .arc-tag.hook { background: rgba(255,255,255,.1); color: var(--cream); }
+  .arc-tag.tpc { background: var(--lav-light); color: var(--lavender); }
+  .arc-tag.aeq { background: var(--gold-light); color: var(--gold); }
+  .arc-tag.demo { background: var(--green-light); color: var(--green); }
+  .arc-tag.cta { background: var(--red-light); color: var(--red); }
+
+  input[type="text"], textarea {
+    width: 100%; padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,.1); border-radius: 8px;
+    background: rgba(255,255,255,.04); color: var(--cream);
+    font-size: 14px; font-family: 'Inter', sans-serif; transition: border-color .2s;
+  }
+  input:focus, textarea:focus { outline: none; border-color: var(--gold); background: rgba(255,255,255,.06); }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,.25); }
+  textarea { min-height: 60px; resize: vertical; line-height: 1.6; }
+
+  /* VOICE RECORDER */
+  .voice-zone {
+    border: 2px dashed rgba(255,255,255,.1);
+    border-radius: 16px;
+    padding: 32px;
     text-align: center;
-    border: 2px solid #e2e0dc;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    transition: all .2s;
-    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all .3s;
+    position: relative;
   }
-  .flow-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
-  .flow-card.done { border-color: var(--green); background: #f0fff4; }
-  .flow-card.active-step { border-color: var(--gold); border-width: 3px; background: var(--light-gold); }
-  .flow-icon { font-size: 36px; line-height: 1; }
-  .flow-label { font-size: 13px; font-weight: 700; color: var(--navy); }
-  .flow-sub { font-size: 11px; color: var(--warm-gray); line-height: 1.4; }
-  .flow-who { font-size: 10px; font-weight: 700; color: var(--white); background: var(--lavender); padding: 2px 8px; border-radius: 10px; margin-top: 4px; }
-  .flow-who.gabby { background: var(--gold); }
-  .flow-arrow { display: flex; align-items: center; justify-content: center; min-width: 32px; font-size: 20px; color: var(--warm-gray); }
+  .voice-zone.recording {
+    border-color: var(--red);
+    background: rgba(248,113,113,.06);
+    animation: pulse-border 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-border {
+    0%,100% { border-color: var(--red); box-shadow: 0 0 0 0 rgba(248,113,113,.2); }
+    50% { border-color: #ef4444; box-shadow: 0 0 20px 4px rgba(248,113,113,.15); }
+  }
+  .mic-btn {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #a07840);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    transition: all .25s;
+    box-shadow: 0 4px 20px var(--gold-glow);
+  }
+  .mic-btn:hover { transform: scale(1.05); box-shadow: 0 6px 28px var(--gold-glow); }
+  .mic-btn.recording { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 4px 20px rgba(239,68,68,.4); }
+  .mic-btn svg { width: 28px; height: 28px; }
+  .voice-status { font-size: 13px; color: var(--slate); }
+  .voice-status.live { color: var(--red); font-weight: 600; }
+  .transcript-preview {
+    margin-top: 16px; padding: 16px; border-radius: 10px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    font-size: 14px; line-height: 1.7; text-align: left;
+    min-height: 80px; color: var(--cream);
+    max-height: 200px; overflow-y: auto;
+  }
+  .transcript-preview.empty { color: rgba(255,255,255,.2); font-style: italic; }
 
-  /* --- WEEK PLANNER --- */
-  .week-header {
-    background: var(--navy);
-    color: var(--cream);
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
+  /* RECORD STEPS */
+  .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .rec-card { padding: 20px; text-align: center; transition: all .25s; }
+  .rec-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .rec-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #a07840); color: var(--deep);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; margin: 0 auto 10px;
   }
-  .week-header .wh-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 4px; }
-  .week-header input, .week-header textarea, .week-header select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 6px;
-    background: rgba(255,255,255,.1);
-    color: var(--cream);
-    font-size: 14px;
-    font-family: inherit;
-  }
-  .week-header input::placeholder, .week-header textarea::placeholder { color: rgba(255,255,255,.4); }
-  .week-header textarea { min-height: 60px; resize: vertical; }
+  .rec-act { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .rec-detail { font-size: 11px; color: var(--slate); line-height: 1.5; }
 
-  /* --- KANBAN COLUMNS --- */
-  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 20px 0; }
-  @media (max-width: 900px) { .kanban { grid-template-columns: 1fr 1fr; } }
-  .k-col {
-    background: var(--white);
-    border-radius: 10px;
-    padding: 16px;
-    min-height: 200px;
-    border-top: 4px solid var(--warm-gray);
+  .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .type-card { padding: 20px; text-align: center; cursor: pointer; transition: all .25s; }
+  .type-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .type-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 10px; font-size: 14px; font-weight: 700;
   }
-  .k-col.col-plan { border-top-color: var(--lavender); }
-  .k-col.col-shoot { border-top-color: var(--gold); }
-  .k-col.col-gabby { border-top-color: var(--navy); }
-  .k-col.col-post { border-top-color: var(--green); }
-  .k-col h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-  .k-col h3 .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .col-plan .dot { background: var(--lavender); }
-  .col-shoot .dot { background: var(--gold); }
-  .col-gabby .dot { background: var(--navy); }
-  .col-post .dot { background: var(--green); }
+  .type-icon.tool { background: var(--gold-light); color: var(--gold); }
+  .type-icon.event { background: var(--lav-light); color: var(--lavender); }
+  .type-icon.write { background: var(--green-light); color: var(--green); }
+  .type-icon.meta { background: rgba(255,255,255,.08); color: var(--cream); }
+  .type-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .type-desc { font-size: 11px; color: var(--slate); line-height: 1.4; }
 
-  .k-card {
-    background: var(--cream);
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 8px;
-    font-size: 13px;
-    border-left: 3px solid transparent;
-    cursor: pointer;
-  }
-  .k-card:hover { background: var(--light-gold); }
-  .k-card .platform-tags { margin-top: 6px; }
-  .k-card strong { display: block; margin-bottom: 4px; font-size: 13px; }
-
-  /* --- PLATFORM BADGES --- */
-  .badge { display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 700; border-radius: 3px; text-transform: uppercase; letter-spacing: .5px; margin: 1px; }
-  .b-li { background: #0077b5; color: white; }
-  .b-ig { background: #e4405f; color: white; }
-  .b-tk { background: #010101; color: white; }
-  .b-yt { background: #ff0000; color: white; }
-  .b-fb { background: #1877f2; color: white; }
-
-  /* --- RECORD GUIDE --- */
-  .record-guide {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 24px;
-    margin: 20px 0;
-    border: 2px solid var(--gold);
-  }
-  .rg-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  .rg-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-  .rg-step {
-    background: var(--cream);
-    border-radius: 8px;
-    padding: 16px;
-    text-align: center;
-  }
-  .rg-step .rg-num { font-size: 28px; font-weight: 800; color: var(--gold); }
-  .rg-step .rg-act { font-size: 13px; font-weight: 700; margin: 4px 0; }
-  .rg-step .rg-detail { font-size: 11px; color: var(--warm-gray); line-height: 1.4; }
-
-  /* --- STORY BUILDER --- */
-  .story-builder { background: var(--white); border-radius: 12px; padding: 24px; margin: 20px 0; }
-  .sb-row { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: start; margin-bottom: 12px; }
-  .sb-label {
-    background: var(--navy);
-    color: var(--cream);
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 700;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-  }
-  .sb-label.tpc { background: var(--lavender); }
-  .sb-label.aeq { background: var(--gold); color: var(--navy); }
-  .sb-label.demo { background: var(--green); }
-  .sb-label.cta { background: var(--red); color: white; }
-  .sb-input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid #d4d0ca;
-    border-radius: 6px;
-    font-size: 14px;
-    font-family: inherit;
-    background: var(--cream);
-  }
-  .sb-input:focus { outline: 2px solid var(--lavender); }
-
-  /* --- GABBY SECTION --- */
-  .gabby-assign {
-    background: linear-gradient(135deg, var(--navy), #2d3e5e);
-    color: var(--cream);
-    border-radius: 12px;
-    padding: 24px;
-    margin: 20px 0;
-  }
-  .gabby-assign h3 { color: var(--gold); font-size: 16px; margin-bottom: 12px; }
+  /* GABBY TASKS */
   .ga-task {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,.1);
-    font-size: 14px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
+    font-size: 14px; transition: opacity .2s;
   }
   .ga-task:last-child { border-bottom: none; }
-  .ga-task input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--gold); }
-  .ga-task.done { opacity: .4; text-decoration: line-through; }
-  .ga-note { margin-top: 12px; }
-  .ga-note textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-    font-size: 13px;
-    font-family: inherit;
-    min-height: 50px;
-    background: rgba(255,255,255,.1);
-    color: var(--cream);
-  }
-  .ga-note textarea::placeholder { color: rgba(255,255,255,.4); }
+  .ga-task input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--gold); flex-shrink: 0; }
+  .ga-task.done { opacity: .3; text-decoration: line-through; }
 
-  /* --- DRIVE MAP --- */
-  .drive-map {
-    background: var(--white);
-    border-radius: 12px;
-    padding: 24px;
-    margin: 20px 0;
-  }
+  /* DRIVE ROWS */
   .dm-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin: 6px 0;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background .15s;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px; border-radius: 10px; margin: 6px 0; transition: background .15s;
   }
-  .dm-row:hover { background: var(--light-gold); }
-  .dm-icon { font-size: 24px; flex-shrink: 0; }
-  .dm-name { font-weight: 700; }
-  .dm-desc { font-size: 12px; color: var(--warm-gray); }
-  .dm-arrow { margin-left: auto; font-size: 18px; color: var(--warm-gray); }
+  .dm-row:hover { background: rgba(255,255,255,.04); }
+  .dm-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .dm-icon.you { background: var(--gold-light); color: var(--gold); }
+  .dm-icon.gab { background: var(--lav-light); color: var(--lavender); }
+  .dm-icon.done-i { background: var(--green-light); color: var(--green); }
+  .dm-icon.arch { background: rgba(255,255,255,.06); color: var(--slate); }
+  .dm-name { font-size: 14px; font-weight: 700; }
+  .dm-desc { font-size: 12px; color: var(--slate); }
+  .dm-who { margin-left: auto; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: .5px; }
+  .dm-who.j { background: var(--gold-light); color: var(--gold); }
+  .dm-who.g { background: var(--lav-light); color: var(--lavender); }
 
-  /* --- QUICK ACTIONS BAR --- */
-  .actions-bar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin: 16px 0;
+  /* POST SCHEDULE */
+  .post-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 16px 0; }
+  .post-day { padding: 16px 10px; text-align: center; border-radius: 12px; }
+  .post-day strong { font-size: 14px; display: block; margin-bottom: 6px; }
+  .post-platform { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; display: inline-block; margin: 2px; }
+  .p-li { background: rgba(0,119,181,.2); color: #38bdf8; }
+  .p-ig { background: rgba(228,64,95,.2); color: #fb7185; }
+  .p-tk { background: rgba(255,255,255,.08); color: var(--cream); }
+  .p-yt { background: rgba(255,0,0,.15); color: #f87171; }
+  .p-fb { background: rgba(24,119,242,.2); color: #60a5fa; }
+  .post-type { font-size: 11px; color: var(--slate); margin-top: 6px; }
+
+  /* SWATCHES */
+  .swatches { display: flex; gap: 8px; margin: 12px 0; }
+  .swatch { width: 32px; height: 32px; border-radius: 8px; border: 2px solid rgba(255,255,255,.1); cursor: pointer; position: relative; }
+  .swatch:hover::after {
+    content: attr(data-hex); position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 9px; color: var(--slate); white-space: nowrap;
   }
-  .act-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
-    background: var(--white);
-    border: 2px solid #e2e0dc;
-    border-radius: 8px;
+
+  /* FEEDBACK / BUGS */
+  .feedback-section { margin-top: 24px; }
+  .fb-entry {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 10px 14px; border-radius: 8px;
+    background: rgba(255,255,255,.03); margin-bottom: 6px;
     font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    color: var(--navy);
-    transition: all .15s;
   }
-  .act-btn:hover { border-color: var(--gold); background: var(--light-gold); }
-  .act-btn .act-icon { font-size: 18px; }
+  .fb-entry .fb-time { font-size: 10px; color: var(--slate); white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+  .fb-entry .fb-who { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 1px; }
+  .fb-entry .fb-who.joyi { background: var(--gold-light); color: var(--gold); }
+  .fb-entry .fb-who.gabby { background: var(--lav-light); color: var(--lavender); }
+  .fb-entry .fb-text { flex: 1; line-height: 1.5; }
+  .fb-input-row { display: flex; gap: 8px; margin-top: 10px; }
+  .fb-input-row input { flex: 1; }
+  .fb-input-row select {
+    padding: 8px 12px; border-radius: 8px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    color: var(--cream); font-size: 13px; font-family: inherit;
+  }
+  .fb-submit {
+    padding: 8px 16px; border-radius: 8px;
+    background: var(--gold); color: var(--deep);
+    border: none; font-weight: 700; font-size: 13px; cursor: pointer;
+    transition: all .2s;
+  }
+  .fb-submit:hover { background: #b8863f; }
 
-  /* --- TOAST --- */
-  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--navy); color: var(--cream); padding: 12px 24px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .3s; z-index: 200; }
+  /* BUTTONS */
+  .btn-next {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--gold), #a07840);
+    color: var(--deep); font-size: 14px; font-weight: 700;
+    border: none; border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 20px;
+  }
+  .btn-next:hover { transform: translateY(-1px); box-shadow: 0 8px 24px var(--gold-glow); }
+  .btn-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; background: transparent;
+    color: var(--slate); font-size: 13px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,.1); border-radius: 10px;
+    cursor: pointer; transition: all .2s; margin-top: 20px; margin-right: 8px;
+  }
+  .btn-back:hover { border-color: var(--slate); color: var(--cream); }
+  .nav-buttons { display: flex; align-items: center; gap: 8px; margin-top: 24px; }
+
+  /* GABBY DEV NOTE */
+  .dev-note {
+    margin-top: 24px; padding: 16px 20px; border-radius: 12px;
+    background: var(--lav-light); border: 1px solid rgba(124,141,200,.25);
+    font-size: 13px; line-height: 1.6; color: var(--lavender);
+  }
+  .dev-note strong { color: var(--cream); }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    padding: 12px 24px; border-radius: 10px;
+    font-size: 13px; font-weight: 600;
+    opacity: 0; transition: opacity .3s; z-index: 200;
+    background: var(--gold); color: var(--deep);
+  }
   .toast.show { opacity: 1; }
 
-  /* --- GENERAL --- */
-  h2 { font-size: 20px; margin-bottom: 4px; }
-  .subtitle { font-size: 13px; color: var(--warm-gray); margin-bottom: 16px; }
-  .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin: 24px 0 8px; }
+  .notes-box { margin-top: 16px; }
+  .notes-box label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--gold); display: block; margin-bottom: 6px;
+  }
 </style>
 </head>
 <body>
 
-<!-- TOP -->
 <div class="top">
-  <div>
-    <h1>WEEKLY CONTENT MACHINE</h1>
-    <span class="date" id="dateDisplay"></span>
-  </div>
-  <div class="right">
+  <h1>WEEKLY CONTENT MACHINE</h1>
+  <div class="links">
     <a href="https://drive.google.com" target="_blank">Drive</a>
     <a href="https://discord.com/channels/" target="_blank">Discord</a>
   </div>
 </div>
 
-<!-- VIEW TABS -->
-<div class="view-toggle">
-  <div class="vtab active" data-v="flow">This Week</div>
-  <div class="vtab" data-v="record">Record Guide</div>
-  <div class="vtab" data-v="gabby">Gabby</div>
-  <div class="vtab" data-v="drive">Drive Map</div>
+<div class="main">
+
+  <!-- STEPS -->
+  <div class="steps-bar">
+    <div class="step-dot active" data-step="0" onclick="goStep(0)">1<span class="step-label">Dump</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" data-step="1" onclick="goStep(1)">2<span class="step-label">Script</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" data-step="2" onclick="goStep(2)">3<span class="step-label">Record</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" data-step="3" onclick="goStep(3)">4<span class="step-label">Upload</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" data-step="4" onclick="goStep(4)">5<span class="step-label">Gabby</span></div>
+    <div class="step-line"></div>
+    <div class="step-dot" data-step="5" onclick="goStep(5)">6<span class="step-label">Post</span></div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- STEP 1: BRAIN DUMP (VOICE)     -->
+  <!-- ============================== -->
+  <div class="step-panel active" id="step-0">
+    <h2>Brain Dump</h2>
+    <p class="subtitle">Talk it out. Hit the mic and ramble. It transcribes live. Or type if you prefer.</p>
+
+    <div class="voice-zone glass" id="voiceZone">
+      <button class="mic-btn" id="micBtn" onclick="toggleVoice()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+          <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </button>
+      <div class="voice-status" id="voiceStatus">Tap to start talking</div>
+      <div class="transcript-preview empty" id="transcript">Your words will appear here as you speak...</div>
+    </div>
+
+    <div class="notes-box">
+      <label>Or type / edit your dump</label>
+      <textarea id="brainDump" rows="5" placeholder="Everything you're thinking about this week's content. Unfiltered." oninput="autoSave()"></textarea>
+    </div>
+
+    <button class="btn-next" onclick="goStep(1)">Next: Build the Script &#8594;</button>
+  </div>
+
+  <!-- ============================== -->
+  <!-- STEP 2: SCRIPT (STORY ARC)     -->
+  <!-- ============================== -->
+  <div class="step-panel" id="step-1">
+    <h2>Build the Script</h2>
+    <p class="subtitle">Lock in the story with Gabby. Five beats. Fill each one.</p>
+
+    <div class="card glass" style="padding:20px;">
+      <div class="arc-row">
+        <div class="arc-tag hook">Hook</div>
+        <input type="text" id="sb-hook" placeholder="First 5 seconds. What stops the scroll?" oninput="autoSave()">
+      </div>
+      <div class="arc-row">
+        <div class="arc-tag tpc">TPC Arc</div>
+        <input type="text" id="sb-tpc" placeholder="The personal practice angle" oninput="autoSave()">
+      </div>
+      <div class="arc-row">
+        <div class="arc-tag aeq">AIdedEQ</div>
+        <input type="text" id="sb-aeq" placeholder="The builder / solution angle" oninput="autoSave()">
+      </div>
+      <div class="arc-row">
+        <div class="arc-tag demo">Show+Tell</div>
+        <input type="text" id="sb-demo" placeholder="What will you screen record or demo?" oninput="autoSave()">
+      </div>
+      <div class="arc-row">
+        <div class="arc-tag cta">CTA</div>
+        <input type="text" id="sb-cta" placeholder="One ask. One link." oninput="autoSave()">
+      </div>
+    </div>
+
+    <div class="notes-box">
+      <label>Script notes / talking points</label>
+      <textarea id="scriptNotes" rows="4" placeholder="Bullet points, phrases you want to hit, anything Gabby should know." oninput="autoSave()"></textarea>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="goStep(0)">&#8592; Dump</button>
+      <button class="btn-next" onclick="goStep(2)">Next: Record &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- STEP 3: RECORD                 -->
+  <!-- ============================== -->
+  <div class="step-panel" id="step-2">
+    <h2>Record</h2>
+    <p class="subtitle">Record yourself doing the work. That is the content.</p>
+
+    <div class="section-label">Screen Record (Mac)</div>
+    <div class="rec-grid">
+      <div class="rec-card glass">
+        <div class="rec-num">1</div>
+        <div class="rec-act">Cmd + Shift + 5</div>
+        <div class="rec-detail">Opens screen recording</div>
+      </div>
+      <div class="rec-card glass">
+        <div class="rec-num">2</div>
+        <div class="rec-act">Narrate as you go</div>
+        <div class="rec-detail">Talk through it like you're showing Gabby</div>
+      </div>
+      <div class="rec-card glass">
+        <div class="rec-num">3</div>
+        <div class="rec-act">Do the actual work</div>
+        <div class="rec-detail">Build, prep, write, demo</div>
+      </div>
+      <div class="rec-card glass">
+        <div class="rec-num">4</div>
+        <div class="rec-act">Stop + Save</div>
+        <div class="rec-detail">Click stop in menu bar</div>
+      </div>
+    </div>
+
+    <div class="section-label">iPhone Selfie (personal hook)</div>
+    <div class="rec-grid">
+      <div class="rec-card glass">
+        <div class="rec-num">1</div>
+        <div class="rec-act">Face a window</div>
+        <div class="rec-detail">Natural light, phone at eye level</div>
+      </div>
+      <div class="rec-card glass">
+        <div class="rec-num">2</div>
+        <div class="rec-act">Say the hook</div>
+        <div class="rec-detail">One sentence, look at the lens</div>
+      </div>
+      <div class="rec-card glass">
+        <div class="rec-num">3</div>
+        <div class="rec-act">Tell the story (60s)</div>
+        <div class="rec-detail">No script needed, just talk</div>
+      </div>
+      <div class="rec-card glass">
+        <div class="rec-num">4</div>
+        <div class="rec-act">One take is enough</div>
+        <div class="rec-detail">Real > polished. Always.</div>
+      </div>
+    </div>
+
+    <div class="section-label">What to record this week</div>
+    <div class="type-grid">
+      <div class="type-card glass">
+        <div class="type-icon tool"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="type-name">Demo a Tool</div>
+        <div class="type-desc">anchorED, ROP, Snapshots</div>
+      </div>
+      <div class="type-card glass">
+        <div class="type-icon event"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="type-name">Prep for Event</div>
+        <div class="type-desc">Women Build Safety, retreats, FIT</div>
+      </div>
+      <div class="type-card glass">
+        <div class="type-icon write"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div class="type-name">Write Curriculum</div>
+        <div class="type-desc">Build a lesson live</div>
+      </div>
+      <div class="type-card glass">
+        <div class="type-icon meta"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
+        <div class="type-name">Behind the Build</div>
+        <div class="type-desc">This dashboard, your process</div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="goStep(1)">&#8592; Script</button>
+      <button class="btn-next" onclick="goStep(3)">Next: Upload &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- STEP 4: UPLOAD                 -->
+  <!-- ============================== -->
+  <div class="step-panel" id="step-3">
+    <h2>Upload to Drive</h2>
+    <p class="subtitle">Drop your raw files. Ping Gabby. You're done for the week.</p>
+
+    <div class="card glass-bright" style="padding:24px;">
+      <div class="dm-row">
+        <div class="dm-icon you"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <div><div class="dm-name">RAW FROM JOYI</div><div class="dm-desc">Drop raw video + screen recordings here</div></div>
+        <div class="dm-who j">JOYI</div>
+      </div>
+      <div style="padding:4px 0 4px 54px; font-size:12px; color:var(--slate);">
+        Name: <strong style="color:var(--gold);">[date]-[topic].mov</strong>
+      </div>
+      <div class="dm-row" style="margin-top:8px;">
+        <div class="dm-icon gab"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <div><div class="dm-name">GABBY WORKSPACE</div><div class="dm-desc">Gabby clips, captions, thumbnails</div></div>
+        <div class="dm-who g">GABBY</div>
+      </div>
+      <div class="dm-row" style="margin-top:8px;">
+        <div class="dm-icon done-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><div class="dm-name">READY TO POST</div><div class="dm-desc">Final content by platform</div></div>
+        <div class="dm-who g">GABBY</div>
+      </div>
+      <div style="padding:4px 0 4px 54px; display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">linkedin/</span>
+        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">instagram/</span>
+        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">tiktok/</span>
+        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">youtube/</span>
+        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">facebook/</span>
+      </div>
+    </div>
+
+    <div class="section-label">iPhone Upload (4 taps)</div>
+    <div class="rec-grid">
+      <div class="rec-card glass"><div class="rec-num">1</div><div class="rec-act">Photos</div><div class="rec-detail">Find the video</div></div>
+      <div class="rec-card glass"><div class="rec-num">2</div><div class="rec-act">Share</div><div class="rec-detail">Box with arrow</div></div>
+      <div class="rec-card glass"><div class="rec-num">3</div><div class="rec-act">Save to Files</div><div class="rec-detail">Drive > RAW FROM JOYI</div></div>
+      <div class="rec-card glass"><div class="rec-num">4</div><div class="rec-act">Discord</div><div class="rec-detail">"raw uploaded"</div></div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="goStep(2)">&#8592; Record</button>
+      <button class="btn-next" onclick="goStep(4)">Next: Gabby &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- STEP 5: GABBY                  -->
+  <!-- ============================== -->
+  <div class="step-panel" id="step-4">
+    <h2>Gabby's Turn</h2>
+    <p class="subtitle">Pull from Drive, build assets, check them off, ping JoYi.</p>
+
+    <div class="card glass-bright" style="padding:24px;">
+      <div id="gabbyTasks">
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Pull raw video from Drive</span></div>
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut 60s hook clip (Reels + TikTok)</span></div>
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut full 2-3 min (YouTube + LinkedIn)</span></div>
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Add captions to all clips</span></div>
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Create thumbnail (1280x720)</span></div>
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Write post captions per platform</span></div>
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Move assets to READY TO POST</span></div>
+        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Ping JoYi in Discord</span></div>
+      </div>
+      <div class="notes-box">
+        <label>Notes between JoYi + Gabby</label>
+        <textarea id="gabbyNotes" placeholder="Leave notes, questions, feedback." oninput="autoSave()"></textarea>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
+      <div class="card glass" style="padding:18px;">
+        <div class="section-label" style="margin-top:0;">Platform Specs</div>
+        <table style="width:100%; font-size:13px; border-collapse:collapse;">
+          <tr><td style="padding:5px 0; color:var(--slate);">YouTube</td><td>16:9, 1080p+</td></tr>
+          <tr><td style="padding:5px 0; color:var(--slate);">LinkedIn</td><td>16:9 or 1:1</td></tr>
+          <tr><td style="padding:5px 0; color:var(--slate);">IG Reels</td><td>9:16, 60-90s</td></tr>
+          <tr><td style="padding:5px 0; color:var(--slate);">TikTok</td><td>9:16, 60-90s</td></tr>
+          <tr><td style="padding:5px 0; color:var(--slate);">Carousel</td><td>1080x1080</td></tr>
+          <tr><td style="padding:5px 0; color:var(--slate);">Thumbnail</td><td>1280x720</td></tr>
+        </table>
+      </div>
+      <div class="card glass" style="padding:18px;">
+        <div class="section-label" style="margin-top:0;">Brand</div>
+        <div class="swatches">
+          <div class="swatch" style="background:#0f1a2e;" data-hex="#0f1a2e"></div>
+          <div class="swatch" style="background:#faf9f6;" data-hex="#faf9f6"></div>
+          <div class="swatch" style="background:#c9975b;" data-hex="#c9975b"></div>
+          <div class="swatch" style="background:#7c8dc8;" data-hex="#7c8dc8"></div>
+          <div class="swatch" style="background:#4a5568;" data-hex="#4a5568"></div>
+        </div>
+        <ul style="font-size:12px; padding-left:16px; color:var(--slate); line-height:2; margin-top:8px;">
+          <li>No emojis on final assets</li>
+          <li>Max 2 fonts</li>
+          <li>Always include CTA URL</li>
+          <li>Warm + professional</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dev-note">
+      <strong>Gabby — this is your platform too.</strong> Clone the repo. Change anything. Add features. Break it and fix it. This dashboard should evolve with our workflow, not stay frozen. Push updates anytime. JoYi will see them on next refresh.
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="goStep(3)">&#8592; Upload</button>
+      <button class="btn-next" onclick="goStep(5)">Next: Post &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- STEP 6: POST                   -->
+  <!-- ============================== -->
+  <div class="step-panel" id="step-5">
+    <h2>Post</h2>
+    <p class="subtitle">One video becomes 5+ posts. Same schedule every week.</p>
+
+    <div class="post-row">
+      <div class="post-day glass"><strong>Mon</strong><span class="post-platform p-li">LinkedIn</span><div class="post-type">Text post</div></div>
+      <div class="post-day glass"><strong>Tue</strong><span class="post-platform p-ig">IG</span><span class="post-platform p-tk">TK</span><div class="post-type">60s clip</div></div>
+      <div class="post-day glass"><strong>Wed</strong><span class="post-platform p-yt">YT</span><span class="post-platform p-li">LI</span><div class="post-type">Full video</div></div>
+      <div class="post-day glass"><strong>Thu</strong><span class="post-platform p-fb">FB</span><div class="post-type">Story + video</div></div>
+      <div class="post-day glass"><strong>Fri</strong><span class="post-platform p-ig">IG</span><div class="post-type">Carousel</div></div>
+    </div>
+
+    <div class="card glass-bright" style="padding:24px; margin-top:16px;">
+      <h3 style="margin-bottom:12px;">1 video &#8594; 7+ pieces</h3>
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:8px 16px; font-size:13px;">
+        <span style="color:var(--gold); font-weight:700;">Full video</span><span style="color:var(--slate);">YouTube + LinkedIn</span>
+        <span style="color:var(--gold); font-weight:700;">Hook clip</span><span style="color:var(--slate);">IG Reels + TikTok (60s)</span>
+        <span style="color:var(--gold); font-weight:700;">Text post</span><span style="color:var(--slate);">LinkedIn</span>
+        <span style="color:var(--gold); font-weight:700;">Carousel</span><span style="color:var(--slate);">Instagram</span>
+        <span style="color:var(--gold); font-weight:700;">Personal post</span><span style="color:var(--slate);">Facebook</span>
+        <span style="color:var(--gold); font-weight:700;">Shorts</span><span style="color:var(--slate);">2-3 extra clips</span>
+        <span style="color:var(--gold); font-weight:700;">Newsletter</span><span style="color:var(--slate);">Monthly Substack</span>
+      </div>
+    </div>
+
+    <div class="card glass" style="padding:24px; margin-top:16px; text-align:center;">
+      <h3>Week Complete</h3>
+      <p style="color:var(--slate); font-size:13px; margin-top:4px;">Reset and start fresh.</p>
+      <button class="btn-next" onclick="resetWeek()" style="margin-top:12px;">Reset for Next Week</button>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="goStep(4)">&#8592; Gabby</button>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- FEEDBACK LOG (always visible)  -->
+  <!-- ============================== -->
+  <div class="feedback-section" style="margin-top:48px; padding-top:24px; border-top:1px solid rgba(255,255,255,.06);">
+    <div class="section-label">Bugs + Update Requests</div>
+    <p style="font-size:12px; color:var(--slate); margin-bottom:12px;">Log issues and ideas here. Both JoYi and Gabby can add entries. This persists between weeks.</p>
+    <div id="feedbackLog"></div>
+    <div class="fb-input-row">
+      <select id="fbWho">
+        <option value="joyi">JoYi</option>
+        <option value="gabby">Gabby</option>
+      </select>
+      <input type="text" id="fbInput" placeholder="Describe the bug, request, or idea..." onkeydown="if(event.key==='Enter')addFeedback()">
+      <button class="fb-submit" onclick="addFeedback()">Add</button>
+    </div>
+  </div>
+
 </div>
 
-<!-- ============================== -->
-<!-- VIEW: THIS WEEK                -->
-<!-- ============================== -->
-<div class="view active" id="v-flow">
-
-  <!-- VISUAL FLOW -->
-  <div class="section-label">Your Weekly Flow</div>
-  <div class="flow">
-    <div class="flow-step">
-      <div class="flow-card active-step" id="fc-plan" onclick="highlightStep('plan')">
-        <div class="flow-icon">&#x1f4ad;</div>
-        <div class="flow-label">Plan the Story</div>
-        <div class="flow-sub">Agree on arc, tool, lesson</div>
-        <div class="flow-who">JoYi + Gabby</div>
-      </div>
-    </div>
-    <div class="flow-arrow">&#x27A1;</div>
-    <div class="flow-step">
-      <div class="flow-card" id="fc-record" onclick="highlightStep('record')">
-        <div class="flow-icon">&#x1f3ac;</div>
-        <div class="flow-label">Record</div>
-        <div class="flow-sub">Screen record + iPhone as you work</div>
-        <div class="flow-who">JoYi</div>
-      </div>
-    </div>
-    <div class="flow-arrow">&#x27A1;</div>
-    <div class="flow-step">
-      <div class="flow-card" id="fc-upload" onclick="highlightStep('upload')">
-        <div class="flow-icon">&#x2601;</div>
-        <div class="flow-label">Upload to Drive</div>
-        <div class="flow-sub">Drop raw files in shared folder</div>
-        <div class="flow-who">JoYi</div>
-      </div>
-    </div>
-    <div class="flow-arrow">&#x27A1;</div>
-    <div class="flow-step">
-      <div class="flow-card" id="fc-gabby" onclick="highlightStep('gabby')">
-        <div class="flow-icon">&#x2702;</div>
-        <div class="flow-label">Gabby Builds</div>
-        <div class="flow-sub">Clips, captions, thumbnails, carousels</div>
-        <div class="flow-who gabby">Gabby</div>
-      </div>
-    </div>
-    <div class="flow-arrow">&#x27A1;</div>
-    <div class="flow-step">
-      <div class="flow-card" id="fc-post" onclick="highlightStep('post')">
-        <div class="flow-icon">&#x1f680;</div>
-        <div class="flow-label">Post</div>
-        <div class="flow-sub">Schedule across platforms</div>
-        <div class="flow-who gabby">Gabby</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- WEEK PLANNER -->
-  <div class="section-label">This Week's Story</div>
-  <div class="week-header">
-    <div>
-      <div class="wh-label">Week Theme</div>
-      <input type="text" id="weekTheme" placeholder="e.g. 1-Year Reflection" value="1-Year Reflection" oninput="autoSave()">
-    </div>
-    <div>
-      <div class="wh-label">The Hook (1 sentence)</div>
-      <input type="text" id="weekHook" placeholder="The scroll-stopper..." value="I quit my career, traveled 5 countries with my sons, and built 23 AI tools in 12 months." oninput="autoSave()">
-    </div>
-    <div>
-      <div class="wh-label">This Week's CTA</div>
-      <input type="text" id="weekCTA" placeholder="One link, one ask" value="aidedeq.org/book" oninput="autoSave()">
-    </div>
-  </div>
-
-  <!-- STORY BUILDER -->
-  <div class="story-builder">
-    <h3 style="margin-bottom:16px;">Story Arc Builder</h3>
-    <div class="sb-row">
-      <div class="sb-label">Hook</div>
-      <input class="sb-input" id="sb-hook" placeholder="First 5 seconds. What stops the scroll?" value="" oninput="autoSave()">
-    </div>
-    <div class="sb-row">
-      <div class="sb-label tpc">TPC Arc</div>
-      <input class="sb-input" id="sb-tpc" placeholder="The personal practice angle — what's the heart of this?" value="" oninput="autoSave()">
-    </div>
-    <div class="sb-row">
-      <div class="sb-label aeq">AIdedEQ Arc</div>
-      <input class="sb-input" id="sb-aeq" placeholder="The builder/solution angle — what did you make or solve?" value="" oninput="autoSave()">
-    </div>
-    <div class="sb-row">
-      <div class="sb-label demo">Show + Tell</div>
-      <input class="sb-input" id="sb-demo" placeholder="What will you screen record or demo? Be specific." value="" oninput="autoSave()">
-    </div>
-    <div class="sb-row">
-      <div class="sb-label cta">CTA</div>
-      <input class="sb-input" id="sb-cta" placeholder="One ask. One link." value="" oninput="autoSave()">
-    </div>
-    <p style="font-size:12px; color:var(--warm-gray); margin-top:8px;">Fill this out together with Gabby in Discord first. Then come here and lock it in.</p>
-  </div>
-
-  <!-- KANBAN -->
-  <div class="section-label">Content Board</div>
-  <div class="kanban">
-    <div class="k-col col-plan">
-      <h3><span class="dot"></span> Plan</h3>
-      <div class="k-card" style="border-left-color: var(--lavender);">
-        <strong>Agree on story arc</strong>
-        <div class="flow-sub">Discord call or async</div>
-      </div>
-      <div class="k-card" style="border-left-color: var(--lavender);">
-        <strong>Pick the demo</strong>
-        <div class="flow-sub">What tool or workflow to show</div>
-      </div>
-    </div>
-    <div class="k-col col-shoot">
-      <h3><span class="dot"></span> Record</h3>
-      <div class="k-card" style="border-left-color: var(--gold);">
-        <strong>Screen record demo</strong>
-        <div class="flow-sub">Record as you do the work</div>
-        <div class="platform-tags"><span class="badge b-yt">YT</span><span class="badge b-li">LI</span></div>
-      </div>
-      <div class="k-card" style="border-left-color: var(--gold);">
-        <strong>iPhone selfie intro</strong>
-        <div class="flow-sub">60 sec hook + personal story</div>
-        <div class="platform-tags"><span class="badge b-ig">IG</span><span class="badge b-tk">TK</span></div>
-      </div>
-    </div>
-    <div class="k-col col-gabby">
-      <h3><span class="dot"></span> Gabby Builds</h3>
-      <div class="k-card" style="border-left-color: var(--navy);">
-        <strong>Cut clips per platform</strong>
-        <div class="flow-sub">60s reel, 3-min full, shorts</div>
-      </div>
-      <div class="k-card" style="border-left-color: var(--navy);">
-        <strong>Captions + thumbnail</strong>
-        <div class="flow-sub">Auto-caption, brand colors</div>
-      </div>
-      <div class="k-card" style="border-left-color: var(--navy);">
-        <strong>Write post copy</strong>
-        <div class="flow-sub">Adapt per platform voice</div>
-      </div>
-    </div>
-    <div class="k-col col-post">
-      <h3><span class="dot"></span> Post</h3>
-      <div class="k-card" style="border-left-color: var(--green);">
-        <strong>Mon: LinkedIn text</strong>
-        <div class="platform-tags"><span class="badge b-li">LI</span></div>
-      </div>
-      <div class="k-card" style="border-left-color: var(--green);">
-        <strong>Tue: Reel + TikTok</strong>
-        <div class="platform-tags"><span class="badge b-ig">IG</span><span class="badge b-tk">TK</span></div>
-      </div>
-      <div class="k-card" style="border-left-color: var(--green);">
-        <strong>Wed: Full video</strong>
-        <div class="platform-tags"><span class="badge b-yt">YT</span><span class="badge b-li">LI</span></div>
-      </div>
-      <div class="k-card" style="border-left-color: var(--green);">
-        <strong>Thu: Facebook</strong>
-        <div class="platform-tags"><span class="badge b-fb">FB</span></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ============================== -->
-<!-- VIEW: RECORD GUIDE             -->
-<!-- ============================== -->
-<div class="view" id="v-record">
-  <h2>Record Guide</h2>
-  <p class="subtitle">You're not making a commercial. You're recording yourself doing the work. That IS the content.</p>
-
-  <div class="record-guide">
-    <div class="rg-title">Screen Record Flow (your daily work = content)</div>
-    <div class="rg-steps">
-      <div class="rg-step">
-        <div class="rg-num">1</div>
-        <div class="rg-act">Open QuickTime</div>
-        <div class="rg-detail">File > New Screen Recording<br>Or: Cmd+Shift+5</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">2</div>
-        <div class="rg-act">Narrate as you go</div>
-        <div class="rg-detail">Talk through what you're doing and why. Don't script it. Just explain like you're showing Gabby.</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">3</div>
-        <div class="rg-act">Do the actual work</div>
-        <div class="rg-detail">Build a tool. Prep for Women Build Safety. Write curriculum. Use a tool you made. That's the content.</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">4</div>
-        <div class="rg-act">Stop + Upload</div>
-        <div class="rg-detail">Save. Drop in Google Drive > RAW FROM JOYI. Tell Gabby in Discord.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="record-guide" style="border-color: var(--lavender);">
-    <div class="rg-title">iPhone Selfie Flow (the personal hook)</div>
-    <div class="rg-steps">
-      <div class="rg-step">
-        <div class="rg-num">1</div>
-        <div class="rg-act">Face a window</div>
-        <div class="rg-detail">Natural light on your face. Phone at eye level.</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">2</div>
-        <div class="rg-act">Say the hook</div>
-        <div class="rg-detail">One sentence. Look at the lens. "I quit my career a year ago."</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">3</div>
-        <div class="rg-act">Tell the story (60s)</div>
-        <div class="rg-detail">The TPC arc. Why this matters to you personally. No script needed — just talk.</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">4</div>
-        <div class="rg-act">Upload to Drive</div>
-        <div class="rg-detail">Share from Photos app directly to Google Drive > RAW FROM JOYI folder.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">This Week's Recording Plan</div>
-  <div style="background:var(--white); border-radius:12px; padding:24px;">
-    <div class="sb-row">
-      <div class="sb-label demo">Record 1</div>
-      <input class="sb-input" id="rec1" placeholder="What are you screen recording? e.g. Building the weekly dashboard" oninput="autoSave()">
-    </div>
-    <div class="sb-row">
-      <div class="sb-label" style="background:var(--gold);color:var(--navy);">Record 2</div>
-      <input class="sb-input" id="rec2" placeholder="iPhone selfie — the personal story hook" oninput="autoSave()">
-    </div>
-    <div class="sb-row">
-      <div class="sb-label" style="background:var(--lavender);">Bonus</div>
-      <input class="sb-input" id="rec3" placeholder="Optional: behind the scenes, prep work, quick tip" oninput="autoSave()">
-    </div>
-  </div>
-
-  <div class="section-label">Content Types You Can Record This Week</div>
-  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
-    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
-      <div style="font-size:28px;">&#x1f4bb;</div>
-      <strong style="font-size:13px; display:block; margin:6px 0;">Screen Record a Tool</strong>
-      <span style="font-size:11px; color:var(--warm-gray);">Open anchorED, ROP, or any tool. Show a real use case.</span>
-    </div>
-    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
-      <div style="font-size:28px;">&#x1f4cb;</div>
-      <strong style="font-size:13px; display:block; margin:6px 0;">Prep for an Event</strong>
-      <span style="font-size:11px; color:var(--warm-gray);">Women Build Safety, retreat planning, FIT training prep — record as you plan.</span>
-    </div>
-    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
-      <div style="font-size:28px;">&#x270d;</div>
-      <strong style="font-size:13px; display:block; margin:6px 0;">Write Curriculum</strong>
-      <span style="font-size:11px; color:var(--warm-gray);">Record yourself building a lesson or module. Narrate your decisions.</span>
-    </div>
-    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
-      <div style="font-size:28px;">&#x1f4f1;</div>
-      <strong style="font-size:13px; display:block; margin:6px 0;">This Dashboard</strong>
-      <span style="font-size:11px; color:var(--warm-gray);">Show how you plan your content each week. Meta-content that teaches.</span>
-    </div>
-  </div>
-</div>
-
-<!-- ============================== -->
-<!-- VIEW: GABBY                    -->
-<!-- ============================== -->
-<div class="view" id="v-gabby">
-  <h2>Gabby's Board</h2>
-  <p class="subtitle">Gabby: this is your workspace. JoYi drops raw content. You turn it into posts.</p>
-
-  <div class="gabby-assign">
-    <h3>This Week's Tasks</h3>
-    <div id="gabbyTasks">
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Pull raw video from Drive > RAW FROM JOYI</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut 60s hook clip for Reels + TikTok</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut full 2-3 min version for YouTube + LinkedIn</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Add captions to all clips</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Create thumbnail (1280x720, face + bold text)</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Write post captions per platform</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Move finished assets to Drive > READY TO POST</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Schedule posts for the week</span></div>
-      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Ping JoYi in Discord when ready for review</span></div>
-    </div>
-    <div class="ga-note">
-      <div class="wh-label" style="color:var(--gold); margin-bottom:6px;">Notes for Gabby</div>
-      <textarea id="gabbyNotes" placeholder="JoYi: leave notes for Gabby here. Gabby: leave questions here." oninput="autoSave()"></textarea>
-    </div>
-  </div>
-
-  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-    <div style="background:var(--white); border-radius:12px; padding:20px;">
-      <h4 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:12px;">Platform Specs</h4>
-      <table style="width:100%; font-size:13px; border-collapse:collapse;">
-        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>YouTube</strong></td><td>16:9, 1080p+</td></tr>
-        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>LinkedIn</strong></td><td>16:9 or 1:1, &lt;10 min</td></tr>
-        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>IG Reels</strong></td><td>9:16, 60-90 sec</td></tr>
-        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>TikTok</strong></td><td>9:16, 60-90 sec</td></tr>
-        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>IG Carousel</strong></td><td>1080x1080, 5-10 slides</td></tr>
-        <tr><td style="padding:6px 0;"><strong>Thumbnail</strong></td><td>1280x720</td></tr>
-      </table>
-    </div>
-    <div style="background:var(--white); border-radius:12px; padding:20px;">
-      <h4 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:12px;">Brand Quick Ref</h4>
-      <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <div style="width:36px;height:36px;border-radius:6px;background:var(--navy);" title="#1a2744"></div>
-        <div style="width:36px;height:36px;border-radius:6px;background:var(--cream);border:1px solid #ddd;" title="#f8f7f4"></div>
-        <div style="width:36px;height:36px;border-radius:6px;background:var(--gold);" title="#d4a574"></div>
-        <div style="width:36px;height:36px;border-radius:6px;background:var(--lavender);" title="#7c8dc8"></div>
-        <div style="width:36px;height:36px;border-radius:6px;background:var(--slate);" title="#4a5568"></div>
-      </div>
-      <ul style="font-size:12px; padding-left:16px; color:var(--warm-gray); line-height:1.8;">
-        <li>No emojis on final assets</li>
-        <li>Max 2 fonts per asset</li>
-        <li>Always include CTA URL</li>
-        <li>Warm + professional, never "woo-woo"</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section-label">Posting Schedule (Every Week)</div>
-  <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px;">
-    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
-      <strong style="font-size:13px; display:block;">Mon</strong>
-      <span class="badge b-li">LinkedIn</span>
-      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Text post</div>
-    </div>
-    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
-      <strong style="font-size:13px; display:block;">Tue</strong>
-      <span class="badge b-ig">IG</span><span class="badge b-tk">TK</span>
-      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">60s clip</div>
-    </div>
-    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
-      <strong style="font-size:13px; display:block;">Wed</strong>
-      <span class="badge b-yt">YouTube</span>
-      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Full video</div>
-    </div>
-    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
-      <strong style="font-size:13px; display:block;">Thu</strong>
-      <span class="badge b-fb">Facebook</span>
-      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Story + video</div>
-    </div>
-    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
-      <strong style="font-size:13px; display:block;">Fri</strong>
-      <span class="badge b-ig">IG</span>
-      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Carousel</div>
-    </div>
-  </div>
-</div>
-
-<!-- ============================== -->
-<!-- VIEW: DRIVE MAP                -->
-<!-- ============================== -->
-<div class="view" id="v-drive">
-  <h2>Google Drive Map</h2>
-  <p class="subtitle">This is how files flow between you and Gabby. Set up these folders once.</p>
-
-  <div class="drive-map">
-    <div class="dm-row" style="background:var(--light-gold); border-radius:8px;">
-      <div class="dm-icon">&#x1f4c1;</div>
-      <div>
-        <div class="dm-name">WEEKLY CONTENT MACHINE</div>
-        <div class="dm-desc">Shared folder — JoYi + Gabby both have edit access</div>
-      </div>
-    </div>
-
-    <div class="dm-row" style="margin-left:24px;">
-      <div class="dm-icon" style="font-size:20px;">&#x1f4f1;</div>
-      <div>
-        <div class="dm-name">RAW FROM JOYI</div>
-        <div class="dm-desc">You drop raw iPhone video + screen recordings here. That's it.</div>
-      </div>
-      <div class="flow-who" style="margin-left:auto;">JoYi</div>
-    </div>
-
-    <div style="margin-left:48px; padding:8px 16px; font-size:12px; color:var(--warm-gray); background:#f9f8f5; border-radius:6px; margin-bottom:4px;">
-      Name files: <strong>[date]-[topic].mov</strong> &nbsp; Example: <strong>2026-04-14-year-one-reflection.mov</strong>
-    </div>
-
-    <div class="dm-row" style="margin-left:24px;">
-      <div class="dm-icon" style="font-size:20px;">&#x2702;</div>
-      <div>
-        <div class="dm-name">GABBY WORKSPACE</div>
-        <div class="dm-desc">Gabby works here — clips, thumbnails, captions, carousels</div>
-      </div>
-      <div class="flow-who gabby" style="margin-left:auto;">Gabby</div>
-    </div>
-
-    <div class="dm-row" style="margin-left:24px;">
-      <div class="dm-icon" style="font-size:20px;">&#x2705;</div>
-      <div>
-        <div class="dm-name">READY TO POST</div>
-        <div class="dm-desc">Final approved content, organized by platform</div>
-      </div>
-      <div class="flow-who gabby" style="margin-left:auto;">Gabby</div>
-    </div>
-
-    <div style="margin-left:48px; display:flex; gap:8px; padding:8px 0; flex-wrap:wrap;">
-      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">linkedin/</span>
-      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">instagram/</span>
-      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">tiktok/</span>
-      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">youtube/</span>
-      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">facebook/</span>
-    </div>
-
-    <div class="dm-row" style="margin-left:24px;">
-      <div class="dm-icon" style="font-size:20px;">&#x1f4e6;</div>
-      <div>
-        <div class="dm-name">ARCHIVE</div>
-        <div class="dm-desc">Past weeks — move here monthly to keep Drive clean</div>
-      </div>
-    </div>
-  </div>
-
-  <div style="background:var(--white); border-radius:12px; padding:20px; margin-top:16px;">
-    <h4 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:12px;">JoYi's Upload Flow (iPhone)</h4>
-    <div class="rg-steps">
-      <div class="rg-step">
-        <div class="rg-num">1</div>
-        <div class="rg-act">Open Photos</div>
-        <div class="rg-detail">Find the video you just shot</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">2</div>
-        <div class="rg-act">Tap Share</div>
-        <div class="rg-detail">The share icon (box with arrow)</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">3</div>
-        <div class="rg-act">Save to Files</div>
-        <div class="rg-detail">Pick Google Drive > RAW FROM JOYI</div>
-      </div>
-      <div class="rg-step">
-        <div class="rg-num">4</div>
-        <div class="rg-act">Ping Gabby</div>
-        <div class="rg-detail">Drop a message in Discord: "raw uploaded"</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // Date
-  document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  let currentStep = 0;
+  const SAVE_KEY = 'wcm_v3';
+  const GABBY_KEY = 'wcm_v3_gabby';
+  const STEP_KEY = 'wcm_v3_step';
+  const FB_KEY = 'wcm_v3_feedback';
 
-  // Tab switching
-  document.querySelectorAll('.vtab').forEach(t => {
-    t.addEventListener('click', () => {
-      document.querySelectorAll('.vtab').forEach(x => x.classList.remove('active'));
-      document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      document.getElementById('v-' + t.dataset.v).classList.add('active');
+  // --- STEPS ---
+  function goStep(n) {
+    currentStep = n;
+    document.querySelectorAll('.step-dot').forEach((d, i) => {
+      d.classList.remove('active','completed');
+      if (i < n) d.classList.add('completed');
+      if (i === n) d.classList.add('active');
     });
-  });
-
-  // Flow step highlight
-  function highlightStep(step) {
-    document.querySelectorAll('.flow-card').forEach(c => c.classList.remove('active-step'));
-    document.getElementById('fc-' + step).classList.add('active-step');
+    document.querySelectorAll('.step-line').forEach((l, i) => { l.classList.toggle('done', i < n); });
+    document.querySelectorAll('.step-panel').forEach((p, i) => { p.classList.toggle('active', i === n); });
+    localStorage.setItem(STEP_KEY, n);
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  // Toast
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2000);
+  // --- VOICE RECORDING (Web Speech API) ---
+  let recognition = null;
+  let isRecording = false;
+  let fullTranscript = '';
+
+  function initSpeech() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      document.getElementById('voiceStatus').textContent = 'Voice not supported in this browser. Use Chrome.';
+      return;
+    }
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (e) => {
+      let interim = '';
+      let final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) { final += t + ' '; }
+        else { interim = t; }
+      }
+      if (final) {
+        fullTranscript += final;
+        // Also append to the textarea
+        const ta = document.getElementById('brainDump');
+        ta.value = fullTranscript;
+        autoSave();
+      }
+      const el = document.getElementById('transcript');
+      el.classList.remove('empty');
+      el.textContent = fullTranscript + (interim ? interim : '');
+      el.scrollTop = el.scrollHeight;
+    };
+
+    recognition.onerror = (e) => {
+      if (e.error === 'no-speech') return; // ignore silence
+      console.error('Speech error:', e.error);
+      stopVoice();
+    };
+
+    recognition.onend = () => {
+      // Auto-restart if still recording (speech API stops after silence)
+      if (isRecording) {
+        try { recognition.start(); } catch(e) {}
+      }
+    };
   }
 
-  // Auto-save all inputs to localStorage
-  const SAVE_KEY = 'wcm_v2_data';
+  function toggleVoice() {
+    if (isRecording) { stopVoice(); } else { startVoice(); }
+  }
 
+  function startVoice() {
+    if (!recognition) initSpeech();
+    if (!recognition) return;
+    isRecording = true;
+    fullTranscript = document.getElementById('brainDump').value;
+    if (fullTranscript && !fullTranscript.endsWith(' ')) fullTranscript += ' ';
+    try { recognition.start(); } catch(e) {}
+    document.getElementById('micBtn').classList.add('recording');
+    document.getElementById('voiceZone').classList.add('recording');
+    document.getElementById('voiceStatus').classList.add('live');
+    document.getElementById('voiceStatus').textContent = 'Listening... tap to stop';
+  }
+
+  function stopVoice() {
+    isRecording = false;
+    if (recognition) try { recognition.stop(); } catch(e) {}
+    document.getElementById('micBtn').classList.remove('recording');
+    document.getElementById('voiceZone').classList.remove('recording');
+    document.getElementById('voiceStatus').classList.remove('live');
+    document.getElementById('voiceStatus').textContent = 'Tap to start talking';
+  }
+
+  initSpeech();
+
+  // --- AUTO SAVE ---
   function autoSave() {
     const data = {};
     document.querySelectorAll('input[type="text"], textarea').forEach(el => {
-      if (el.id) data[el.id] = el.value;
+      if (el.id && el.id !== 'fbInput') data[el.id] = el.value;
     });
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   }
-
   function loadSaved() {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return;
@@ -787,33 +798,88 @@
     });
   }
 
-  // Gabby tasks save/load
+  // --- GABBY TASKS ---
   function saveGabby() {
     const states = [];
     document.querySelectorAll('#gabbyTasks .ga-task input').forEach(cb => {
       states.push(cb.checked);
       cb.parentElement.classList.toggle('done', cb.checked);
     });
-    localStorage.setItem('wcm_v2_gabby', JSON.stringify(states));
-    autoSave();
+    localStorage.setItem(GABBY_KEY, JSON.stringify(states));
   }
-
   function loadGabby() {
-    const raw = localStorage.getItem('wcm_v2_gabby');
+    const raw = localStorage.getItem(GABBY_KEY);
     if (!raw) return;
-    const states = JSON.parse(raw);
-    const cbs = document.querySelectorAll('#gabbyTasks .ga-task input');
-    states.forEach((s, i) => {
-      if (cbs[i]) {
-        cbs[i].checked = s;
-        cbs[i].parentElement.classList.toggle('done', s);
-      }
+    JSON.parse(raw).forEach((s, i) => {
+      const cbs = document.querySelectorAll('#gabbyTasks .ga-task input');
+      if (cbs[i]) { cbs[i].checked = s; cbs[i].parentElement.classList.toggle('done', s); }
     });
   }
 
-  // Init
+  // --- FEEDBACK LOG ---
+  function loadFeedback() {
+    const raw = localStorage.getItem(FB_KEY);
+    const items = raw ? JSON.parse(raw) : [];
+    renderFeedback(items);
+  }
+  function renderFeedback(items) {
+    const el = document.getElementById('feedbackLog');
+    if (!items.length) {
+      el.innerHTML = '<div style="font-size:13px; color:rgba(255,255,255,.2); padding:12px; text-align:center;">No entries yet. Add bugs, requests, or ideas below.</div>';
+      return;
+    }
+    el.innerHTML = items.map((f,i) => `
+      <div class="fb-entry">
+        <span class="fb-who ${f.who}">${f.who === 'joyi' ? 'JoYi' : 'Gabby'}</span>
+        <span class="fb-text">${esc(f.text)}</span>
+        <span class="fb-time">${f.date}</span>
+      </div>
+    `).join('');
+  }
+  function addFeedback() {
+    const input = document.getElementById('fbInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const who = document.getElementById('fbWho').value;
+    const raw = localStorage.getItem(FB_KEY);
+    const items = raw ? JSON.parse(raw) : [];
+    const now = new Date();
+    const date = (now.getMonth()+1) + '/' + now.getDate() + ' ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+    items.unshift({ who, text, date });
+    localStorage.setItem(FB_KEY, JSON.stringify(items));
+    renderFeedback(items);
+    input.value = '';
+    showToast('Added');
+  }
+  function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  // --- RESET ---
+  function resetWeek() {
+    if (!confirm('Clear this week and start fresh? (Feedback log is kept.)')) return;
+    localStorage.removeItem(SAVE_KEY);
+    localStorage.removeItem(GABBY_KEY);
+    document.querySelectorAll('input[type="text"], textarea').forEach(el => { if (el.id !== 'fbInput') el.value = ''; });
+    document.querySelectorAll('#gabbyTasks .ga-task input').forEach(cb => { cb.checked = false; cb.parentElement.classList.remove('done'); });
+    document.getElementById('transcript').textContent = 'Your words will appear here as you speak...';
+    document.getElementById('transcript').classList.add('empty');
+    fullTranscript = '';
+    goStep(0);
+    showToast('Reset for next week');
+  }
+
+  // --- TOAST ---
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // --- INIT ---
   loadSaved();
   loadGabby();
+  loadFeedback();
+  const savedStep = localStorage.getItem(STEP_KEY);
+  if (savedStep !== null) goStep(parseInt(savedStep));
 </script>
 </body>
 </html>
