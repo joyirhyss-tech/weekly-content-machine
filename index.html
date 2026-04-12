@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Content Machine</title>
+<style>
+  :root {
+    --navy: #1a2744;
+    --cream: #f8f7f4;
+    --gold: #d4a574;
+    --light-gold: #f5ead8;
+    --lavender: #7c8dc8;
+    --slate: #4a5568;
+    --warm-gray: #6b7280;
+    --white: #fff;
+    --green: #38a169;
+    --yellow: #d69e2e;
+    --red: #e53e3e;
+    --blue: #3182ce;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--cream); color: var(--navy); }
+
+  /* --- TOP BAR --- */
+  .top { background: var(--navy); color: var(--cream); padding: 14px 28px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+  .top h1 { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+  .top .right { display: flex; gap: 12px; align-items: center; }
+  .top .right a { color: var(--gold); text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--gold); border-radius: 5px; }
+  .top .right a:hover { background: var(--gold); color: var(--navy); }
+  .top .date { font-size: 13px; opacity: .7; }
+
+  /* --- VIEWS --- */
+  .view-toggle { display: flex; background: var(--white); border-bottom: 2px solid var(--navy); padding: 0 20px; }
+  .vtab { padding: 12px 22px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; color: var(--warm-gray); }
+  .vtab:hover { color: var(--navy); }
+  .vtab.active { color: var(--navy); border-bottom-color: var(--gold); }
+
+  .view { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* --- FLOW DIAGRAM --- */
+  .flow { display: flex; gap: 0; align-items: stretch; margin: 20px 0; overflow-x: auto; padding-bottom: 8px; }
+  .flow-step { flex: 1; min-width: 180px; position: relative; }
+  .flow-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    border: 2px solid #e2e0dc;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all .2s;
+    cursor: pointer;
+  }
+  .flow-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+  .flow-card.done { border-color: var(--green); background: #f0fff4; }
+  .flow-card.active-step { border-color: var(--gold); border-width: 3px; background: var(--light-gold); }
+  .flow-icon { font-size: 36px; line-height: 1; }
+  .flow-label { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .flow-sub { font-size: 11px; color: var(--warm-gray); line-height: 1.4; }
+  .flow-who { font-size: 10px; font-weight: 700; color: var(--white); background: var(--lavender); padding: 2px 8px; border-radius: 10px; margin-top: 4px; }
+  .flow-who.gabby { background: var(--gold); }
+  .flow-arrow { display: flex; align-items: center; justify-content: center; min-width: 32px; font-size: 20px; color: var(--warm-gray); }
+
+  /* --- WEEK PLANNER --- */
+  .week-header {
+    background: var(--navy);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .week-header .wh-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 4px; }
+  .week-header input, .week-header textarea, .week-header select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 6px;
+    background: rgba(255,255,255,.1);
+    color: var(--cream);
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .week-header input::placeholder, .week-header textarea::placeholder { color: rgba(255,255,255,.4); }
+  .week-header textarea { min-height: 60px; resize: vertical; }
+
+  /* --- KANBAN COLUMNS --- */
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 20px 0; }
+  @media (max-width: 900px) { .kanban { grid-template-columns: 1fr 1fr; } }
+  .k-col {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 200px;
+    border-top: 4px solid var(--warm-gray);
+  }
+  .k-col.col-plan { border-top-color: var(--lavender); }
+  .k-col.col-shoot { border-top-color: var(--gold); }
+  .k-col.col-gabby { border-top-color: var(--navy); }
+  .k-col.col-post { border-top-color: var(--green); }
+  .k-col h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .k-col h3 .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .col-plan .dot { background: var(--lavender); }
+  .col-shoot .dot { background: var(--gold); }
+  .col-gabby .dot { background: var(--navy); }
+  .col-post .dot { background: var(--green); }
+
+  .k-card {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+  }
+  .k-card:hover { background: var(--light-gold); }
+  .k-card .platform-tags { margin-top: 6px; }
+  .k-card strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
+  /* --- PLATFORM BADGES --- */
+  .badge { display: inline-block; padding: 2px 8px; font-size: 10px; font-weight: 700; border-radius: 3px; text-transform: uppercase; letter-spacing: .5px; margin: 1px; }
+  .b-li { background: #0077b5; color: white; }
+  .b-ig { background: #e4405f; color: white; }
+  .b-tk { background: #010101; color: white; }
+  .b-yt { background: #ff0000; color: white; }
+  .b-fb { background: #1877f2; color: white; }
+
+  /* --- RECORD GUIDE --- */
+  .record-guide {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    border: 2px solid var(--gold);
+  }
+  .rg-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .rg-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .rg-step {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .rg-step .rg-num { font-size: 28px; font-weight: 800; color: var(--gold); }
+  .rg-step .rg-act { font-size: 13px; font-weight: 700; margin: 4px 0; }
+  .rg-step .rg-detail { font-size: 11px; color: var(--warm-gray); line-height: 1.4; }
+
+  /* --- STORY BUILDER --- */
+  .story-builder { background: var(--white); border-radius: 12px; padding: 24px; margin: 20px 0; }
+  .sb-row { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: start; margin-bottom: 12px; }
+  .sb-label {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .sb-label.tpc { background: var(--lavender); }
+  .sb-label.aeq { background: var(--gold); color: var(--navy); }
+  .sb-label.demo { background: var(--green); }
+  .sb-label.cta { background: var(--red); color: white; }
+  .sb-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d4d0ca;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--cream);
+  }
+  .sb-input:focus { outline: 2px solid var(--lavender); }
+
+  /* --- GABBY SECTION --- */
+  .gabby-assign {
+    background: linear-gradient(135deg, var(--navy), #2d3e5e);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .gabby-assign h3 { color: var(--gold); font-size: 16px; margin-bottom: 12px; }
+  .ga-task {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+    font-size: 14px;
+  }
+  .ga-task:last-child { border-bottom: none; }
+  .ga-task input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--gold); }
+  .ga-task.done { opacity: .4; text-decoration: line-through; }
+  .ga-note { margin-top: 12px; }
+  .ga-note textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 13px;
+    font-family: inherit;
+    min-height: 50px;
+    background: rgba(255,255,255,.1);
+    color: var(--cream);
+  }
+  .ga-note textarea::placeholder { color: rgba(255,255,255,.4); }
+
+  /* --- DRIVE MAP --- */
+  .drive-map {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+  .dm-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 6px 0;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .dm-row:hover { background: var(--light-gold); }
+  .dm-icon { font-size: 24px; flex-shrink: 0; }
+  .dm-name { font-weight: 700; }
+  .dm-desc { font-size: 12px; color: var(--warm-gray); }
+  .dm-arrow { margin-left: auto; font-size: 18px; color: var(--warm-gray); }
+
+  /* --- QUICK ACTIONS BAR --- */
+  .actions-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .act-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: var(--white);
+    border: 2px solid #e2e0dc;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--navy);
+    transition: all .15s;
+  }
+  .act-btn:hover { border-color: var(--gold); background: var(--light-gold); }
+  .act-btn .act-icon { font-size: 18px; }
+
+  /* --- TOAST --- */
+  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--navy); color: var(--cream); padding: 12px 24px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .3s; z-index: 200; }
+  .toast.show { opacity: 1; }
+
+  /* --- GENERAL --- */
+  h2 { font-size: 20px; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: var(--warm-gray); margin-bottom: 16px; }
+  .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin: 24px 0 8px; }
+</style>
+</head>
+<body>
+
+<!-- TOP -->
+<div class="top">
+  <div>
+    <h1>WEEKLY CONTENT MACHINE</h1>
+    <span class="date" id="dateDisplay"></span>
+  </div>
+  <div class="right">
+    <a href="https://drive.google.com" target="_blank">Drive</a>
+    <a href="https://discord.com/channels/" target="_blank">Discord</a>
+  </div>
+</div>
+
+<!-- VIEW TABS -->
+<div class="view-toggle">
+  <div class="vtab active" data-v="flow">This Week</div>
+  <div class="vtab" data-v="record">Record Guide</div>
+  <div class="vtab" data-v="gabby">Gabby</div>
+  <div class="vtab" data-v="drive">Drive Map</div>
+</div>
+
+<!-- ============================== -->
+<!-- VIEW: THIS WEEK                -->
+<!-- ============================== -->
+<div class="view active" id="v-flow">
+
+  <!-- VISUAL FLOW -->
+  <div class="section-label">Your Weekly Flow</div>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-card active-step" id="fc-plan" onclick="highlightStep('plan')">
+        <div class="flow-icon">&#x1f4ad;</div>
+        <div class="flow-label">Plan the Story</div>
+        <div class="flow-sub">Agree on arc, tool, lesson</div>
+        <div class="flow-who">JoYi + Gabby</div>
+      </div>
+    </div>
+    <div class="flow-arrow">&#x27A1;</div>
+    <div class="flow-step">
+      <div class="flow-card" id="fc-record" onclick="highlightStep('record')">
+        <div class="flow-icon">&#x1f3ac;</div>
+        <div class="flow-label">Record</div>
+        <div class="flow-sub">Screen record + iPhone as you work</div>
+        <div class="flow-who">JoYi</div>
+      </div>
+    </div>
+    <div class="flow-arrow">&#x27A1;</div>
+    <div class="flow-step">
+      <div class="flow-card" id="fc-upload" onclick="highlightStep('upload')">
+        <div class="flow-icon">&#x2601;</div>
+        <div class="flow-label">Upload to Drive</div>
+        <div class="flow-sub">Drop raw files in shared folder</div>
+        <div class="flow-who">JoYi</div>
+      </div>
+    </div>
+    <div class="flow-arrow">&#x27A1;</div>
+    <div class="flow-step">
+      <div class="flow-card" id="fc-gabby" onclick="highlightStep('gabby')">
+        <div class="flow-icon">&#x2702;</div>
+        <div class="flow-label">Gabby Builds</div>
+        <div class="flow-sub">Clips, captions, thumbnails, carousels</div>
+        <div class="flow-who gabby">Gabby</div>
+      </div>
+    </div>
+    <div class="flow-arrow">&#x27A1;</div>
+    <div class="flow-step">
+      <div class="flow-card" id="fc-post" onclick="highlightStep('post')">
+        <div class="flow-icon">&#x1f680;</div>
+        <div class="flow-label">Post</div>
+        <div class="flow-sub">Schedule across platforms</div>
+        <div class="flow-who gabby">Gabby</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK PLANNER -->
+  <div class="section-label">This Week's Story</div>
+  <div class="week-header">
+    <div>
+      <div class="wh-label">Week Theme</div>
+      <input type="text" id="weekTheme" placeholder="e.g. 1-Year Reflection" value="1-Year Reflection" oninput="autoSave()">
+    </div>
+    <div>
+      <div class="wh-label">The Hook (1 sentence)</div>
+      <input type="text" id="weekHook" placeholder="The scroll-stopper..." value="I quit my career, traveled 5 countries with my sons, and built 23 AI tools in 12 months." oninput="autoSave()">
+    </div>
+    <div>
+      <div class="wh-label">This Week's CTA</div>
+      <input type="text" id="weekCTA" placeholder="One link, one ask" value="aidedeq.org/book" oninput="autoSave()">
+    </div>
+  </div>
+
+  <!-- STORY BUILDER -->
+  <div class="story-builder">
+    <h3 style="margin-bottom:16px;">Story Arc Builder</h3>
+    <div class="sb-row">
+      <div class="sb-label">Hook</div>
+      <input class="sb-input" id="sb-hook" placeholder="First 5 seconds. What stops the scroll?" value="" oninput="autoSave()">
+    </div>
+    <div class="sb-row">
+      <div class="sb-label tpc">TPC Arc</div>
+      <input class="sb-input" id="sb-tpc" placeholder="The personal practice angle — what's the heart of this?" value="" oninput="autoSave()">
+    </div>
+    <div class="sb-row">
+      <div class="sb-label aeq">AIdedEQ Arc</div>
+      <input class="sb-input" id="sb-aeq" placeholder="The builder/solution angle — what did you make or solve?" value="" oninput="autoSave()">
+    </div>
+    <div class="sb-row">
+      <div class="sb-label demo">Show + Tell</div>
+      <input class="sb-input" id="sb-demo" placeholder="What will you screen record or demo? Be specific." value="" oninput="autoSave()">
+    </div>
+    <div class="sb-row">
+      <div class="sb-label cta">CTA</div>
+      <input class="sb-input" id="sb-cta" placeholder="One ask. One link." value="" oninput="autoSave()">
+    </div>
+    <p style="font-size:12px; color:var(--warm-gray); margin-top:8px;">Fill this out together with Gabby in Discord first. Then come here and lock it in.</p>
+  </div>
+
+  <!-- KANBAN -->
+  <div class="section-label">Content Board</div>
+  <div class="kanban">
+    <div class="k-col col-plan">
+      <h3><span class="dot"></span> Plan</h3>
+      <div class="k-card" style="border-left-color: var(--lavender);">
+        <strong>Agree on story arc</strong>
+        <div class="flow-sub">Discord call or async</div>
+      </div>
+      <div class="k-card" style="border-left-color: var(--lavender);">
+        <strong>Pick the demo</strong>
+        <div class="flow-sub">What tool or workflow to show</div>
+      </div>
+    </div>
+    <div class="k-col col-shoot">
+      <h3><span class="dot"></span> Record</h3>
+      <div class="k-card" style="border-left-color: var(--gold);">
+        <strong>Screen record demo</strong>
+        <div class="flow-sub">Record as you do the work</div>
+        <div class="platform-tags"><span class="badge b-yt">YT</span><span class="badge b-li">LI</span></div>
+      </div>
+      <div class="k-card" style="border-left-color: var(--gold);">
+        <strong>iPhone selfie intro</strong>
+        <div class="flow-sub">60 sec hook + personal story</div>
+        <div class="platform-tags"><span class="badge b-ig">IG</span><span class="badge b-tk">TK</span></div>
+      </div>
+    </div>
+    <div class="k-col col-gabby">
+      <h3><span class="dot"></span> Gabby Builds</h3>
+      <div class="k-card" style="border-left-color: var(--navy);">
+        <strong>Cut clips per platform</strong>
+        <div class="flow-sub">60s reel, 3-min full, shorts</div>
+      </div>
+      <div class="k-card" style="border-left-color: var(--navy);">
+        <strong>Captions + thumbnail</strong>
+        <div class="flow-sub">Auto-caption, brand colors</div>
+      </div>
+      <div class="k-card" style="border-left-color: var(--navy);">
+        <strong>Write post copy</strong>
+        <div class="flow-sub">Adapt per platform voice</div>
+      </div>
+    </div>
+    <div class="k-col col-post">
+      <h3><span class="dot"></span> Post</h3>
+      <div class="k-card" style="border-left-color: var(--green);">
+        <strong>Mon: LinkedIn text</strong>
+        <div class="platform-tags"><span class="badge b-li">LI</span></div>
+      </div>
+      <div class="k-card" style="border-left-color: var(--green);">
+        <strong>Tue: Reel + TikTok</strong>
+        <div class="platform-tags"><span class="badge b-ig">IG</span><span class="badge b-tk">TK</span></div>
+      </div>
+      <div class="k-card" style="border-left-color: var(--green);">
+        <strong>Wed: Full video</strong>
+        <div class="platform-tags"><span class="badge b-yt">YT</span><span class="badge b-li">LI</span></div>
+      </div>
+      <div class="k-card" style="border-left-color: var(--green);">
+        <strong>Thu: Facebook</strong>
+        <div class="platform-tags"><span class="badge b-fb">FB</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- VIEW: RECORD GUIDE             -->
+<!-- ============================== -->
+<div class="view" id="v-record">
+  <h2>Record Guide</h2>
+  <p class="subtitle">You're not making a commercial. You're recording yourself doing the work. That IS the content.</p>
+
+  <div class="record-guide">
+    <div class="rg-title">Screen Record Flow (your daily work = content)</div>
+    <div class="rg-steps">
+      <div class="rg-step">
+        <div class="rg-num">1</div>
+        <div class="rg-act">Open QuickTime</div>
+        <div class="rg-detail">File > New Screen Recording<br>Or: Cmd+Shift+5</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">2</div>
+        <div class="rg-act">Narrate as you go</div>
+        <div class="rg-detail">Talk through what you're doing and why. Don't script it. Just explain like you're showing Gabby.</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">3</div>
+        <div class="rg-act">Do the actual work</div>
+        <div class="rg-detail">Build a tool. Prep for Women Build Safety. Write curriculum. Use a tool you made. That's the content.</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">4</div>
+        <div class="rg-act">Stop + Upload</div>
+        <div class="rg-detail">Save. Drop in Google Drive > RAW FROM JOYI. Tell Gabby in Discord.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="record-guide" style="border-color: var(--lavender);">
+    <div class="rg-title">iPhone Selfie Flow (the personal hook)</div>
+    <div class="rg-steps">
+      <div class="rg-step">
+        <div class="rg-num">1</div>
+        <div class="rg-act">Face a window</div>
+        <div class="rg-detail">Natural light on your face. Phone at eye level.</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">2</div>
+        <div class="rg-act">Say the hook</div>
+        <div class="rg-detail">One sentence. Look at the lens. "I quit my career a year ago."</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">3</div>
+        <div class="rg-act">Tell the story (60s)</div>
+        <div class="rg-detail">The TPC arc. Why this matters to you personally. No script needed — just talk.</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">4</div>
+        <div class="rg-act">Upload to Drive</div>
+        <div class="rg-detail">Share from Photos app directly to Google Drive > RAW FROM JOYI folder.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">This Week's Recording Plan</div>
+  <div style="background:var(--white); border-radius:12px; padding:24px;">
+    <div class="sb-row">
+      <div class="sb-label demo">Record 1</div>
+      <input class="sb-input" id="rec1" placeholder="What are you screen recording? e.g. Building the weekly dashboard" oninput="autoSave()">
+    </div>
+    <div class="sb-row">
+      <div class="sb-label" style="background:var(--gold);color:var(--navy);">Record 2</div>
+      <input class="sb-input" id="rec2" placeholder="iPhone selfie — the personal story hook" oninput="autoSave()">
+    </div>
+    <div class="sb-row">
+      <div class="sb-label" style="background:var(--lavender);">Bonus</div>
+      <input class="sb-input" id="rec3" placeholder="Optional: behind the scenes, prep work, quick tip" oninput="autoSave()">
+    </div>
+  </div>
+
+  <div class="section-label">Content Types You Can Record This Week</div>
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:28px;">&#x1f4bb;</div>
+      <strong style="font-size:13px; display:block; margin:6px 0;">Screen Record a Tool</strong>
+      <span style="font-size:11px; color:var(--warm-gray);">Open anchorED, ROP, or any tool. Show a real use case.</span>
+    </div>
+    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:28px;">&#x1f4cb;</div>
+      <strong style="font-size:13px; display:block; margin:6px 0;">Prep for an Event</strong>
+      <span style="font-size:11px; color:var(--warm-gray);">Women Build Safety, retreat planning, FIT training prep — record as you plan.</span>
+    </div>
+    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:28px;">&#x270d;</div>
+      <strong style="font-size:13px; display:block; margin:6px 0;">Write Curriculum</strong>
+      <span style="font-size:11px; color:var(--warm-gray);">Record yourself building a lesson or module. Narrate your decisions.</span>
+    </div>
+    <div style="background:var(--white); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:28px;">&#x1f4f1;</div>
+      <strong style="font-size:13px; display:block; margin:6px 0;">This Dashboard</strong>
+      <span style="font-size:11px; color:var(--warm-gray);">Show how you plan your content each week. Meta-content that teaches.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- VIEW: GABBY                    -->
+<!-- ============================== -->
+<div class="view" id="v-gabby">
+  <h2>Gabby's Board</h2>
+  <p class="subtitle">Gabby: this is your workspace. JoYi drops raw content. You turn it into posts.</p>
+
+  <div class="gabby-assign">
+    <h3>This Week's Tasks</h3>
+    <div id="gabbyTasks">
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Pull raw video from Drive > RAW FROM JOYI</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut 60s hook clip for Reels + TikTok</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut full 2-3 min version for YouTube + LinkedIn</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Add captions to all clips</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Create thumbnail (1280x720, face + bold text)</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Write post captions per platform</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Move finished assets to Drive > READY TO POST</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Schedule posts for the week</span></div>
+      <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Ping JoYi in Discord when ready for review</span></div>
+    </div>
+    <div class="ga-note">
+      <div class="wh-label" style="color:var(--gold); margin-bottom:6px;">Notes for Gabby</div>
+      <textarea id="gabbyNotes" placeholder="JoYi: leave notes for Gabby here. Gabby: leave questions here." oninput="autoSave()"></textarea>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+    <div style="background:var(--white); border-radius:12px; padding:20px;">
+      <h4 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:12px;">Platform Specs</h4>
+      <table style="width:100%; font-size:13px; border-collapse:collapse;">
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>YouTube</strong></td><td>16:9, 1080p+</td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>LinkedIn</strong></td><td>16:9 or 1:1, &lt;10 min</td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>IG Reels</strong></td><td>9:16, 60-90 sec</td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>TikTok</strong></td><td>9:16, 60-90 sec</td></tr>
+        <tr style="border-bottom:1px solid #eee;"><td style="padding:6px 0;"><strong>IG Carousel</strong></td><td>1080x1080, 5-10 slides</td></tr>
+        <tr><td style="padding:6px 0;"><strong>Thumbnail</strong></td><td>1280x720</td></tr>
+      </table>
+    </div>
+    <div style="background:var(--white); border-radius:12px; padding:20px;">
+      <h4 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:12px;">Brand Quick Ref</h4>
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <div style="width:36px;height:36px;border-radius:6px;background:var(--navy);" title="#1a2744"></div>
+        <div style="width:36px;height:36px;border-radius:6px;background:var(--cream);border:1px solid #ddd;" title="#f8f7f4"></div>
+        <div style="width:36px;height:36px;border-radius:6px;background:var(--gold);" title="#d4a574"></div>
+        <div style="width:36px;height:36px;border-radius:6px;background:var(--lavender);" title="#7c8dc8"></div>
+        <div style="width:36px;height:36px;border-radius:6px;background:var(--slate);" title="#4a5568"></div>
+      </div>
+      <ul style="font-size:12px; padding-left:16px; color:var(--warm-gray); line-height:1.8;">
+        <li>No emojis on final assets</li>
+        <li>Max 2 fonts per asset</li>
+        <li>Always include CTA URL</li>
+        <li>Warm + professional, never "woo-woo"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label">Posting Schedule (Every Week)</div>
+  <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px;">
+    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
+      <strong style="font-size:13px; display:block;">Mon</strong>
+      <span class="badge b-li">LinkedIn</span>
+      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Text post</div>
+    </div>
+    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
+      <strong style="font-size:13px; display:block;">Tue</strong>
+      <span class="badge b-ig">IG</span><span class="badge b-tk">TK</span>
+      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">60s clip</div>
+    </div>
+    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
+      <strong style="font-size:13px; display:block;">Wed</strong>
+      <span class="badge b-yt">YouTube</span>
+      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Full video</div>
+    </div>
+    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
+      <strong style="font-size:13px; display:block;">Thu</strong>
+      <span class="badge b-fb">Facebook</span>
+      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Story + video</div>
+    </div>
+    <div style="background:var(--white); border-radius:8px; padding:14px; text-align:center;">
+      <strong style="font-size:13px; display:block;">Fri</strong>
+      <span class="badge b-ig">IG</span>
+      <div style="font-size:11px; color:var(--warm-gray); margin-top:4px;">Carousel</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- VIEW: DRIVE MAP                -->
+<!-- ============================== -->
+<div class="view" id="v-drive">
+  <h2>Google Drive Map</h2>
+  <p class="subtitle">This is how files flow between you and Gabby. Set up these folders once.</p>
+
+  <div class="drive-map">
+    <div class="dm-row" style="background:var(--light-gold); border-radius:8px;">
+      <div class="dm-icon">&#x1f4c1;</div>
+      <div>
+        <div class="dm-name">WEEKLY CONTENT MACHINE</div>
+        <div class="dm-desc">Shared folder — JoYi + Gabby both have edit access</div>
+      </div>
+    </div>
+
+    <div class="dm-row" style="margin-left:24px;">
+      <div class="dm-icon" style="font-size:20px;">&#x1f4f1;</div>
+      <div>
+        <div class="dm-name">RAW FROM JOYI</div>
+        <div class="dm-desc">You drop raw iPhone video + screen recordings here. That's it.</div>
+      </div>
+      <div class="flow-who" style="margin-left:auto;">JoYi</div>
+    </div>
+
+    <div style="margin-left:48px; padding:8px 16px; font-size:12px; color:var(--warm-gray); background:#f9f8f5; border-radius:6px; margin-bottom:4px;">
+      Name files: <strong>[date]-[topic].mov</strong> &nbsp; Example: <strong>2026-04-14-year-one-reflection.mov</strong>
+    </div>
+
+    <div class="dm-row" style="margin-left:24px;">
+      <div class="dm-icon" style="font-size:20px;">&#x2702;</div>
+      <div>
+        <div class="dm-name">GABBY WORKSPACE</div>
+        <div class="dm-desc">Gabby works here — clips, thumbnails, captions, carousels</div>
+      </div>
+      <div class="flow-who gabby" style="margin-left:auto;">Gabby</div>
+    </div>
+
+    <div class="dm-row" style="margin-left:24px;">
+      <div class="dm-icon" style="font-size:20px;">&#x2705;</div>
+      <div>
+        <div class="dm-name">READY TO POST</div>
+        <div class="dm-desc">Final approved content, organized by platform</div>
+      </div>
+      <div class="flow-who gabby" style="margin-left:auto;">Gabby</div>
+    </div>
+
+    <div style="margin-left:48px; display:flex; gap:8px; padding:8px 0; flex-wrap:wrap;">
+      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">linkedin/</span>
+      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">instagram/</span>
+      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">tiktok/</span>
+      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">youtube/</span>
+      <span style="background:var(--white); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; border:1px solid #e2e0dc;">facebook/</span>
+    </div>
+
+    <div class="dm-row" style="margin-left:24px;">
+      <div class="dm-icon" style="font-size:20px;">&#x1f4e6;</div>
+      <div>
+        <div class="dm-name">ARCHIVE</div>
+        <div class="dm-desc">Past weeks — move here monthly to keep Drive clean</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--white); border-radius:12px; padding:20px; margin-top:16px;">
+    <h4 style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:12px;">JoYi's Upload Flow (iPhone)</h4>
+    <div class="rg-steps">
+      <div class="rg-step">
+        <div class="rg-num">1</div>
+        <div class="rg-act">Open Photos</div>
+        <div class="rg-detail">Find the video you just shot</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">2</div>
+        <div class="rg-act">Tap Share</div>
+        <div class="rg-detail">The share icon (box with arrow)</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">3</div>
+        <div class="rg-act">Save to Files</div>
+        <div class="rg-detail">Pick Google Drive > RAW FROM JOYI</div>
+      </div>
+      <div class="rg-step">
+        <div class="rg-num">4</div>
+        <div class="rg-act">Ping Gabby</div>
+        <div class="rg-detail">Drop a message in Discord: "raw uploaded"</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // Date
+  document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  // Tab switching
+  document.querySelectorAll('.vtab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.vtab').forEach(x => x.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      document.getElementById('v-' + t.dataset.v).classList.add('active');
+    });
+  });
+
+  // Flow step highlight
+  function highlightStep(step) {
+    document.querySelectorAll('.flow-card').forEach(c => c.classList.remove('active-step'));
+    document.getElementById('fc-' + step).classList.add('active-step');
+  }
+
+  // Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // Auto-save all inputs to localStorage
+  const SAVE_KEY = 'wcm_v2_data';
+
+  function autoSave() {
+    const data = {};
+    document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+      if (el.id) data[el.id] = el.value;
+    });
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  }
+
+  function loadSaved() {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Object.keys(data).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = data[id];
+    });
+  }
+
+  // Gabby tasks save/load
+  function saveGabby() {
+    const states = [];
+    document.querySelectorAll('#gabbyTasks .ga-task input').forEach(cb => {
+      states.push(cb.checked);
+      cb.parentElement.classList.toggle('done', cb.checked);
+    });
+    localStorage.setItem('wcm_v2_gabby', JSON.stringify(states));
+    autoSave();
+  }
+
+  function loadGabby() {
+    const raw = localStorage.getItem('wcm_v2_gabby');
+    if (!raw) return;
+    const states = JSON.parse(raw);
+    const cbs = document.querySelectorAll('#gabbyTasks .ga-task input');
+    states.forEach((s, i) => {
+      if (cbs[i]) {
+        cbs[i].checked = s;
+        cbs[i].parentElement.classList.toggle('done', s);
+      }
+    });
+  }
+
+  // Init
+  loadSaved();
+  loadGabby();
+</script>
+</body>
+</html>
