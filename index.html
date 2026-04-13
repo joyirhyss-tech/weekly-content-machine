@@ -387,23 +387,86 @@
   .intel-tag.resource { background: var(--green-light); color: var(--green); }
   .intel-tag.research { background: var(--lav-light); color: var(--lavender); }
 
-  /* SCRIPT OUTPUT */
-  .script-block { }
-  .script-text {
-    font-size: 15px; line-height: 1.7; color: var(--cream);
-    padding: 10px 14px; border-radius: 8px;
-    background: rgba(255,255,255,.03);
-    border: 1px solid transparent;
-    min-height: 24px;
-    transition: border-color .2s;
-    outline: none;
+  /* SCRIPT / GUIDE OUTPUT */
+  .phase { display: none; animation: fadeUp .35s ease; }
+  .phase.active { display: block; }
+
+  /* Clarify questions */
+  .clarify-q {
+    padding: 14px 18px; border-radius: 10px; margin: 8px 0;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    cursor: pointer; transition: all .2s;
   }
-  .script-text:hover { border-color: rgba(255,255,255,.1); }
-  .script-text:focus { border-color: var(--gold); background: rgba(255,255,255,.05); }
-  .script-text[contenteditable]:empty::before {
-    content: 'Click to edit...';
-    color: rgba(255,255,255,.2);
+  .clarify-q:hover { border-color: var(--gold); background: rgba(201,151,91,.06); }
+  .clarify-q .cq-label { font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .clarify-q .cq-text { font-size: 14px; color: var(--cream); line-height: 1.5; }
+  .clarify-q textarea {
+    margin-top: 8px; font-size: 13px; min-height: 40px; padding: 8px 12px;
+    background: rgba(255,255,255,.04);
   }
+
+  /* Direction cards */
+  .dir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  @media (max-width: 700px) { .dir-grid { grid-template-columns: 1fr; } }
+  .dir-card {
+    padding: 18px; border-radius: 12px; cursor: pointer;
+    transition: all .2s; border: 2px solid transparent;
+  }
+  .dir-card:hover { border-color: rgba(255,255,255,.15); transform: translateY(-1px); }
+  .dir-card.selected { border-color: var(--gold); background: rgba(201,151,91,.08); }
+  .dir-card h4 { font-size: 14px; margin-bottom: 4px; }
+  .dir-card p { font-size: 12px; color: var(--slate); line-height: 1.5; }
+
+  /* Recording guide cards */
+  .guide-section { margin: 20px 0; }
+  .guide-card {
+    padding: 20px; border-radius: 14px; margin: 12px 0;
+    position: relative; overflow: hidden;
+  }
+  .guide-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  }
+  .guide-card.g-joyi::before { background: var(--gold); }
+  .guide-card.g-pencil::before { background: var(--lavender); }
+  .guide-card.g-lesson::before { background: var(--green); }
+  .guide-card.g-cta::before { background: var(--red); }
+
+  .guide-type {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 10px; border-radius: 6px; margin-bottom: 10px;
+  }
+  .gt-joyi { background: var(--gold-light); color: var(--gold); }
+  .gt-pencil { background: var(--lav-light); color: var(--lavender); }
+  .gt-lesson { background: var(--green-light); color: var(--green); }
+  .gt-cta { background: var(--red-light); color: var(--red); }
+
+  .guide-topic { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .guide-prompt { font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 8px; }
+  .guide-exact {
+    font-size: 15px; font-weight: 600; color: var(--cream);
+    padding: 10px 14px; border-radius: 8px; margin: 8px 0;
+    background: rgba(201,151,91,.08); border-left: 3px solid var(--gold);
+    font-style: italic; line-height: 1.6;
+  }
+  .guide-notes { font-size: 12px; color: rgba(255,255,255,.3); margin-top: 6px; }
+
+  /* Visual asset cards */
+  .visual-card {
+    padding: 16px; border-radius: 12px; margin: 8px 0;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .vis-thumb {
+    width: 80px; height: 60px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+    text-align: center; line-height: 1.3;
+  }
+  .vis-thumb.pencil { background: linear-gradient(135deg, rgba(124,141,200,.2), rgba(201,151,91,.15)); color: var(--lavender); border: 1px solid rgba(124,141,200,.2); }
+  .vis-thumb.screen { background: var(--green-light); color: var(--green); border: 1px solid rgba(74,222,128,.15); }
+  .vis-desc { flex: 1; }
+  .vis-desc strong { font-size: 13px; display: block; margin-bottom: 2px; }
+  .vis-desc span { font-size: 12px; color: var(--slate); line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -494,53 +557,75 @@
       <textarea id="brainDump" rows="8" placeholder="Talk into the mic or type here. Both go to the same place. Ramble freely — the script generator will sort it out." oninput="autoSave()" style="font-size:15px; line-height:1.7;"></textarea>
     </div>
 
-    <button class="btn-next" onclick="generateScript()">Generate My Script &#8594;</button>
+    <button class="btn-next" onclick="startGuide()">Build My Guide &#8594;</button>
   </div>
 
   <!-- ============================== -->
-  <!-- STEP 2: SCRIPT (STORY ARC)     -->
+  <!-- STEP 2: GUIDED SCRIPT BUILDER  -->
   <!-- ============================== -->
   <div class="step-panel" id="step-1">
-    <h2>Your Script</h2>
-    <p class="subtitle">Auto-generated from your brain dump. Edit anything, or just go record.</p>
 
-    <!-- GENERATED SCRIPT DISPLAY -->
-    <div id="scriptDisplay" class="card glass-bright" style="padding:24px;">
-      <div class="script-block">
-        <div class="arc-tag hook" style="display:inline-block; margin-bottom:8px;">Hook</div>
-        <div class="script-text" id="out-hook" contenteditable="true" oninput="saveScriptEdits()"></div>
-      </div>
-      <div class="script-block" style="margin-top:16px;">
-        <div class="arc-tag tpc" style="display:inline-block; margin-bottom:8px;">TPC Arc</div>
-        <div class="script-text" id="out-tpc" contenteditable="true" oninput="saveScriptEdits()"></div>
-      </div>
-      <div class="script-block" style="margin-top:16px;">
-        <div class="arc-tag aeq" style="display:inline-block; margin-bottom:8px;">AIdedEQ Arc</div>
-        <div class="script-text" id="out-aeq" contenteditable="true" oninput="saveScriptEdits()"></div>
-      </div>
-      <div class="script-block" style="margin-top:16px;">
-        <div class="arc-tag demo" style="display:inline-block; margin-bottom:8px;">Show + Tell</div>
-        <div class="script-text" id="out-demo" contenteditable="true" oninput="saveScriptEdits()"></div>
-      </div>
-      <div class="script-block" style="margin-top:16px;">
-        <div class="arc-tag cta" style="display:inline-block; margin-bottom:8px;">CTA</div>
-        <div class="script-text" id="out-cta" contenteditable="true" oninput="saveScriptEdits()"></div>
+    <!-- PHASE A: CLARIFYING QUESTIONS -->
+    <div class="phase active" id="phase-clarify">
+      <h2>Quick Clarify</h2>
+      <p class="subtitle">Based on your dump, answer what feels right. Skip any that don't apply.</p>
+      <div id="clarifyQuestions"></div>
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="goStep(0)">&#8592; Dump</button>
+        <button class="btn-next" onclick="showDirections()">See My Options &#8594;</button>
       </div>
     </div>
 
-    <!-- FULL TALKING SCRIPT -->
-    <div class="section-label">Full Talking Script</div>
-    <div class="card glass" style="padding:20px;">
-      <div id="fullScript" contenteditable="true" style="font-size:15px; line-height:1.8; min-height:120px; outline:none;" oninput="saveScriptEdits()"></div>
+    <!-- PHASE B: DIRECTION CHOICES -->
+    <div class="phase" id="phase-directions">
+      <h2>Pick Your Direction</h2>
+      <p class="subtitle">Choose one path for TPC and one for AIdedEQ. These shape your recording guide.</p>
+
+      <div class="section-label">The Practice Center angle</div>
+      <div class="dir-grid" id="tpcOptions"></div>
+
+      <div class="section-label">AIdedEQ angle</div>
+      <div class="dir-grid" id="aeqOptions"></div>
+
+      <div class="section-label">Content tone</div>
+      <div class="dir-grid" id="toneOptions">
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="reflective">
+          <h4>Reflective</h4><p>Looking back, lessons learned, personal growth</p>
+        </div>
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="teaching">
+          <h4>Teaching</h4><p>Here's how to do this, step by step, try it yourself</p>
+        </div>
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="builder">
+          <h4>Builder Energy</h4><p>Watch me build this, behind the scenes, work in progress</p>
+        </div>
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="calling-in">
+          <h4>Calling In</h4><p>This matters, here's why, come be part of this</p>
+        </div>
+      </div>
+
+      <div class="section-label">Relevant from the field</div>
+      <div id="relevantLinks" class="card glass" style="padding:16px;"></div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="showPhase('phase-clarify')">&#8592; Clarify</button>
+        <button class="btn-next" onclick="buildRecordingGuide()">Build My Recording Guide &#8594;</button>
+      </div>
     </div>
 
-    <div style="display:flex; gap:8px; margin-top:12px;">
-      <button class="intel-refresh" onclick="generateScript()" style="margin-left:0;">Re-generate from dump</button>
-    </div>
+    <!-- PHASE C: RECORDING GUIDE -->
+    <div class="phase" id="phase-guide">
+      <h2>Your Recording Guide</h2>
+      <p class="subtitle">Not a script. Topics to riff on, questions to answer on camera, and the exact words for high-impact moments.</p>
 
-    <div class="nav-buttons">
-      <button class="btn-back" onclick="goStep(0)">&#8592; Dump</button>
-      <button class="btn-next" onclick="goStep(2)">Next: Record &#8594;</button>
+      <div id="recordingGuide"></div>
+
+      <div class="section-label">Visual Assets (Gabby creates these)</div>
+      <div id="visualAssets"></div>
+
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="showPhase('phase-directions')">&#8592; Directions</button>
+        <button class="btn-next" onclick="goStep(2)">Next: Record &#8594;</button>
+      </div>
     </div>
   </div>
 
@@ -978,13 +1063,12 @@
     localStorage.removeItem(SCRIPT_SAVE_KEY);
     document.querySelectorAll('input[type="text"], textarea').forEach(el => { if (el.id !== 'fbInput') el.value = ''; });
     document.querySelectorAll('#gabbyTasks .ga-task input').forEach(cb => { cb.checked = false; cb.parentElement.classList.remove('done'); });
-    // Clear script outputs
-    ['out-hook','out-tpc','out-aeq','out-demo','out-cta'].forEach(id => {
+    // Clear guide outputs
+    ['recordingGuide','visualAssets','clarifyQuestions','tpcOptions','aeqOptions','relevantLinks'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.textContent = '';
+      if (el) el.innerHTML = '';
     });
-    const fs = document.getElementById('fullScript');
-    if (fs) fs.innerText = '';
+    guideData = { clarify: {}, tpcDir: '', aeqDir: '', tone: '', guide: null };
     fullTranscript = '';
     goStep(0);
     showToast('Reset for next week');
@@ -997,142 +1081,317 @@
     setTimeout(() => t.classList.remove('show'), 2000);
   }
 
-  // --- SCRIPT GENERATION ENGINE ---
+  // --- GUIDE GENERATION ENGINE ---
   const SCRIPT_SAVE_KEY = 'wcm_v3_script';
+  let guideData = { clarify: {}, tpcDir: '', aeqDir: '', tone: '', guide: null };
 
-  // Keyword banks for detecting themes in the brain dump
   const THEME_KEYS = {
     tpc: ['practice','mindfulness','forgiveness','healing','meditation','pray','shrine','temple','peace',
           'present','attitudinal','facilitate','facilitation','facilitated','bonding','family','sons',
           'daughter','traveled','travel','journey','mountain','fuji','korea','japan','philippines',
           'osaka','busan','culture','spirit','heart','soul','fear','courage','leap','quit','left',
-          'director','career','workforce','personal','reflection','learn','grew','growth'],
+          'director','career','workforce','personal','reflection','learn','grew','growth','love',
+          'connection','belonging','wholeness','awe','meaning','essence'],
     aeq: ['tool','tools','built','build','building','code','coding','vibe','agentic','ai','aidedeq',
           'tech','technology','software','app','platform','nonprofit','nonprofits','organization',
           'mission','anchored','rop','snapshots','saas','consulting','curriculum','training',
-          'retreats','team','created','vision','partnership','startup','entrepreneur'],
-    demo: ['show','demo','screen','record','walkthrough','tutorial','how','process','step',
-           'dashboard','website','interface','click','open','try','example','real','live']
+          'retreats','team','created','vision','partnership','startup','entrepreneur','women',
+          'safety','girls','moxie'],
+    personal: ['quit','left','scared','year','ago','moved','sons','daughter','family','climbed',
+               'traveled','prayed','collapsed','born','new','started','learned','pivot']
   };
 
   function splitSentences(text) {
-    // Split on periods, question marks, exclamation points, or long pauses (indicated by multiple spaces or newlines)
-    return text
-      .replace(/\n/g, '. ')
-      .split(/(?<=[.!?])\s+|(?<=\w)\s{2,}/)
-      .map(s => s.trim())
-      .filter(s => s.length > 10);
+    return text.replace(/\n/g, '. ').split(/(?<=[.!?])\s+|(?<=\w)\s{2,}/)
+      .map(s => s.trim()).filter(s => s.length > 8);
   }
+  function score(s, keys) { const l = s.toLowerCase(); return keys.filter(k => l.includes(k)).length; }
 
-  function scoreSentence(sentence, keys) {
-    const lower = sentence.toLowerCase();
-    let score = 0;
-    keys.forEach(k => { if (lower.includes(k)) score++; });
-    return score;
-  }
-
-  function findBest(sentences, keys, exclude) {
-    let best = null, bestScore = 0;
-    for (const s of sentences) {
-      if (exclude.includes(s)) continue;
-      const score = scoreSentence(s, keys);
-      if (score > bestScore) { bestScore = score; best = s; }
-    }
-    return best;
-  }
-
-  function generateScript() {
+  // PHASE A: Generate clarifying questions from the dump
+  function startGuide() {
     const dump = document.getElementById('brainDump').value.trim();
-    if (!dump || dump.length < 20) {
-      showToast('Talk or type more first — need material to work with');
-      return;
-    }
+    if (!dump || dump.length < 20) { showToast('Need more material — talk or type first'); return; }
 
     const sentences = splitSentences(dump);
-    const used = [];
+    const hasTPC = sentences.some(s => score(s, THEME_KEYS.tpc) >= 2);
+    const hasAEQ = sentences.some(s => score(s, THEME_KEYS.aeq) >= 2);
+    const hasPersonal = sentences.some(s => score(s, THEME_KEYS.personal) >= 2);
 
-    // --- HOOK: Find the most dramatic / personal opening ---
-    // Prefer short sentences with strong personal words
-    const hookKeys = ['quit','left','year','ago','scared','terrified','changed','never','first','one day',
-                      'moment','decided','everything','started','born','collapsed','vision'];
-    let hook = findBest(sentences, hookKeys, used);
-    if (!hook) hook = sentences[0] || dump.slice(0, 80);
-    // Trim to punchy length
-    if (hook.length > 120) hook = hook.slice(0, 117) + '...';
-    used.push(hook);
+    const questions = [];
+    questions.push({
+      id: 'audience',
+      label: 'Who is this for?',
+      text: 'Who do you want watching this — practitioners, nonprofit leaders, potential clients, your community, or the general public?'
+    });
+    if (hasPersonal) {
+      questions.push({
+        id: 'depth',
+        label: 'How personal?',
+        text: 'You mentioned personal experiences. How deep do you want to go — surface-level context, or full story with the emotional weight?'
+      });
+    }
+    questions.push({
+      id: 'takeaway',
+      label: 'One thing they walk away with',
+      text: 'If the viewer remembers one thing, what is it? A feeling? A tool? A practice they can try today?'
+    });
+    if (hasAEQ) {
+      questions.push({
+        id: 'demo',
+        label: 'What can you show?',
+        text: 'You mentioned tools/building. What could you screen record or demo right now — even rough?'
+      });
+    }
+    questions.push({
+      id: 'cta',
+      label: 'What do you want them to do?',
+      text: 'Book a call? Subscribe? Try a tool? Follow you? Just one ask.'
+    });
 
-    // --- TPC ARC: Personal practice, healing, family, journey ---
-    let tpcSentences = sentences.filter(s => scoreSentence(s, THEME_KEYS.tpc) >= 1 && !used.includes(s));
-    let tpc = tpcSentences.slice(0, 3).join(' ');
-    if (!tpc) tpc = 'The personal practice that made this possible — mindfulness, forgiveness, showing up.';
-    used.push(...tpcSentences.slice(0, 3));
+    const el = document.getElementById('clarifyQuestions');
+    el.innerHTML = questions.map(q => `
+      <div class="clarify-q" onclick="this.querySelector('textarea')?.focus()">
+        <div class="cq-label">${q.label}</div>
+        <div class="cq-text">${q.text}</div>
+        <textarea id="cq-${q.id}" rows="2" placeholder="Quick answer..." oninput="guideData.clarify['${q.id}']=this.value"></textarea>
+      </div>
+    `).join('');
 
-    // --- AEQ ARC: Building, tools, solutions ---
-    let aeqSentences = sentences.filter(s => scoreSentence(s, THEME_KEYS.aeq) >= 1 && !used.includes(s));
-    let aeq = aeqSentences.slice(0, 3).join(' ');
-    if (!aeq) aeq = 'The tools and solutions being built — AIdedEQ, 23+ tools for mission-driven orgs.';
-    used.push(...aeqSentences.slice(0, 3));
-
-    // --- SHOW + TELL: What to demo ---
-    let demoSentences = sentences.filter(s => scoreSentence(s, THEME_KEYS.demo) >= 1 && !used.includes(s));
-    let demo = demoSentences.length > 0
-      ? 'Screen record: ' + demoSentences[0]
-      : 'Screen record a tool walkthrough or show the work you did this week.';
-
-    // --- CTA ---
-    let cta = 'Book a free consultation at aidedeq.org/book — or start your practice at thepracticecenter.org';
-
-    // --- FULL TALKING SCRIPT ---
-    const fullScript = `[HOOK — look at camera, first 5 seconds]
-"${hook}"
-
-[PERSONAL PRACTICE — 45-60 seconds, speak from the heart]
-${tpc}
-
-[THE BUILD — 30-45 seconds, show what you've made]
-${aeq}
-
-[SHOW AND TELL — 30-45 seconds, screen share or demo]
-${demo}
-
-[CLOSE — 10-15 seconds]
-${cta}`;
-
-    // Populate the display
-    document.getElementById('out-hook').textContent = hook;
-    document.getElementById('out-tpc').textContent = tpc;
-    document.getElementById('out-aeq').textContent = aeq;
-    document.getElementById('out-demo').textContent = demo;
-    document.getElementById('out-cta').textContent = cta;
-    document.getElementById('fullScript').innerText = fullScript;
-
-    saveScriptEdits();
     goStep(1);
-    showToast('Script generated from your dump');
+    showPhase('phase-clarify');
   }
 
-  function saveScriptEdits() {
-    const data = {
-      hook: document.getElementById('out-hook')?.textContent || '',
-      tpc: document.getElementById('out-tpc')?.textContent || '',
-      aeq: document.getElementById('out-aeq')?.textContent || '',
-      demo: document.getElementById('out-demo')?.textContent || '',
-      cta: document.getElementById('out-cta')?.textContent || '',
-      full: document.getElementById('fullScript')?.innerText || '',
+  function showPhase(id) {
+    document.querySelectorAll('#step-1 .phase').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  // PHASE B: Generate direction options
+  function showDirections() {
+    const dump = document.getElementById('brainDump').value.trim();
+    const sentences = splitSentences(dump);
+
+    // Extract key themes for TPC options
+    const tpcThemes = sentences.filter(s => score(s, THEME_KEYS.tpc) >= 1);
+    const aeqThemes = sentences.filter(s => score(s, THEME_KEYS.aeq) >= 1);
+
+    // Generate TPC direction options based on dump content
+    const tpcOpts = [];
+    if (tpcThemes.some(s => s.toLowerCase().match(/forgiv|heal|peace|attitud/)))
+      tpcOpts.push({ val: 'forgiveness', title: 'Forgiveness / Attitudinal Healing', desc: 'Lead with the practice — what forgiveness actually looks like in daily life' });
+    if (tpcThemes.some(s => s.toLowerCase().match(/travel|fuji|japan|korea|phil|shrine|temple|climb/)))
+      tpcOpts.push({ val: 'journey', title: 'The Journey / Pilgrimage', desc: 'The physical journey as metaphor for inner transformation' });
+    if (tpcThemes.some(s => s.toLowerCase().match(/family|son|daughter|bond|parent/)))
+      tpcOpts.push({ val: 'family', title: 'Family as Practice', desc: 'Practicing with the people closest to you — real, messy, daily' });
+    tpcOpts.push({ val: 'presence', title: 'Showing Up / Presence', desc: 'The practice of being fully here — in your body, your work, this moment' });
+    if (tpcOpts.length < 2) tpcOpts.push({ val: 'wholeness', title: 'Five Sources of Wholeness', desc: 'Essence, connection, belonging, meaning, awe' });
+
+    document.getElementById('tpcOptions').innerHTML = tpcOpts.map(o => `
+      <div class="dir-card glass" onclick="selectCard(this,'tpc')" data-val="${o.val}">
+        <h4>${o.title}</h4><p>${o.desc}</p>
+      </div>
+    `).join('');
+
+    // AEQ direction options
+    const aeqOpts = [];
+    if (aeqThemes.some(s => s.toLowerCase().match(/tool|built|build|creat/)))
+      aeqOpts.push({ val: 'tools', title: 'Tool Showcase', desc: 'Show what you built — screen record a real use case' });
+    if (aeqThemes.some(s => s.toLowerCase().match(/team|partner|vision|startup/)))
+      aeqOpts.push({ val: 'founder', title: 'Founder Story', desc: 'The builder journey — from vision to reality' });
+    if (aeqThemes.some(s => s.toLowerCase().match(/consult|nonprofit|mission|org/)))
+      aeqOpts.push({ val: 'consulting', title: 'Nonprofit AI Gap', desc: 'The problem you solve — tech that fits mission-driven orgs' });
+    aeqOpts.push({ val: 'curriculum', title: 'Curriculum + Training', desc: 'What you\'re teaching and building for facilitators' });
+    if (aeqOpts.length < 2) aeqOpts.push({ val: 'process', title: 'How I Build', desc: 'Vibe coding, agentic engineering — the actual process' });
+
+    document.getElementById('aeqOptions').innerHTML = aeqOpts.map(o => `
+      <div class="dir-card glass" onclick="selectCard(this,'aeq')" data-val="${o.val}">
+        <h4>${o.title}</h4><p>${o.desc}</p>
+      </div>
+    `).join('');
+
+    // Pull relevant intel links
+    const allIntel = [];
+    ['facilitation','nonprofit','ai'].forEach(lane => {
+      const cached = getCachedIntel(lane);
+      if (cached) allIntel.push(...cached.map(i => ({...i, lane})));
+    });
+    const rl = document.getElementById('relevantLinks');
+    if (allIntel.length > 0) {
+      const top = allIntel.slice(0, 4);
+      rl.innerHTML = top.map(i => `
+        <div style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:13px;">
+          <a href="${esc(i.link)}" target="_blank" style="color:var(--cream); text-decoration:none; font-weight:600;">${esc(i.title)}</a>
+          <span style="font-size:11px; color:var(--slate); margin-left:8px;">${esc(i.source)}</span>
+        </div>
+      `).join('');
+    } else {
+      rl.innerHTML = '<span style="font-size:12px; color:var(--slate);">No cached articles. Refresh intel on Step 1.</span>';
+    }
+
+    showPhase('phase-directions');
+  }
+
+  function selectCard(el, group) {
+    el.parentElement.querySelectorAll('.dir-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    if (group === 'tpc') guideData.tpcDir = el.dataset.val;
+    if (group === 'aeq') guideData.aeqDir = el.dataset.val;
+    if (group === 'tone') guideData.tone = el.dataset.val;
+  }
+
+  // PHASE C: Build the actual recording guide
+  function buildRecordingGuide() {
+    const dump = document.getElementById('brainDump').value.trim();
+    const sentences = splitSentences(dump);
+    const cl = guideData.clarify;
+    const tone = guideData.tone || 'reflective';
+
+    // Find the strongest personal sentence for the exact-words hook
+    const hookKeys = ['quit','left','year','ago','scared','changed','decided','everything','started','collapsed','vision','born'];
+    let hookSentence = '';
+    let best = 0;
+    sentences.forEach(s => { const sc = score(s, hookKeys); if (sc > best) { best = sc; hookSentence = s; }});
+    if (!hookSentence) hookSentence = sentences[0] || '';
+    if (hookSentence.length > 100) hookSentence = hookSentence.slice(0,97) + '...';
+
+    // Find TPC-rich and AEQ-rich sentences
+    const tpcRich = sentences.filter(s => score(s, THEME_KEYS.tpc) >= 2).slice(0,3);
+    const aeqRich = sentences.filter(s => score(s, THEME_KEYS.aeq) >= 2).slice(0,3);
+
+    const guide = [];
+
+    // --- SEGMENT 1: JoYi to Camera (Hook + Personal) ---
+    guide.push({
+      type: 'joyi', typeLabel: 'JoYi to Camera', typeClass: 'gt-joyi', cardClass: 'g-joyi',
+      topic: 'The Hook',
+      prompt: 'Look at the camera. Say this line, then riff on why it matters.',
+      exact: hookSentence,
+      notes: '5 seconds. Don\'t explain. Just say it and pause.'
+    });
+
+    // TPC segment
+    const tpcTopics = {
+      'forgiveness': { topic: 'The Practice That Changed Everything', prompt: 'Talk about forgiveness as a real practice — not a concept. What does it look like on a hard Tuesday morning? How did it change how you show up?' },
+      'journey': { topic: 'The Journey', prompt: 'You traveled. You climbed. You prayed. What did the physical journey teach you that staying home couldn\'t have?' },
+      'family': { topic: 'Family as Practice Ground', prompt: 'Your sons, your daughter, the people closest to you. How is practice different when it\'s with family — not clients, not strangers?' },
+      'presence': { topic: 'Showing Up', prompt: 'What does it mean to be present — not in theory, but right now, in your actual life, with all the uncertainty?' },
+      'wholeness': { topic: 'Five Sources of Wholeness', prompt: 'Essence, connection, belonging, meaning, awe. Pick one that is most alive for you this week. Talk about it.' }
     };
-    localStorage.setItem(SCRIPT_SAVE_KEY, JSON.stringify(data));
+    const tpcT = tpcTopics[guideData.tpcDir] || tpcTopics['presence'];
+    const tpcExact = tpcRich.length > 0 ? tpcRich[0] : '';
+
+    guide.push({
+      type: 'joyi', typeLabel: 'JoYi to Camera', typeClass: 'gt-joyi', cardClass: 'g-joyi',
+      topic: tpcT.topic + ' (TPC)',
+      prompt: tpcT.prompt,
+      exact: tpcExact || '',
+      notes: '45-60 seconds. Speak from the heart. Don\'t teach yet — just share.'
+    });
+
+    // --- SEGMENT 2: Pencil-drawn visual ---
+    guide.push({
+      type: 'pencil', typeLabel: 'Pencil + Watercolor Visual', typeClass: 'gt-pencil', cardClass: 'g-pencil',
+      topic: 'Key Concept Illustration',
+      prompt: 'Gabby creates a pencil-drawn watercolor card that visualizes the core idea. This plays as B-roll while JoYi\'s voice continues.',
+      exact: '',
+      notes: 'Gabby: create 2-3 hand-drawn style frames. Navy/cream/gold palette. Text overlay of the key phrase.'
+    });
+
+    // --- SEGMENT 3: AIdedEQ / Builder ---
+    const aeqTopics = {
+      'tools': { topic: 'The Tool', prompt: 'What tool did you build or use this week? Show it. Open it up. Walk through one real scenario — a practitioner stuck at 9am on a Monday. What does the tool do for them?' },
+      'founder': { topic: 'The Builder Journey', prompt: 'What does building look like right now? What broke? What worked? What surprised you? Talk about building as a founder, not a marketer.' },
+      'consulting': { topic: 'The Gap You Fill', prompt: 'Most nonprofit tech is built for someone else. Name the specific problem. Name who has it. Name what you built instead.' },
+      'curriculum': { topic: 'What You\'re Teaching', prompt: 'What curriculum are you writing or delivering? Who is it for? What makes it different from what already exists?' },
+      'process': { topic: 'How You Build', prompt: 'Vibe coding, agentic engineering, AI as partner. Show the actual screen. Talk through your process.' }
+    };
+    const aeqT = aeqTopics[guideData.aeqDir] || aeqTopics['tools'];
+    const aeqExact = aeqRich.length > 0 ? aeqRich[0] : '';
+
+    guide.push({
+      type: 'joyi', typeLabel: 'JoYi to Camera or Screen Share', typeClass: 'gt-joyi', cardClass: 'g-joyi',
+      topic: aeqT.topic + ' (AIdedEQ)',
+      prompt: aeqT.prompt,
+      exact: aeqExact || '',
+      notes: '30-45 seconds. Show, don\'t just tell. Screen share if possible.'
+    });
+
+    // --- SEGMENT 4: Lesson / Value for audience ---
+    const takeaway = cl.takeaway || 'a practice they can try today';
+    guide.push({
+      type: 'lesson', typeLabel: 'Lesson for the Audience', typeClass: 'gt-lesson', cardClass: 'g-lesson',
+      topic: 'Try This',
+      prompt: `Give them something real to do. Based on your dump, the takeaway is: "${takeaway}". Frame it as one clear action they can take right now.`,
+      exact: '',
+      notes: 'This can be a practice, a tool link, a question to sit with, or a simple exercise. 15-20 seconds.'
+    });
+
+    // --- SEGMENT 5: Pencil visual for lesson ---
+    guide.push({
+      type: 'pencil', typeLabel: 'Pencil + Watercolor Visual', typeClass: 'gt-pencil', cardClass: 'g-pencil',
+      topic: 'Practice / Takeaway Card',
+      prompt: 'Gabby creates a visual card with the specific practice or action step. This is what people screenshot and share.',
+      exact: '',
+      notes: 'Make this the most shareable frame. Clear text. Beautiful. Simple.'
+    });
+
+    // --- SEGMENT 6: CTA ---
+    const ctaText = cl.cta || 'Book a free consultation at aidedeq.org/book';
+    guide.push({
+      type: 'cta', typeLabel: 'Call to Action', typeClass: 'gt-cta', cardClass: 'g-cta',
+      topic: 'The Ask',
+      prompt: 'One clear ask. Say it directly. Mean it.',
+      exact: ctaText,
+      notes: '10 seconds. Look at the camera. Say the URL slowly.'
+    });
+
+    // Render the guide
+    const guideEl = document.getElementById('recordingGuide');
+    guideEl.innerHTML = guide.map((g, i) => `
+      <div class="guide-card glass ${g.cardClass}">
+        <div class="guide-type ${g.typeClass}">${g.typeLabel}</div>
+        <div class="guide-topic">${g.topic}</div>
+        <div class="guide-prompt">${g.prompt}</div>
+        ${g.exact ? `<div class="guide-exact">"${esc(g.exact)}"</div>` : ''}
+        <div class="guide-notes">${g.notes}</div>
+      </div>
+    `).join('');
+
+    // Render visual asset list for Gabby
+    const visuals = [
+      { type: 'pencil', title: 'Hook Title Card', desc: `Pencil-drawn watercolor: "${hookSentence.slice(0,50)}..." — navy background, gold text, hand-lettered feel` },
+      { type: 'pencil', title: 'TPC Concept Card', desc: `Illustrate: ${tpcT.topic}. Watercolor wash background, minimal line art, the key principle in elegant text` },
+      { type: 'screen', title: 'Screen Recording', desc: `Capture: ${aeqT.topic} demo. JoYi records this live — Gabby cuts to the cleanest segment` },
+      { type: 'pencil', title: 'Takeaway / Practice Card', desc: `The shareable frame. One clear action step. Pencil-drawn border, cream background, bold statement.` },
+      { type: 'pencil', title: 'CTA Card', desc: `${ctaText} — clean, branded, with TPC or AIdedEQ logo` },
+    ];
+
+    document.getElementById('visualAssets').innerHTML = visuals.map(v => `
+      <div class="visual-card glass">
+        <div class="vis-thumb ${v.type}">${v.type === 'pencil' ? 'Pencil +<br>Watercolor' : 'Screen<br>Capture'}</div>
+        <div class="vis-desc">
+          <strong>${v.title}</strong>
+          <span>${v.desc}</span>
+        </div>
+      </div>
+    `).join('');
+
+    // Save
+    localStorage.setItem(SCRIPT_SAVE_KEY, JSON.stringify({ guide, visuals, guideData }));
+
+    showPhase('phase-guide');
+    showToast('Recording guide ready');
   }
 
   function loadScript() {
+    // Restore guide data if exists
     const raw = localStorage.getItem(SCRIPT_SAVE_KEY);
     if (!raw) return;
-    const data = JSON.parse(raw);
-    if (data.hook) document.getElementById('out-hook').textContent = data.hook;
-    if (data.tpc) document.getElementById('out-tpc').textContent = data.tpc;
-    if (data.aeq) document.getElementById('out-aeq').textContent = data.aeq;
-    if (data.demo) document.getElementById('out-demo').textContent = data.demo;
-    if (data.cta) document.getElementById('out-cta').textContent = data.cta;
-    if (data.full) document.getElementById('fullScript').innerText = data.full;
+    try {
+      const data = JSON.parse(raw);
+      if (data.guideData) guideData = data.guideData;
+    } catch(e) {}
   }
 
   // --- FIELD INTEL (RSS FEEDS) ---
