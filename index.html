@@ -386,6 +386,24 @@
   .intel-tag.trending { background: rgba(248,113,113,.15); color: var(--red); }
   .intel-tag.resource { background: var(--green-light); color: var(--green); }
   .intel-tag.research { background: var(--lav-light); color: var(--lavender); }
+
+  /* SCRIPT OUTPUT */
+  .script-block { }
+  .script-text {
+    font-size: 15px; line-height: 1.7; color: var(--cream);
+    padding: 10px 14px; border-radius: 8px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid transparent;
+    min-height: 24px;
+    transition: border-color .2s;
+    outline: none;
+  }
+  .script-text:hover { border-color: rgba(255,255,255,.1); }
+  .script-text:focus { border-color: var(--gold); background: rgba(255,255,255,.05); }
+  .script-text[contenteditable]:empty::before {
+    content: 'Click to edit...';
+    color: rgba(255,255,255,.2);
+  }
 </style>
 </head>
 <body>
@@ -456,61 +474,68 @@
       </div>
     </div>
 
-    <!-- VOICE ZONE -->
-    <div class="voice-zone glass" id="voiceZone">
-      <button class="mic-btn" id="micBtn" onclick="toggleVoice()">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
-          <path d="M19 10v2a7 7 0 01-14 0v-2"/>
-          <line x1="12" y1="19" x2="12" y2="23"/>
-          <line x1="8" y1="23" x2="16" y2="23"/>
-        </svg>
-      </button>
-      <div class="voice-status" id="voiceStatus">Tap to start talking</div>
-      <div class="transcript-preview empty" id="transcript">Your words will appear here as you speak...</div>
+    <!-- COMBINED VOICE + TEXT DUMP -->
+    <div class="card glass" style="padding:20px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <button class="mic-btn" id="micBtn" onclick="toggleVoice()" style="width:52px;height:52px;margin:0;">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:22px;height:22px;">
+            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+            <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <div>
+          <div class="voice-status" id="voiceStatus" style="font-size:14px; font-weight:600;">Tap mic to talk, or just type below</div>
+          <div style="font-size:11px; color:var(--slate);">Voice adds to your text. Use both. Edit anytime.</div>
+        </div>
+      </div>
+      <div id="voiceZone"></div>
+      <textarea id="brainDump" rows="8" placeholder="Talk into the mic or type here. Both go to the same place. Ramble freely — the script generator will sort it out." oninput="autoSave()" style="font-size:15px; line-height:1.7;"></textarea>
     </div>
 
-    <div class="notes-box">
-      <label>Or type / edit your dump</label>
-      <textarea id="brainDump" rows="5" placeholder="Everything you're thinking about this week's content. Unfiltered." oninput="autoSave()"></textarea>
-    </div>
-
-    <button class="btn-next" onclick="goStep(1)">Next: Build the Script &#8594;</button>
+    <button class="btn-next" onclick="generateScript()">Generate My Script &#8594;</button>
   </div>
 
   <!-- ============================== -->
   <!-- STEP 2: SCRIPT (STORY ARC)     -->
   <!-- ============================== -->
   <div class="step-panel" id="step-1">
-    <h2>Build the Script</h2>
-    <p class="subtitle">Lock in the story with Gabby. Five beats. Fill each one.</p>
+    <h2>Your Script</h2>
+    <p class="subtitle">Auto-generated from your brain dump. Edit anything, or just go record.</p>
 
-    <div class="card glass" style="padding:20px;">
-      <div class="arc-row">
-        <div class="arc-tag hook">Hook</div>
-        <input type="text" id="sb-hook" placeholder="First 5 seconds. What stops the scroll?" oninput="autoSave()">
+    <!-- GENERATED SCRIPT DISPLAY -->
+    <div id="scriptDisplay" class="card glass-bright" style="padding:24px;">
+      <div class="script-block">
+        <div class="arc-tag hook" style="display:inline-block; margin-bottom:8px;">Hook</div>
+        <div class="script-text" id="out-hook" contenteditable="true" oninput="saveScriptEdits()"></div>
       </div>
-      <div class="arc-row">
-        <div class="arc-tag tpc">TPC Arc</div>
-        <input type="text" id="sb-tpc" placeholder="The personal practice angle" oninput="autoSave()">
+      <div class="script-block" style="margin-top:16px;">
+        <div class="arc-tag tpc" style="display:inline-block; margin-bottom:8px;">TPC Arc</div>
+        <div class="script-text" id="out-tpc" contenteditable="true" oninput="saveScriptEdits()"></div>
       </div>
-      <div class="arc-row">
-        <div class="arc-tag aeq">AIdedEQ</div>
-        <input type="text" id="sb-aeq" placeholder="The builder / solution angle" oninput="autoSave()">
+      <div class="script-block" style="margin-top:16px;">
+        <div class="arc-tag aeq" style="display:inline-block; margin-bottom:8px;">AIdedEQ Arc</div>
+        <div class="script-text" id="out-aeq" contenteditable="true" oninput="saveScriptEdits()"></div>
       </div>
-      <div class="arc-row">
-        <div class="arc-tag demo">Show+Tell</div>
-        <input type="text" id="sb-demo" placeholder="What will you screen record or demo?" oninput="autoSave()">
+      <div class="script-block" style="margin-top:16px;">
+        <div class="arc-tag demo" style="display:inline-block; margin-bottom:8px;">Show + Tell</div>
+        <div class="script-text" id="out-demo" contenteditable="true" oninput="saveScriptEdits()"></div>
       </div>
-      <div class="arc-row">
-        <div class="arc-tag cta">CTA</div>
-        <input type="text" id="sb-cta" placeholder="One ask. One link." oninput="autoSave()">
+      <div class="script-block" style="margin-top:16px;">
+        <div class="arc-tag cta" style="display:inline-block; margin-bottom:8px;">CTA</div>
+        <div class="script-text" id="out-cta" contenteditable="true" oninput="saveScriptEdits()"></div>
       </div>
     </div>
 
-    <div class="notes-box">
-      <label>Script notes / talking points</label>
-      <textarea id="scriptNotes" rows="4" placeholder="Bullet points, phrases you want to hit, anything Gabby should know." oninput="autoSave()"></textarea>
+    <!-- FULL TALKING SCRIPT -->
+    <div class="section-label">Full Talking Script</div>
+    <div class="card glass" style="padding:20px;">
+      <div id="fullScript" contenteditable="true" style="font-size:15px; line-height:1.8; min-height:120px; outline:none;" oninput="saveScriptEdits()"></div>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-top:12px;">
+      <button class="intel-refresh" onclick="generateScript()" style="margin-left:0;">Re-generate from dump</button>
     </div>
 
     <div class="nav-buttons">
@@ -824,15 +849,11 @@
       }
       if (final) {
         fullTranscript += final;
-        // Also append to the textarea
         const ta = document.getElementById('brainDump');
         ta.value = fullTranscript;
+        ta.scrollTop = ta.scrollHeight;
         autoSave();
       }
-      const el = document.getElementById('transcript');
-      el.classList.remove('empty');
-      el.textContent = fullTranscript + (interim ? interim : '');
-      el.scrollTop = el.scrollHeight;
     };
 
     recognition.onerror = (e) => {
@@ -857,22 +878,21 @@
     if (!recognition) initSpeech();
     if (!recognition) return;
     isRecording = true;
+    // Always pick up from what's currently in the textarea
     fullTranscript = document.getElementById('brainDump').value;
-    if (fullTranscript && !fullTranscript.endsWith(' ')) fullTranscript += ' ';
+    if (fullTranscript && !fullTranscript.endsWith(' ') && !fullTranscript.endsWith('\n')) fullTranscript += ' ';
     try { recognition.start(); } catch(e) {}
     document.getElementById('micBtn').classList.add('recording');
-    document.getElementById('voiceZone').classList.add('recording');
     document.getElementById('voiceStatus').classList.add('live');
-    document.getElementById('voiceStatus').textContent = 'Listening... tap to stop';
+    document.getElementById('voiceStatus').textContent = 'Listening... tap mic to stop';
   }
 
   function stopVoice() {
     isRecording = false;
     if (recognition) try { recognition.stop(); } catch(e) {}
     document.getElementById('micBtn').classList.remove('recording');
-    document.getElementById('voiceZone').classList.remove('recording');
     document.getElementById('voiceStatus').classList.remove('live');
-    document.getElementById('voiceStatus').textContent = 'Tap to start talking';
+    document.getElementById('voiceStatus').textContent = 'Tap mic to talk, or just type below';
   }
 
   initSpeech();
@@ -955,10 +975,16 @@
     if (!confirm('Clear this week and start fresh? (Feedback log is kept.)')) return;
     localStorage.removeItem(SAVE_KEY);
     localStorage.removeItem(GABBY_KEY);
+    localStorage.removeItem(SCRIPT_SAVE_KEY);
     document.querySelectorAll('input[type="text"], textarea').forEach(el => { if (el.id !== 'fbInput') el.value = ''; });
     document.querySelectorAll('#gabbyTasks .ga-task input').forEach(cb => { cb.checked = false; cb.parentElement.classList.remove('done'); });
-    document.getElementById('transcript').textContent = 'Your words will appear here as you speak...';
-    document.getElementById('transcript').classList.add('empty');
+    // Clear script outputs
+    ['out-hook','out-tpc','out-aeq','out-demo','out-cta'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '';
+    });
+    const fs = document.getElementById('fullScript');
+    if (fs) fs.innerText = '';
     fullTranscript = '';
     goStep(0);
     showToast('Reset for next week');
@@ -969,6 +995,144 @@
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  // --- SCRIPT GENERATION ENGINE ---
+  const SCRIPT_SAVE_KEY = 'wcm_v3_script';
+
+  // Keyword banks for detecting themes in the brain dump
+  const THEME_KEYS = {
+    tpc: ['practice','mindfulness','forgiveness','healing','meditation','pray','shrine','temple','peace',
+          'present','attitudinal','facilitate','facilitation','facilitated','bonding','family','sons',
+          'daughter','traveled','travel','journey','mountain','fuji','korea','japan','philippines',
+          'osaka','busan','culture','spirit','heart','soul','fear','courage','leap','quit','left',
+          'director','career','workforce','personal','reflection','learn','grew','growth'],
+    aeq: ['tool','tools','built','build','building','code','coding','vibe','agentic','ai','aidedeq',
+          'tech','technology','software','app','platform','nonprofit','nonprofits','organization',
+          'mission','anchored','rop','snapshots','saas','consulting','curriculum','training',
+          'retreats','team','created','vision','partnership','startup','entrepreneur'],
+    demo: ['show','demo','screen','record','walkthrough','tutorial','how','process','step',
+           'dashboard','website','interface','click','open','try','example','real','live']
+  };
+
+  function splitSentences(text) {
+    // Split on periods, question marks, exclamation points, or long pauses (indicated by multiple spaces or newlines)
+    return text
+      .replace(/\n/g, '. ')
+      .split(/(?<=[.!?])\s+|(?<=\w)\s{2,}/)
+      .map(s => s.trim())
+      .filter(s => s.length > 10);
+  }
+
+  function scoreSentence(sentence, keys) {
+    const lower = sentence.toLowerCase();
+    let score = 0;
+    keys.forEach(k => { if (lower.includes(k)) score++; });
+    return score;
+  }
+
+  function findBest(sentences, keys, exclude) {
+    let best = null, bestScore = 0;
+    for (const s of sentences) {
+      if (exclude.includes(s)) continue;
+      const score = scoreSentence(s, keys);
+      if (score > bestScore) { bestScore = score; best = s; }
+    }
+    return best;
+  }
+
+  function generateScript() {
+    const dump = document.getElementById('brainDump').value.trim();
+    if (!dump || dump.length < 20) {
+      showToast('Talk or type more first — need material to work with');
+      return;
+    }
+
+    const sentences = splitSentences(dump);
+    const used = [];
+
+    // --- HOOK: Find the most dramatic / personal opening ---
+    // Prefer short sentences with strong personal words
+    const hookKeys = ['quit','left','year','ago','scared','terrified','changed','never','first','one day',
+                      'moment','decided','everything','started','born','collapsed','vision'];
+    let hook = findBest(sentences, hookKeys, used);
+    if (!hook) hook = sentences[0] || dump.slice(0, 80);
+    // Trim to punchy length
+    if (hook.length > 120) hook = hook.slice(0, 117) + '...';
+    used.push(hook);
+
+    // --- TPC ARC: Personal practice, healing, family, journey ---
+    let tpcSentences = sentences.filter(s => scoreSentence(s, THEME_KEYS.tpc) >= 1 && !used.includes(s));
+    let tpc = tpcSentences.slice(0, 3).join(' ');
+    if (!tpc) tpc = 'The personal practice that made this possible — mindfulness, forgiveness, showing up.';
+    used.push(...tpcSentences.slice(0, 3));
+
+    // --- AEQ ARC: Building, tools, solutions ---
+    let aeqSentences = sentences.filter(s => scoreSentence(s, THEME_KEYS.aeq) >= 1 && !used.includes(s));
+    let aeq = aeqSentences.slice(0, 3).join(' ');
+    if (!aeq) aeq = 'The tools and solutions being built — AIdedEQ, 23+ tools for mission-driven orgs.';
+    used.push(...aeqSentences.slice(0, 3));
+
+    // --- SHOW + TELL: What to demo ---
+    let demoSentences = sentences.filter(s => scoreSentence(s, THEME_KEYS.demo) >= 1 && !used.includes(s));
+    let demo = demoSentences.length > 0
+      ? 'Screen record: ' + demoSentences[0]
+      : 'Screen record a tool walkthrough or show the work you did this week.';
+
+    // --- CTA ---
+    let cta = 'Book a free consultation at aidedeq.org/book — or start your practice at thepracticecenter.org';
+
+    // --- FULL TALKING SCRIPT ---
+    const fullScript = `[HOOK — look at camera, first 5 seconds]
+"${hook}"
+
+[PERSONAL PRACTICE — 45-60 seconds, speak from the heart]
+${tpc}
+
+[THE BUILD — 30-45 seconds, show what you've made]
+${aeq}
+
+[SHOW AND TELL — 30-45 seconds, screen share or demo]
+${demo}
+
+[CLOSE — 10-15 seconds]
+${cta}`;
+
+    // Populate the display
+    document.getElementById('out-hook').textContent = hook;
+    document.getElementById('out-tpc').textContent = tpc;
+    document.getElementById('out-aeq').textContent = aeq;
+    document.getElementById('out-demo').textContent = demo;
+    document.getElementById('out-cta').textContent = cta;
+    document.getElementById('fullScript').innerText = fullScript;
+
+    saveScriptEdits();
+    goStep(1);
+    showToast('Script generated from your dump');
+  }
+
+  function saveScriptEdits() {
+    const data = {
+      hook: document.getElementById('out-hook')?.textContent || '',
+      tpc: document.getElementById('out-tpc')?.textContent || '',
+      aeq: document.getElementById('out-aeq')?.textContent || '',
+      demo: document.getElementById('out-demo')?.textContent || '',
+      cta: document.getElementById('out-cta')?.textContent || '',
+      full: document.getElementById('fullScript')?.innerText || '',
+    };
+    localStorage.setItem(SCRIPT_SAVE_KEY, JSON.stringify(data));
+  }
+
+  function loadScript() {
+    const raw = localStorage.getItem(SCRIPT_SAVE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.hook) document.getElementById('out-hook').textContent = data.hook;
+    if (data.tpc) document.getElementById('out-tpc').textContent = data.tpc;
+    if (data.aeq) document.getElementById('out-aeq').textContent = data.aeq;
+    if (data.demo) document.getElementById('out-demo').textContent = data.demo;
+    if (data.cta) document.getElementById('out-cta').textContent = data.cta;
+    if (data.full) document.getElementById('fullScript').innerText = data.full;
   }
 
   // --- FIELD INTEL (RSS FEEDS) ---
@@ -1119,6 +1283,7 @@
 
   // --- INIT ---
   loadSaved();
+  loadScript();
   loadGabby();
   loadFeedback();
   const savedStep = localStorage.getItem(STEP_KEY);
