@@ -324,6 +324,68 @@
     font-size: 11px; font-weight: 700; text-transform: uppercase;
     letter-spacing: 1px; color: var(--gold); display: block; margin-bottom: 6px;
   }
+
+  /* FIELD INTEL */
+  .intel-section { margin-bottom: 24px; }
+  .intel-lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 768px) { .intel-lanes { grid-template-columns: 1fr; } }
+  .intel-lane { border-radius: 14px; padding: 16px; min-height: 200px; }
+  .lane-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+    padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .lane-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .lane-icon.fac { background: var(--lav-light); color: var(--lavender); }
+  .lane-icon.np { background: var(--gold-light); color: var(--gold); }
+  .lane-icon.ai { background: var(--green-light); color: var(--green); }
+  .lane-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .lane-title.fac { color: var(--lavender); }
+  .lane-title.np { color: var(--gold); }
+  .lane-title.ai { color: var(--green); }
+
+  .intel-item {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .intel-item:last-child { border-bottom: none; }
+  .intel-item:hover { padding-left: 6px; }
+  .intel-item a {
+    text-decoration: none; color: var(--cream);
+    font-size: 13px; font-weight: 600; line-height: 1.4;
+    display: block;
+  }
+  .intel-item a:hover { color: var(--gold); }
+  .intel-item .intel-source {
+    font-size: 10px; color: var(--slate); margin-top: 2px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .intel-item .intel-use {
+    display: none; margin-top: 6px; padding: 6px 10px;
+    background: rgba(255,255,255,.04); border-radius: 6px;
+    font-size: 11px; color: var(--slate); line-height: 1.5;
+  }
+  .intel-item.expanded .intel-use { display: block; }
+
+  .intel-refresh {
+    padding: 6px 14px; border-radius: 6px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    color: var(--slate); font-size: 11px; font-weight: 600; cursor: pointer;
+    transition: all .2s; margin-left: auto;
+  }
+  .intel-refresh:hover { border-color: var(--gold); color: var(--gold); }
+  .intel-loading { text-align: center; padding: 20px; font-size: 12px; color: var(--slate); }
+  .intel-tag {
+    display: inline-block; padding: 2px 6px; border-radius: 4px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .intel-tag.trending { background: rgba(248,113,113,.15); color: var(--red); }
+  .intel-tag.resource { background: var(--green-light); color: var(--green); }
+  .intel-tag.research { background: var(--lav-light); color: var(--lavender); }
 </style>
 </head>
 <body>
@@ -358,8 +420,43 @@
   <!-- ============================== -->
   <div class="step-panel active" id="step-0">
     <h2>Brain Dump</h2>
-    <p class="subtitle">Talk it out. Hit the mic and ramble. It transcribes live. Or type if you prefer.</p>
+    <p class="subtitle">Scan the field intel, then talk it out. What's relevant? What's missing? What do people need to hear from you?</p>
 
+    <!-- FIELD INTEL -->
+    <div class="intel-section">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+        <div class="section-label" style="margin:0;">Field Intel</div>
+        <button class="intel-refresh" onclick="loadAllFeeds()">Refresh</button>
+      </div>
+      <div class="intel-lanes">
+        <!-- LANE 1: Facilitation + PYD -->
+        <div class="intel-lane glass">
+          <div class="lane-header">
+            <div class="lane-icon fac"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div class="lane-title fac">Facilitation + PYD</div>
+          </div>
+          <div id="feed-facilitation"><div class="intel-loading">Loading...</div></div>
+        </div>
+        <!-- LANE 2: Nonprofit + Mission -->
+        <div class="intel-lane glass">
+          <div class="lane-header">
+            <div class="lane-icon np"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></div>
+            <div class="lane-title np">Nonprofit + Mission</div>
+          </div>
+          <div id="feed-nonprofit"><div class="intel-loading">Loading...</div></div>
+        </div>
+        <!-- LANE 3: AI Tools + Tech -->
+        <div class="intel-lane glass">
+          <div class="lane-header">
+            <div class="lane-icon ai"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div class="lane-title ai">AI Tools + Tech</div>
+          </div>
+          <div id="feed-ai"><div class="intel-loading">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VOICE ZONE -->
     <div class="voice-zone glass" id="voiceZone">
       <button class="mic-btn" id="micBtn" onclick="toggleVoice()">
         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -874,12 +971,161 @@
     setTimeout(() => t.classList.remove('show'), 2000);
   }
 
+  // --- FIELD INTEL (RSS FEEDS) ---
+  const FEED_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
+  const INTEL_CACHE_KEY = 'wcm_v3_intel';
+  const INTEL_CACHE_TTL = 4 * 60 * 60 * 1000; // 4 hours
+
+  const FEED_SOURCES = {
+    facilitation: [
+      { url: 'https://ssir.org/site/rss', name: 'Stanford Social Innovation Review', tag: 'research' },
+      { url: 'https://www.searchinstitute.org/feed/', name: 'Search Institute', tag: 'research' },
+      { url: 'https://forumfyi.org/feed/', name: 'Forum for Youth Investment', tag: 'resource' },
+    ],
+    nonprofit: [
+      { url: 'https://nonprofitquarterly.org/feed/', name: 'Nonprofit Quarterly', tag: 'trending' },
+      { url: 'https://ssir.org/site/rss', name: 'SSIR', tag: 'research' },
+      { url: 'https://philanthropynewsdigest.org/feeds/news', name: 'Philanthropy News Digest', tag: 'trending' },
+    ],
+    ai: [
+      { url: 'https://techcrunch.com/category/artificial-intelligence/feed/', name: 'TechCrunch AI', tag: 'trending' },
+      { url: 'https://blog.techsoup.org/rss.xml', name: 'TechSoup', tag: 'resource' },
+      { url: 'https://www.nten.org/feed/', name: 'NTEN', tag: 'resource' },
+    ]
+  };
+
+  // Content angle suggestions based on lane
+  const ANGLE_HINTS = {
+    facilitation: 'How does this connect to your facilitation practice or PYD work? Could you teach this concept in 60 seconds?',
+    nonprofit: 'Is this a problem your tools solve? Could you react to this with a real example from your work?',
+    ai: 'Can you demo a tool that addresses this? Is this relevant to nonprofits you work with?'
+  };
+
+  async function fetchFeed(source) {
+    try {
+      const res = await fetch(FEED_PROXY + encodeURIComponent(source.url) + '&count=5');
+      const data = await res.json();
+      if (data.status === 'ok' && data.items) {
+        return data.items.slice(0, 4).map(item => ({
+          title: item.title,
+          link: item.link,
+          source: source.name,
+          tag: source.tag,
+          date: item.pubDate ? new Date(item.pubDate).toLocaleDateString('en-US', { month:'short', day:'numeric' }) : ''
+        }));
+      }
+    } catch(e) { console.warn('Feed failed:', source.name, e); }
+    return [];
+  }
+
+  async function loadLane(lane) {
+    const el = document.getElementById('feed-' + lane);
+    const sources = FEED_SOURCES[lane];
+    let allItems = [];
+
+    // Try cache first
+    const cached = getCachedIntel(lane);
+    if (cached) {
+      renderLane(el, cached, lane);
+      return;
+    }
+
+    el.innerHTML = '<div class="intel-loading">Loading...</div>';
+
+    for (const source of sources) {
+      const items = await fetchFeed(source);
+      allItems = allItems.concat(items);
+    }
+
+    // Deduplicate by title
+    const seen = new Set();
+    allItems = allItems.filter(item => {
+      const key = item.title.toLowerCase().slice(0, 50);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, 5);
+
+    if (allItems.length === 0) {
+      // Fallback curated content
+      allItems = getFallback(lane);
+    }
+
+    cacheIntel(lane, allItems);
+    renderLane(el, allItems, lane);
+  }
+
+  function renderLane(el, items, lane) {
+    if (!items.length) {
+      el.innerHTML = '<div class="intel-loading">No articles found. Check connection.</div>';
+      return;
+    }
+    el.innerHTML = items.map((item, i) => `
+      <div class="intel-item" onclick="this.classList.toggle('expanded')">
+        <a href="${esc(item.link)}" target="_blank" onclick="event.stopPropagation()">${esc(item.title)}</a>
+        <div class="intel-source">
+          <span class="intel-tag ${item.tag}">${item.tag}</span>
+          ${esc(item.source)} ${item.date ? '&middot; ' + item.date : ''}
+        </div>
+        <div class="intel-use">${ANGLE_HINTS[lane]}</div>
+      </div>
+    `).join('');
+  }
+
+  function getCachedIntel(lane) {
+    try {
+      const raw = localStorage.getItem(INTEL_CACHE_KEY + '_' + lane);
+      if (!raw) return null;
+      const { items, ts } = JSON.parse(raw);
+      if (Date.now() - ts > INTEL_CACHE_TTL) return null;
+      return items;
+    } catch(e) { return null; }
+  }
+
+  function cacheIntel(lane, items) {
+    localStorage.setItem(INTEL_CACHE_KEY + '_' + lane, JSON.stringify({ items, ts: Date.now() }));
+  }
+
+  function loadAllFeeds() {
+    // Clear cache on manual refresh
+    ['facilitation','nonprofit','ai'].forEach(lane => {
+      localStorage.removeItem(INTEL_CACHE_KEY + '_' + lane);
+      document.getElementById('feed-' + lane).innerHTML = '<div class="intel-loading">Loading...</div>';
+    });
+    ['facilitation','nonprofit','ai'].forEach(lane => loadLane(lane));
+  }
+
+  // Curated fallbacks if feeds fail (offline or blocked)
+  function getFallback(lane) {
+    const fallbacks = {
+      facilitation: [
+        { title: 'The Power of Restorative Circles in Youth Programs', link: 'https://ssir.org', source: 'SSIR', tag: 'research', date: '' },
+        { title: 'Positive Youth Development: What Works in 2026', link: 'https://forumfyi.org', source: 'Forum for Youth Investment', tag: 'resource', date: '' },
+        { title: 'Trauma-Informed Facilitation Practices', link: 'https://searchinstitute.org', source: 'Search Institute', tag: 'research', date: '' },
+      ],
+      nonprofit: [
+        { title: 'Small Nonprofits and the AI Adoption Gap', link: 'https://nonprofitquarterly.org', source: 'NPQ', tag: 'trending', date: '' },
+        { title: 'Building Tech Capacity Without Enterprise Budgets', link: 'https://techsoup.org', source: 'TechSoup', tag: 'resource', date: '' },
+        { title: 'Mission Drift in the Age of AI: Staying Grounded', link: 'https://ssir.org', source: 'SSIR', tag: 'research', date: '' },
+      ],
+      ai: [
+        { title: 'AI Tools Built for Nonprofits, Not Adapted From Enterprise', link: 'https://nten.org', source: 'NTEN', tag: 'resource', date: '' },
+        { title: 'Voice-First Interfaces for Community Organizations', link: 'https://techsoup.org', source: 'TechSoup', tag: 'resource', date: '' },
+        { title: 'The Case for AI Co-Pilots in Youth Work', link: 'https://nten.org', source: 'NTEN', tag: 'trending', date: '' },
+      ]
+    };
+    return fallbacks[lane] || [];
+  }
+
   // --- INIT ---
   loadSaved();
   loadGabby();
   loadFeedback();
   const savedStep = localStorage.getItem(STEP_KEY);
   if (savedStep !== null) goStep(parseInt(savedStep));
+
+  // Load intel feeds
+  ['facilitation','nonprofit','ai'].forEach(lane => loadLane(lane));
 </script>
 </body>
 </html>
