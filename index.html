@@ -982,106 +982,311 @@
   }
 
   // Step 1 → Step 2: Analyze dump and show direction options
+  // ========================================
+  // JOYI'S CONTENT BRAIN — specific to her work
+  // ========================================
+
+  // TPC direction options — rooted in her actual curriculum + philosophy
+  const TPC_DIRECTIONS = {
+    'journey': {
+      title: 'Fuji / The Pilgrimage',
+      desc: 'Full moon on Fuji, shrines, collapsing on the mountain, getting back up',
+      topic: 'I Climbed Mount Fuji Under a Full Moon',
+      prompts: [
+        'Tell the Fuji story: why you went, the full moon, what happened on the mountain.',
+        'What did you pray for at the shrines? Not the polite version — the real one.',
+        'You collapsed on the side of a mountain and got back up. What does that feel like when you\'re also rebuilding your whole life?',
+      ],
+      leading: [
+        'What did awe do to you physically? Not what you thought about it — what happened in your body?',
+        'Your friend guided you up. Who are the people who walk WITH you, not ahead of you?',
+        'You said "I like to shock my senses." When was the last time you did something that scared you into being present?',
+      ],
+    },
+    'forgiveness': {
+      title: 'Attitudinal Healing / Forgiveness',
+      desc: 'The daily practice — not the concept. From your 30 years in the work.',
+      topic: 'Forgiveness Is Not What You Think It Is',
+      prompts: [
+        'You\'ve done attitudinal healing work for decades. What do people get wrong about forgiveness?',
+        'Name a specific moment — with a kid, a colleague, yourself — where forgiveness was the hardest and most necessary practice.',
+        'How is forgiveness different from letting it go? You have a strong opinion about this — say it.',
+      ],
+      leading: [
+        'When did forgiveness save a relationship you thought was over?',
+        'What\'s the forgiveness practice you give to a facilitator on their worst day?',
+        'You left a director job after 30 years. Did you have to forgive the work itself?',
+      ],
+    },
+    'family': {
+      title: 'Family as Practice Ground',
+      desc: 'Traveling with your sons, parenting as facilitation, real-life practice',
+      topic: 'I Took My Sons Across the World to Learn Something',
+      prompts: [
+        'You took your sons to Japan, the Philippines, Korea. What did THEY teach YOU?',
+        'How is being a parent different from being a facilitator? Or is it the same thing?',
+        'You left a stable career with children depending on you. How did you explain that decision to them?',
+      ],
+      leading: [
+        'What did your sons see in Japan that changed how they see you?',
+        'Is there a moment from the trip where your kid said something that stopped you?',
+        'You practice presence. How do you practice it when your teenager is driving you crazy?',
+      ],
+    },
+    'presence': {
+      title: 'Presence — Not Productivity',
+      desc: 'Being here. Not optimizing. Your counter-cultural stance.',
+      topic: 'I\'m Not Interested in Optimization',
+      prompts: [
+        'Everyone is optimizing. You\'re not. Say why — and say it like you mean it.',
+        'You said "I never set out with an outcome in mind. I go to be present. Always." Unpack that for someone who\'s been taught to set SMART goals their whole career.',
+        'What does presence look like when you\'re scared about money, about the business, about whether this will work?',
+      ],
+      leading: [
+        'What\'s one thing you did this week with zero outcome in mind? What happened?',
+        'Who taught you presence? Was it a person or an experience?',
+        'You\'re building a business AND preaching presence. How do you hold that tension without it being fake?',
+      ],
+    },
+    'wholeness': {
+      title: 'Five Sources of Wholeness',
+      desc: 'Essence, connection, belonging, meaning, awe — from your curriculum',
+      topic: 'The Five Things Every Human Being Needs',
+      prompts: [
+        'Name the five sources: essence, connection, belonging, meaning, awe. Pick ONE that\'s most alive for you right now and go deep.',
+        'You built an entire curriculum around wholeness. Why? What was broken that made you build this?',
+        'Which source of wholeness is hardest for YOU personally? Not your clients — you.',
+      ],
+      leading: [
+        'When did you last feel awe? Not appreciate it intellectually — FEEL it in your body?',
+        'Belonging is one of the five. You left Hawaii, left your job, left your community. How do you practice belonging when you\'ve left?',
+        'How does the Five Sources framework show up in anchorED or your other tools?',
+      ],
+    },
+  };
+
+  // AEQ direction options — rooted in her actual tools + business
+  const AEQ_DIRECTIONS = {
+    'tools': {
+      title: 'Tool Demo — anchorED / ROP / Snapshots',
+      desc: 'Screen share a real tool. Show what it does for a practitioner at 9am Monday.',
+      topic: 'I Built the Tools I Wished I Had',
+      prompts: [
+        'Open anchorED right now. Show the screen. Walk through what a youth worker sees when they log in Monday morning and need to plan a restorative circle.',
+        'ROP Tracker — what is it? Who needs it? Show ONE screen and explain what it replaces (hint: a messy spreadsheet and three emails).',
+        'Snapshots — what does a program director see that they couldn\'t see before? Show the dashboard. Talk through a real scenario.',
+      ],
+      leading: [
+        'You built 23+ tools. Which one do you wish you had when you were a director at PACT?',
+        'What\'s the tool a nonprofit director would cry over? Not because it\'s fancy — because it finally works.',
+        'Show the tool AND tell the story of the person you built it for. Name them if you can.',
+      ],
+    },
+    'founder': {
+      title: 'The Builder\'s Journey — Year One',
+      desc: 'From director to vibe coder. What it actually looks like.',
+      topic: 'A Year Ago I Didn\'t Know What Code Was',
+      prompts: [
+        'You went from 30 years of youth work to vibe coding in under a year. Tell that story like it\'s ridiculous — because it is.',
+        'What does a day look like for you now vs a year ago? Be specific. 7am then vs 7am now.',
+        'You call yourself an agentic engineer. What does that mean in plain English? And why should a nonprofit leader care?',
+      ],
+      leading: [
+        'What was the first thing you built that actually worked? How did it feel?',
+        'When did you realize you could build software? What was the exact moment?',
+        'You have no CS degree, no bootcamp, no tech background. Say that out loud and own it.',
+      ],
+    },
+    'consulting': {
+      title: 'The Nonprofit Tech Gap',
+      desc: 'Enterprise tools cost $50K. Your orgs have $500. You built the bridge.',
+      topic: 'Your Nonprofit Deserves Better Than a Spreadsheet',
+      prompts: [
+        'Name the exact problem: a nonprofit with 3 staff, no IT budget, mission-critical data living in a Google Sheet that one person understands. You\'ve seen this. Tell the story.',
+        'What does enterprise software get wrong about small nonprofits? You lived this for 30 years — name it.',
+        'AIdedEQ pricing starts at what? Say the number. Compare it to Salesforce. Let the audience do the math.',
+      ],
+      leading: [
+        'Who is your ideal client? Describe them: role, org size, budget, pain point. Be specific.',
+        'What happens to a community when the nonprofit that serves them can\'t track outcomes? What\'s really at stake?',
+        'You said AI should remove friction so people can get to the mission. What friction specifically?',
+      ],
+    },
+    'curriculum': {
+      title: 'FIT Training / Curriculum',
+      desc: 'What you\'re teaching facilitators. The Basic Human Decency framework.',
+      topic: 'Basic Human Decency Is a Framework, Not a Slogan',
+      prompts: [
+        'Basic Human Decency — you turned a phrase into a framework. Walk through it. What are the components?',
+        'You have 12 FIT trainees right now. What are you teaching them that they can\'t get from a textbook?',
+        'Women Build Safety — what is it? Who is it for? What happens in the room?',
+      ],
+      leading: [
+        'What\'s the one skill most facilitators are missing? You\'ve trained hundreds — you know.',
+        'How is your curriculum different from what\'s already out there? Don\'t be humble.',
+        'A facilitator comes to you burned out. What\'s the first thing you teach them?',
+      ],
+    },
+    'process': {
+      title: 'How I Build — Vibe Coding Live',
+      desc: 'Show your screen. Build something. Talk through the process.',
+      topic: 'Watch Me Build This',
+      prompts: [
+        'Open your screen right now. Show what you\'re building today. Talk through it like you\'re showing a friend who doesn\'t code.',
+        'You use AI as a building partner — show the actual conversation. Show the prompt. Show the result. Be transparent about the process.',
+        'What did you build THIS WEEK? Even if it\'s rough. Especially if it\'s rough. Show the work in progress.',
+      ],
+      leading: [
+        'What broke today? Show the error. Show how you fixed it. That IS the content.',
+        'You\'re building this dashboard right now. Meta-content: show the tool you use to make the content.',
+        'What would you say to a nonprofit leader who thinks they can\'t build their own tools?',
+      ],
+    },
+  };
+
   function buildGuide() {
     const dump = document.getElementById('brainDump').value.trim();
     if (!dump || dump.length < 20) { showToast('Talk or type first — need more to work with'); return; }
 
     const sentences = splitSentences(dump);
+    const lower = dump.toLowerCase();
 
-    // Auto-detect TPC options from content
+    // Auto-detect TPC options — show what's relevant to the dump
     const tpcOpts = [];
-    if (sentences.some(s => s.toLowerCase().match(/forgiv|heal|peace|attitud/)))
-      tpcOpts.push({ val:'forgiveness', title:'Forgiveness / Healing', desc:'What forgiveness looks like in daily life' });
-    if (sentences.some(s => s.toLowerCase().match(/travel|fuji|japan|korea|phil|shrine|temple|climb/)))
-      tpcOpts.push({ val:'journey', title:'The Journey', desc:'Physical journey as metaphor for transformation' });
-    if (sentences.some(s => s.toLowerCase().match(/family|son|daughter|bond|parent/)))
-      tpcOpts.push({ val:'family', title:'Family as Practice', desc:'Practicing with people closest to you' });
-    tpcOpts.push({ val:'presence', title:'Presence', desc:'Being fully here in your body, your work, this moment' });
-    if (tpcOpts.length < 2) tpcOpts.push({ val:'wholeness', title:'Five Sources', desc:'Essence, connection, belonging, meaning, awe' });
+    if (lower.match(/travel|fuji|japan|korea|phil|shrine|temple|climb|mountain|moon/))
+      tpcOpts.push({ val:'journey', ...TPC_DIRECTIONS.journey });
+    if (lower.match(/forgiv|heal|attitud|peace|restor/))
+      tpcOpts.push({ val:'forgiveness', ...TPC_DIRECTIONS.forgiveness });
+    if (lower.match(/son|daughter|family|kid|parent|child/))
+      tpcOpts.push({ val:'family', ...TPC_DIRECTIONS.family });
+    if (lower.match(/whole|essence|belong|meaning|awe|five source/))
+      tpcOpts.push({ val:'wholeness', ...TPC_DIRECTIONS.wholeness });
+    tpcOpts.push({ val:'presence', ...TPC_DIRECTIONS.presence });
+    // Dedupe by val
+    const seenTpc = new Set();
+    const uniqueTpc = tpcOpts.filter(o => { if (seenTpc.has(o.val)) return false; seenTpc.add(o.val); return true; }).slice(0, 4);
 
-    document.getElementById('tpcOptions').innerHTML = tpcOpts.map(o => `
+    document.getElementById('tpcOptions').innerHTML = uniqueTpc.map(o => `
       <div class="dir-card glass" onclick="selectCard(this,'tpc')" data-val="${o.val}"><h4>${o.title}</h4><p>${o.desc}</p></div>
     `).join('');
 
     // AEQ options
     const aeqOpts = [];
-    if (sentences.some(s => s.toLowerCase().match(/tool|built|build|creat/)))
-      aeqOpts.push({ val:'tools', title:'Tool Showcase', desc:'Demo a real use case' });
-    if (sentences.some(s => s.toLowerCase().match(/team|partner|vision|startup/)))
-      aeqOpts.push({ val:'founder', title:'Founder Story', desc:'From vision to reality' });
-    if (sentences.some(s => s.toLowerCase().match(/consult|nonprofit|mission|org/)))
-      aeqOpts.push({ val:'consulting', title:'The Gap', desc:'Tech that fits mission-driven orgs' });
-    aeqOpts.push({ val:'process', title:'How I Build', desc:'Vibe coding, agentic engineering' });
-    if (aeqOpts.length < 2) aeqOpts.push({ val:'curriculum', title:'Teaching', desc:'What you\'re building for facilitators' });
+    if (lower.match(/tool|anchor|rop|snapshot|built|build|creat|software/))
+      aeqOpts.push({ val:'tools', ...AEQ_DIRECTIONS.tools });
+    if (lower.match(/quit|left|year|director|journey|start|learn|vibe|code/))
+      aeqOpts.push({ val:'founder', ...AEQ_DIRECTIONS.founder });
+    if (lower.match(/nonprofit|org|consult|gap|mission|enterprise|spreadsheet/))
+      aeqOpts.push({ val:'consulting', ...AEQ_DIRECTIONS.consulting });
+    if (lower.match(/curriculum|fit|train|teach|women|safety|facilitat/))
+      aeqOpts.push({ val:'curriculum', ...AEQ_DIRECTIONS.curriculum });
+    aeqOpts.push({ val:'process', ...AEQ_DIRECTIONS.process });
+    const seenAeq = new Set();
+    const uniqueAeq = aeqOpts.filter(o => { if (seenAeq.has(o.val)) return false; seenAeq.add(o.val); return true; }).slice(0, 4);
 
-    document.getElementById('aeqOptions').innerHTML = aeqOpts.map(o => `
+    document.getElementById('aeqOptions').innerHTML = uniqueAeq.map(o => `
       <div class="dir-card glass" onclick="selectCard(this,'aeq')" data-val="${o.val}"><h4>${o.title}</h4><p>${o.desc}</p></div>
     `).join('');
 
-    // Auto-select first option in each group
     document.querySelector('#tpcOptions .dir-card')?.click();
     document.querySelector('#aeqOptions .dir-card')?.click();
 
     goStep(1);
   }
 
-  // Generate the actual recording guide
+  // Generate the actual recording guide — deeply specific to JoYi
   function generateGuide() {
     const dump = document.getElementById('brainDump').value.trim();
     const sentences = splitSentences(dump);
     const tone = guideData.tone || 'reflective';
 
-    // Find strongest hook sentence
+    // Find strongest hook sentence — emotional weight
+    const hookKeys2 = ['quit','left','year','scared','changed','decided','everything','started','collapsed','vision','born','climbed','prayed','built','awe','curiosity','present','moment'];
     let hookSentence = '', best = 0;
-    sentences.forEach(s => { const sc = score(s, HOOK_KEYS); if (sc > best) { best = sc; hookSentence = s; } });
+    sentences.forEach(s => { const sc = score(s, hookKeys2); if (sc > best) { best = sc; hookSentence = s; } });
     if (!hookSentence) hookSentence = sentences[0] || '';
-    if (hookSentence.length > 100) hookSentence = hookSentence.slice(0, 97) + '...';
+    if (hookSentence.length > 120) hookSentence = hookSentence.slice(0, 117) + '...';
 
+    // Pull her strongest quotes from the dump
     const tpcRich = sentences.filter(s => score(s, TPC_KEYS) >= 2).slice(0, 3);
     const aeqRich = sentences.filter(s => score(s, AEQ_KEYS) >= 2).slice(0, 3);
 
-    const tpcTopics = {
-      'forgiveness': { topic:'The Practice That Changed Everything', prompt:'Talk about forgiveness as a real practice — not a concept. What does it look like on a hard Tuesday morning?' },
-      'journey': { topic:'The Journey', prompt:'You traveled. You climbed. You prayed. What did the physical journey teach you that staying home couldn\'t have?' },
-      'family': { topic:'Family as Practice Ground', prompt:'Your sons, your daughter. How is practice different with family — not clients, not strangers?' },
-      'presence': { topic:'Showing Up', prompt:'What does it mean to be present — not in theory, but right now, in your actual life, with all the uncertainty?' },
-      'wholeness': { topic:'Five Sources of Wholeness', prompt:'Essence, connection, belonging, meaning, awe. Pick one that is most alive for you this week.' }
-    };
-    const aeqTopics = {
-      'tools': { topic:'The Tool', prompt:'What tool did you build or use this week? Show it. Walk through one real scenario.' },
-      'founder': { topic:'The Builder Journey', prompt:'What does building look like right now? What broke? What worked? What surprised you?' },
-      'consulting': { topic:'The Gap You Fill', prompt:'Most nonprofit tech is built for someone else. Name the problem. Name who has it. Name what you built.' },
-      'curriculum': { topic:'What You\'re Teaching', prompt:'What curriculum are you writing or delivering? What makes it different?' },
-      'process': { topic:'How You Build', prompt:'Vibe coding, agentic engineering, AI as partner. Show the actual screen. Talk through your process.' }
-    };
+    // Get the selected directions
+    const tpcDir = TPC_DIRECTIONS[guideData.tpcDir] || TPC_DIRECTIONS['presence'];
+    const aeqDir = AEQ_DIRECTIONS[guideData.aeqDir] || AEQ_DIRECTIONS['tools'];
 
-    const tpcT = tpcTopics[guideData.tpcDir] || tpcTopics['presence'];
-    const aeqT = aeqTopics[guideData.aeqDir] || aeqTopics['tools'];
+    // Pick prompts based on tone
+    const toneIdx = { reflective: 0, teaching: 1, builder: 2, 'calling-in': 0 };
+    const ti = toneIdx[tone] || 0;
+
+    // Build specific leading questions from her content
+    const tpcPrompt = tpcDir.prompts[ti] || tpcDir.prompts[0];
+    const tpcLeading = tpcDir.leading[ti] || tpcDir.leading[0];
+    const aeqPrompt = aeqDir.prompts[ti] || aeqDir.prompts[0];
+    const aeqLeading = aeqDir.leading[ti] || aeqDir.leading[0];
+
+    // Pick a specific lesson from the dump content
+    const lessonBank = {
+      journey: { topic: 'Go Try Hard Stuff', prompt: 'Tell them: this week, do one thing that scares you. Not a big thing — a small thing. Sign up for the class. Send the email. Book the trip. Start before you\'re ready.', exact: 'Follow your curiosity. I never set out with an outcome in mind. I go to be present.' },
+      forgiveness: { topic: 'The 3-Breath Forgiveness Practice', prompt: 'Teach them the practice: Breath 1 — name what happened. Breath 2 — name what you\'re holding. Breath 3 — set it down. Not forever. Just for now.', exact: 'Forgiveness is not about them. It\'s about freeing up space in your body for what matters.' },
+      family: { topic: 'Practice With Your People', prompt: 'Challenge: this week, be fully present for one meal with your family. No phone. No agenda. Just be there and notice what happens.', exact: 'The hardest practice ground is the dinner table.' },
+      presence: { topic: 'One Moment of Real Presence', prompt: 'Give them this: set a timer for 2 minutes. Close your eyes. Don\'t meditate. Don\'t breathe deeply. Just notice what you notice. That\'s the whole practice.', exact: 'Presence is not a technique. It\'s what\'s left when you stop performing.' },
+      wholeness: { topic: 'Which Source Is Missing?', prompt: 'Ask them: Essence, connection, belonging, meaning, awe. Which one are you starving for right now? Name it. That\'s your work this week.', exact: 'You don\'t need more productivity. You need more wholeness.' },
+    };
+    const lessonChoice = lessonBank[guideData.tpcDir] || lessonBank['presence'];
+
+    // Pick a CTA that rotates based on content
+    const ctaBank = [
+      { exact: 'Book a free consultation — aidedeq.org/book. 30 minutes. I\'ll show you what\'s possible for your organization.', notes: 'For AEQ content. Look at camera. Say URL slowly.' },
+      { exact: 'Join us at thepracticecenter.org. Free resources, facilitation tools, and a community that practices what it preaches.', notes: 'For TPC content. Warm, inviting.' },
+      { exact: 'Try anchorED free at aidedeq.org/tools. Built for facilitators, by a facilitator. No enterprise contract. No IT department required.', notes: 'For tool demos. Direct.' },
+      { exact: 'Subscribe and follow along — I\'m building this in public. Every tool, every mistake, every win. New content every Monday.', notes: 'For builder/process content. Community-oriented.' },
+    ];
+    const ctaIdx = guideData.aeqDir === 'tools' ? 2 : guideData.aeqDir === 'process' ? 3 : guideData.tpcDir ? 1 : 0;
+    const cta = ctaBank[ctaIdx] || ctaBank[0];
 
     const guide = [
-      { type:'joyi', typeLabel:'JoYi to Camera', typeClass:'gt-joyi', cardClass:'g-joyi',
-        topic:'The Hook', prompt:'Look at the camera. Say this line, then riff on why it matters.',
-        exact: hookSentence, notes:'5 seconds. Don\'t explain. Just say it and pause.' },
+      { type:'joyi', typeLabel:'JoYi to Camera — The Hook', typeClass:'gt-joyi', cardClass:'g-joyi',
+        topic:'Open Strong',
+        prompt:'Look at the lens. Say this line. Pause. Let it land. Then ask yourself out loud: "Why am I telling you this?"',
+        exact: hookSentence,
+        notes:'5-8 seconds of silence after the line. The pause IS the hook.' },
 
-      { type:'joyi', typeLabel:'JoYi to Camera', typeClass:'gt-joyi', cardClass:'g-joyi',
-        topic: tpcT.topic + ' (TPC)', prompt: tpcT.prompt,
-        exact: tpcRich[0] || '', notes:'45-60 seconds. Speak from the heart.' },
+      { type:'joyi', typeLabel:'JoYi to Camera — ' + tpcDir.title, typeClass:'gt-joyi', cardClass:'g-joyi',
+        topic: tpcDir.topic,
+        prompt: tpcPrompt + '\n\nLeading question to riff on:\n' + tpcLeading,
+        exact: tpcRich[0] || '',
+        notes:'45-60 seconds. Start with the specific story, then zoom out to the lesson. Don\'t teach yet — just share what happened.' },
 
-      { type:'pencil', typeLabel:'Pencil + Watercolor', typeClass:'gt-pencil', cardClass:'g-pencil',
-        topic:'Visual B-Roll', prompt:'Moxie girl illustration card — pencil-drawn watercolor style. Gabby creates or selects from story-frames.',
-        exact:'', notes:'Navy/cream/gold palette. Hand-lettered text overlay of key phrase.' },
+      { type:'pencil', typeLabel:'Pencil + Watercolor — Moxie Girl', typeClass:'gt-pencil', cardClass:'g-pencil',
+        topic:'Visual: "' + (tpcRich[0] ? tpcRich[0].slice(0,50) + '...' : tpcDir.topic) + '"',
+        prompt:'Gabby: Moxie girl card for this moment. Curly-haired woman in a pose that matches the emotion — ' +
+          (guideData.tpcDir === 'journey' ? 'sitting at the base of a mountain, looking up' :
+           guideData.tpcDir === 'forgiveness' ? 'hands open, releasing something invisible' :
+           guideData.tpcDir === 'family' ? 'walking with smaller figures beside her' :
+           guideData.tpcDir === 'wholeness' ? 'standing in a circle of five elements' :
+           'standing still, grounded, present') +
+          '. Pencil lines, watercolor wash in navy/gold/cream.',
+        exact:'',
+        notes:'1080x1080. Use story-frames/ as reference. This plays as B-roll while JoYi\'s voice continues over it.' },
 
-      { type:'joyi', typeLabel:'JoYi to Camera or Screen', typeClass:'gt-joyi', cardClass:'g-joyi',
-        topic: aeqT.topic + ' (AIdedEQ)', prompt: aeqT.prompt,
-        exact: aeqRich[0] || '', notes:'30-45 seconds. Show, don\'t just tell.' },
+      { type:'joyi', typeLabel:'JoYi to Camera or Screen — ' + aeqDir.title, typeClass:'gt-joyi', cardClass:'g-joyi',
+        topic: aeqDir.topic,
+        prompt: aeqPrompt + '\n\nThen go deeper:\n' + aeqLeading,
+        exact: aeqRich[0] || '',
+        notes:'30-45 seconds. If you can show a screen, show a screen. If not, tell the story of the person this tool is for.' },
 
-      { type:'lesson', typeLabel:'Lesson', typeClass:'gt-lesson', cardClass:'g-lesson',
-        topic:'Try This', prompt:'Give them one real thing to do. A practice, a tool link, a question to sit with.',
-        exact:'', notes:'15-20 seconds. Make it actionable.' },
+      { type:'lesson', typeLabel:'Lesson — Give Them Something Real', typeClass:'gt-lesson', cardClass:'g-lesson',
+        topic: lessonChoice.topic,
+        prompt: lessonChoice.prompt,
+        exact: lessonChoice.exact,
+        notes:'15-20 seconds. Say it directly. This is the part people screenshot and share.' },
 
-      { type:'cta', typeLabel:'CTA', typeClass:'gt-cta', cardClass:'g-cta',
-        topic:'The Ask', prompt:'One clear ask. Say it directly.',
-        exact:'Book a free consultation at aidedeq.org/book', notes:'10 seconds. Look at the camera. Say the URL slowly.' }
+      { type:'cta', typeLabel:'CTA — One Ask', typeClass:'gt-cta', cardClass:'g-cta',
+        topic:'Say It Like You Mean It',
+        prompt:'One ask. Not two. Not three. Look at the camera. Say the URL. Mean it.',
+        exact: cta.exact,
+        notes: cta.notes }
     ];
 
     // Render — cards are editable so JoYi can tweak before teleprompter
