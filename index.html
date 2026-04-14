@@ -865,8 +865,7 @@
     document.getElementById('voiceStatus').textContent = 'Tap to talk';
     document.getElementById('voiceStatus').style.color = 'var(--cream)';
   }
-  // Pre-request mic permission (async, non-blocking)
-  initSpeech().catch(() => {});
+  // Mic permission is requested only when user taps the mic button — not on load
 
   // --- INTEL TOGGLE ---
   function toggleIntel() {
