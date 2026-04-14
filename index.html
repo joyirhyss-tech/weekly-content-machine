@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weekly Content Machine</title>
+<title>Marketing Monday — JoYi</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
   :root {
     --navy: #0f1a2e;
     --deep: #0a1220;
@@ -15,13 +15,14 @@
     --gold-glow: rgba(201,151,91,.35);
     --lavender: #7c8dc8;
     --lav-light: rgba(124,141,200,.15);
+    --sage: #8ea884;
+    --sage-light: rgba(142,168,134,.12);
     --slate: #94a3b8;
     --green: #4ade80;
     --green-light: rgba(74,222,128,.12);
     --white: #ffffff;
     --glass: rgba(255,255,255,.06);
     --glass-border: rgba(255,255,255,.1);
-    --glass-bright: rgba(255,255,255,.1);
     --red: #f87171;
     --red-light: rgba(248,113,113,.12);
   }
@@ -38,7 +39,7 @@
     position: fixed;
     top: -40%; left: -20%;
     width: 80%; height: 80%;
-    background: radial-gradient(circle, rgba(124,141,200,.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(201,151,91,.06) 0%, transparent 70%);
     pointer-events: none; z-index: 0;
   }
   body::after {
@@ -46,83 +47,66 @@
     position: fixed;
     bottom: -30%; right: -10%;
     width: 60%; height: 60%;
-    background: radial-gradient(circle, rgba(201,151,91,.06) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(124,141,200,.05) 0%, transparent 70%);
     pointer-events: none; z-index: 0;
   }
 
-  .glass {
-    background: var(--glass);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-  }
-  .glass-bright {
-    background: var(--glass-bright);
-    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 16px;
-  }
+  .glass { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; }
+  .glass-bright { background: rgba(255,255,255,.08); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; }
 
-  /* TOP */
+  /* TOP BAR */
   .top {
     position: sticky; top: 0; z-index: 100;
-    padding: 14px 28px;
+    padding: 12px 28px;
     display: flex; justify-content: space-between; align-items: center;
-    background: rgba(10,18,32,.9);
+    background: rgba(10,18,32,.92);
     backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--glass-border);
   }
-  .top h1 { font-size: 14px; font-weight: 700; letter-spacing: 2px; color: var(--gold); }
-  .top .links { display: flex; gap: 8px; }
+  .top-left { display: flex; align-items: center; gap: 12px; }
+  .top-left h1 {
+    font-family: 'Lora', serif;
+    font-size: 16px; font-weight: 700; color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+  .top-left .tagline { font-size: 10px; color: var(--slate); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+  .top .links { display: flex; gap: 6px; }
   .top .links a {
-    color: var(--slate); text-decoration: none; font-size: 12px; font-weight: 600;
-    padding: 6px 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 8px; transition: all .2s;
+    color: var(--slate); text-decoration: none; font-size: 11px; font-weight: 600;
+    padding: 5px 12px; border: 1px solid rgba(255,255,255,.08); border-radius: 8px; transition: all .2s;
   }
   .top .links a:hover { color: var(--gold); border-color: var(--gold); }
 
-  .main { max-width: 960px; margin: 0 auto; padding: 32px 24px; position: relative; z-index: 1; }
+  .main { max-width: 880px; margin: 0 auto; padding: 28px 24px; position: relative; z-index: 1; }
 
-  /* STEPS BAR */
-  .steps-bar { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 32px; }
+  /* STEPS — Only 3 now */
+  .steps-bar { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 28px; }
   .step-dot {
-    width: 40px; height: 40px; border-radius: 50%;
+    width: 44px; height: 44px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 700; cursor: pointer; transition: all .3s;
+    font-size: 13px; font-weight: 700; cursor: pointer; transition: all .3s;
     border: 2px solid rgba(255,255,255,.1); color: var(--slate);
     background: var(--glass); backdrop-filter: blur(10px); position: relative;
   }
   .step-dot.active { border-color: var(--gold); color: var(--navy); background: var(--gold); box-shadow: 0 0 24px var(--gold-glow); }
   .step-dot.completed { border-color: var(--green); color: var(--deep); background: var(--green); }
   .step-dot .step-label {
-    position: absolute; top: 48px; font-size: 10px; font-weight: 600;
+    position: absolute; top: 52px; font-size: 11px; font-weight: 600;
     letter-spacing: .5px; white-space: nowrap; color: var(--slate);
   }
   .step-dot.active .step-label { color: var(--gold); }
-  .step-line { width: 48px; height: 2px; background: rgba(255,255,255,.08); }
+  .step-line { width: 80px; height: 2px; background: rgba(255,255,255,.08); }
   .step-line.done { background: var(--green); }
 
   .step-panel { display: none; animation: fadeUp .4s ease; }
   .step-panel.active { display: block; }
   @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
 
-  h2 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
-  .subtitle { font-size: 13px; color: var(--slate); margin-bottom: 24px; line-height: 1.5; }
-  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin: 28px 0 12px; }
+  h2 { font-family: 'Lora', serif; font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: var(--slate); margin-bottom: 20px; line-height: 1.6; }
+  .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin: 24px 0 10px; }
 
-  .card { padding: 24px; margin-bottom: 16px; }
-  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-
-  /* ARC BUILDER */
-  .arc-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .arc-tag {
-    width: 100px; flex-shrink: 0; padding: 8px 0; text-align: center; border-radius: 8px;
-    font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
-  }
-  .arc-tag.hook { background: rgba(255,255,255,.1); color: var(--cream); }
-  .arc-tag.tpc { background: var(--lav-light); color: var(--lavender); }
-  .arc-tag.aeq { background: var(--gold-light); color: var(--gold); }
-  .arc-tag.demo { background: var(--green-light); color: var(--green); }
-  .arc-tag.cta { background: var(--red-light); color: var(--red); }
+  .card { padding: 20px; margin-bottom: 14px; }
 
   input[type="text"], textarea {
     width: 100%; padding: 10px 14px;
@@ -134,154 +118,128 @@
   input::placeholder, textarea::placeholder { color: rgba(255,255,255,.25); }
   textarea { min-height: 60px; resize: vertical; line-height: 1.6; }
 
-  /* VOICE RECORDER */
-  .voice-zone {
-    border: 2px dashed rgba(255,255,255,.1);
-    border-radius: 16px;
-    padding: 32px;
-    text-align: center;
-    margin-bottom: 16px;
-    transition: all .3s;
-    position: relative;
-  }
-  .voice-zone.recording {
-    border-color: var(--red);
-    background: rgba(248,113,113,.06);
-    animation: pulse-border 1.5s ease-in-out infinite;
-  }
-  @keyframes pulse-border {
-    0%,100% { border-color: var(--red); box-shadow: 0 0 0 0 rgba(248,113,113,.2); }
-    50% { border-color: #ef4444; box-shadow: 0 0 20px 4px rgba(248,113,113,.15); }
-  }
+  /* MIC BUTTON */
   .mic-btn {
-    width: 72px; height: 72px; border-radius: 50%;
+    width: 64px; height: 64px; border-radius: 50%;
     background: linear-gradient(135deg, var(--gold), #a07840);
     border: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 12px;
+    margin: 0 auto 10px;
     transition: all .25s;
     box-shadow: 0 4px 20px var(--gold-glow);
   }
   .mic-btn:hover { transform: scale(1.05); box-shadow: 0 6px 28px var(--gold-glow); }
-  .mic-btn.recording { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 4px 20px rgba(239,68,68,.4); }
-  .mic-btn svg { width: 28px; height: 28px; }
-  .voice-status { font-size: 13px; color: var(--slate); }
-  .voice-status.live { color: var(--red); font-weight: 600; }
-  .transcript-preview {
-    margin-top: 16px; padding: 16px; border-radius: 10px;
+  .mic-btn.recording { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 4px 20px rgba(239,68,68,.4); animation: pulse-mic 1.5s ease-in-out infinite; }
+  @keyframes pulse-mic { 0%,100% { box-shadow: 0 4px 20px rgba(239,68,68,.4); } 50% { box-shadow: 0 4px 30px rgba(239,68,68,.6); } }
+  .mic-btn svg { width: 26px; height: 26px; }
+
+  /* INTEL TOGGLE */
+  .intel-toggle {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-radius: 10px;
     background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
-    font-size: 14px; line-height: 1.7; text-align: left;
-    min-height: 80px; color: var(--cream);
-    max-height: 200px; overflow-y: auto;
+    cursor: pointer; transition: all .2s; margin-bottom: 14px;
   }
-  .transcript-preview.empty { color: rgba(255,255,255,.2); font-style: italic; }
+  .intel-toggle:hover { border-color: var(--gold); }
+  .intel-toggle .arrow { transition: transform .2s; font-size: 10px; color: var(--gold); }
+  .intel-toggle.open .arrow { transform: rotate(90deg); }
+  .intel-toggle span { font-size: 12px; font-weight: 600; color: var(--slate); }
+  .intel-content { display: none; margin-bottom: 16px; }
+  .intel-content.open { display: block; }
 
-  /* RECORD STEPS */
-  .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-  .rec-card { padding: 20px; text-align: center; transition: all .25s; }
-  .rec-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-  .rec-num {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), #a07840); color: var(--deep);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 800; margin: 0 auto 10px;
-  }
-  .rec-act { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .rec-detail { font-size: 11px; color: var(--slate); line-height: 1.5; }
+  .intel-lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 768px) { .intel-lanes { grid-template-columns: 1fr; } }
+  .intel-lane { border-radius: 12px; padding: 14px; }
+  .lane-header { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .lane-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .lane-icon.fac { background: var(--lav-light); color: var(--lavender); }
+  .lane-icon.np { background: var(--gold-light); color: var(--gold); }
+  .lane-icon.ai { background: var(--green-light); color: var(--green); }
+  .lane-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .lane-title.fac { color: var(--lavender); }
+  .lane-title.np { color: var(--gold); }
+  .lane-title.ai { color: var(--green); }
 
-  .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-  .type-card { padding: 20px; text-align: center; cursor: pointer; transition: all .25s; }
-  .type-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-  .type-icon {
-    width: 48px; height: 48px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 10px; font-size: 14px; font-weight: 700;
-  }
-  .type-icon.tool { background: var(--gold-light); color: var(--gold); }
-  .type-icon.event { background: var(--lav-light); color: var(--lavender); }
-  .type-icon.write { background: var(--green-light); color: var(--green); }
-  .type-icon.meta { background: rgba(255,255,255,.08); color: var(--cream); }
-  .type-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-  .type-desc { font-size: 11px; color: var(--slate); line-height: 1.4; }
+  .intel-item { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .intel-item:last-child { border-bottom: none; }
+  .intel-item a { text-decoration: none; color: var(--cream); font-size: 12px; font-weight: 600; line-height: 1.4; display: block; }
+  .intel-item a:hover { color: var(--gold); }
+  .intel-item .intel-source { font-size: 10px; color: var(--slate); margin-top: 2px; }
+  .intel-tag { display: inline-block; padding: 2px 5px; border-radius: 3px; font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-right: 4px; }
+  .intel-tag.trending { background: rgba(248,113,113,.15); color: var(--red); }
+  .intel-tag.resource { background: var(--green-light); color: var(--green); }
+  .intel-tag.research { background: var(--lav-light); color: var(--lavender); }
+  .intel-loading { text-align: center; padding: 16px; font-size: 11px; color: var(--slate); }
 
-  /* GABBY TASKS */
-  .ga-task {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.05);
-    font-size: 14px; transition: opacity .2s;
+  /* DIRECTION CARDS */
+  .dir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+  @media (max-width: 700px) { .dir-grid { grid-template-columns: 1fr; } }
+  .dir-card {
+    padding: 14px 16px; border-radius: 10px; cursor: pointer;
+    transition: all .2s; border: 2px solid transparent;
   }
-  .ga-task:last-child { border-bottom: none; }
-  .ga-task input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--gold); flex-shrink: 0; }
-  .ga-task.done { opacity: .3; text-decoration: line-through; }
+  .dir-card:hover { border-color: rgba(255,255,255,.12); }
+  .dir-card.selected { border-color: var(--gold); background: rgba(201,151,91,.08); }
+  .dir-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .dir-card p { font-size: 11px; color: var(--slate); line-height: 1.4; }
 
-  /* DRIVE ROWS */
-  .dm-row {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 18px; border-radius: 10px; margin: 6px 0; transition: background .15s;
+  /* RECORDING GUIDE */
+  .guide-card {
+    padding: 18px; border-radius: 12px; margin: 10px 0;
+    position: relative; overflow: hidden;
   }
-  .dm-row:hover { background: rgba(255,255,255,.04); }
-  .dm-icon {
-    width: 40px; height: 40px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700; flex-shrink: 0;
-  }
-  .dm-icon.you { background: var(--gold-light); color: var(--gold); }
-  .dm-icon.gab { background: var(--lav-light); color: var(--lavender); }
-  .dm-icon.done-i { background: var(--green-light); color: var(--green); }
-  .dm-icon.arch { background: rgba(255,255,255,.06); color: var(--slate); }
-  .dm-name { font-size: 14px; font-weight: 700; }
-  .dm-desc { font-size: 12px; color: var(--slate); }
-  .dm-who { margin-left: auto; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: .5px; }
-  .dm-who.j { background: var(--gold-light); color: var(--gold); }
-  .dm-who.g { background: var(--lav-light); color: var(--lavender); }
+  .guide-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+  .guide-card.g-joyi::before { background: var(--gold); }
+  .guide-card.g-pencil::before { background: var(--lavender); }
+  .guide-card.g-lesson::before { background: var(--green); }
+  .guide-card.g-cta::before { background: var(--red); }
 
-  /* POST SCHEDULE */
-  .post-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 16px 0; }
-  .post-day { padding: 16px 10px; text-align: center; border-radius: 12px; }
-  .post-day strong { font-size: 14px; display: block; margin-bottom: 6px; }
-  .post-platform { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; display: inline-block; margin: 2px; }
-  .p-li { background: rgba(0,119,181,.2); color: #38bdf8; }
-  .p-ig { background: rgba(228,64,95,.2); color: #fb7185; }
-  .p-tk { background: rgba(255,255,255,.08); color: var(--cream); }
-  .p-yt { background: rgba(255,0,0,.15); color: #f87171; }
-  .p-fb { background: rgba(24,119,242,.2); color: #60a5fa; }
-  .post-type { font-size: 11px; color: var(--slate); margin-top: 6px; }
+  .guide-type {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 5px; margin-bottom: 8px;
+  }
+  .gt-joyi { background: var(--gold-light); color: var(--gold); }
+  .gt-pencil { background: var(--lav-light); color: var(--lavender); }
+  .gt-lesson { background: var(--green-light); color: var(--green); }
+  .gt-cta { background: var(--red-light); color: var(--red); }
 
-  /* SWATCHES */
-  .swatches { display: flex; gap: 8px; margin: 12px 0; }
-  .swatch { width: 32px; height: 32px; border-radius: 8px; border: 2px solid rgba(255,255,255,.1); cursor: pointer; position: relative; }
-  .swatch:hover::after {
-    content: attr(data-hex); position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
-    font-size: 9px; color: var(--slate); white-space: nowrap;
+  .guide-topic { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .guide-prompt { font-size: 13px; color: var(--slate); line-height: 1.6; margin-bottom: 6px; }
+  .guide-exact {
+    font-size: 14px; font-weight: 600; color: var(--cream);
+    padding: 8px 12px; border-radius: 6px; margin: 6px 0;
+    background: rgba(201,151,91,.08); border-left: 3px solid var(--gold);
+    font-style: italic; line-height: 1.6;
   }
+  .guide-notes { font-size: 11px; color: rgba(255,255,255,.3); margin-top: 4px; }
 
-  /* FEEDBACK / BUGS */
-  .feedback-section { margin-top: 24px; }
-  .fb-entry {
-    display: flex; gap: 10px; align-items: flex-start;
-    padding: 10px 14px; border-radius: 8px;
-    background: rgba(255,255,255,.03); margin-bottom: 6px;
-    font-size: 13px;
+  /* PLATFORM ROW */
+  .platform-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 12px 0; }
+  @media (max-width: 600px) { .platform-row { grid-template-columns: repeat(3, 1fr); } }
+  .plat-card {
+    text-align: center; padding: 14px 8px; border-radius: 10px; cursor: pointer; transition: all .2s;
+    border: 2px solid transparent;
   }
-  .fb-entry .fb-time { font-size: 10px; color: var(--slate); white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
-  .fb-entry .fb-who { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; margin-top: 1px; }
-  .fb-entry .fb-who.joyi { background: var(--gold-light); color: var(--gold); }
-  .fb-entry .fb-who.gabby { background: var(--lav-light); color: var(--lavender); }
-  .fb-entry .fb-text { flex: 1; line-height: 1.5; }
-  .fb-input-row { display: flex; gap: 8px; margin-top: 10px; }
-  .fb-input-row input { flex: 1; }
-  .fb-input-row select {
-    padding: 8px 12px; border-radius: 8px;
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-    color: var(--cream); font-size: 13px; font-family: inherit;
+  .plat-card:hover { transform: translateY(-2px); }
+  .plat-card.active { border-color: var(--gold); background: rgba(201,151,91,.06); }
+  .plat-card .plat-name { font-size: 11px; font-weight: 700; margin-top: 6px; }
+  .plat-card .plat-format { font-size: 9px; color: var(--slate); margin-top: 2px; }
+  .p-li { color: #38bdf8; }
+  .p-ig { color: #fb7185; }
+  .p-tk { color: var(--cream); }
+  .p-yt { color: #f87171; }
+  .p-fb { color: #60a5fa; }
+
+  /* CHECKLIST */
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,.04);
+    font-size: 13px; transition: opacity .2s;
   }
-  .fb-submit {
-    padding: 8px 16px; border-radius: 8px;
-    background: var(--gold); color: var(--deep);
-    border: none; font-weight: 700; font-size: 13px; cursor: pointer;
-    transition: all .2s;
-  }
-  .fb-submit:hover { background: #b8863f; }
+  .check-item:last-child { border-bottom: none; }
+  .check-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--gold); flex-shrink: 0; }
+  .check-item.done { opacity: .3; text-decoration: line-through; }
 
   /* BUTTONS */
   .btn-next {
@@ -289,247 +247,336 @@
     padding: 12px 28px;
     background: linear-gradient(135deg, var(--gold), #a07840);
     color: var(--deep); font-size: 14px; font-weight: 700;
-    border: none; border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 20px;
+    border: none; border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 16px;
   }
   .btn-next:hover { transform: translateY(-1px); box-shadow: 0 8px 24px var(--gold-glow); }
   .btn-back {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 10px 20px; background: transparent;
+    padding: 10px 18px; background: transparent;
     color: var(--slate); font-size: 13px; font-weight: 600;
     border: 1px solid rgba(255,255,255,.1); border-radius: 10px;
-    cursor: pointer; transition: all .2s; margin-top: 20px; margin-right: 8px;
+    cursor: pointer; transition: all .2s; margin-top: 16px; margin-right: 8px;
   }
   .btn-back:hover { border-color: var(--slate); color: var(--cream); }
-  .nav-buttons { display: flex; align-items: center; gap: 8px; margin-top: 24px; }
+  .nav-buttons { display: flex; align-items: center; gap: 8px; margin-top: 20px; }
 
   /* GABBY DEV NOTE */
   .dev-note {
-    margin-top: 24px; padding: 16px 20px; border-radius: 12px;
+    margin-top: 20px; padding: 14px 18px; border-radius: 10px;
     background: var(--lav-light); border: 1px solid rgba(124,141,200,.25);
-    font-size: 13px; line-height: 1.6; color: var(--lavender);
+    font-size: 12px; line-height: 1.6; color: var(--lavender);
   }
   .dev-note strong { color: var(--cream); }
 
+  /* FEEDBACK */
+  .feedback-section { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.06); }
+  .fb-entry {
+    display: flex; gap: 8px; align-items: flex-start;
+    padding: 8px 12px; border-radius: 6px;
+    background: rgba(255,255,255,.03); margin-bottom: 4px; font-size: 12px;
+  }
+  .fb-who { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 8px; flex-shrink: 0; margin-top: 1px; }
+  .fb-who.joyi { background: var(--gold-light); color: var(--gold); }
+  .fb-who.gabby { background: var(--lav-light); color: var(--lavender); }
+  .fb-text { flex: 1; line-height: 1.4; }
+  .fb-time { font-size: 9px; color: var(--slate); flex-shrink: 0; }
+  .fb-input-row { display: flex; gap: 6px; margin-top: 8px; }
+  .fb-input-row input { flex: 1; font-size: 12px; padding: 8px 12px; }
+  .fb-input-row select {
+    padding: 6px 10px; border-radius: 6px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    color: var(--cream); font-size: 12px; font-family: inherit;
+  }
+  .fb-submit {
+    padding: 6px 14px; border-radius: 6px;
+    background: var(--gold); color: var(--deep);
+    border: none; font-weight: 700; font-size: 12px; cursor: pointer;
+  }
+
   .toast {
     position: fixed; bottom: 24px; right: 24px;
-    padding: 12px 24px; border-radius: 10px;
+    padding: 10px 20px; border-radius: 10px;
     font-size: 13px; font-weight: 600;
     opacity: 0; transition: opacity .3s; z-index: 200;
     background: var(--gold); color: var(--deep);
   }
   .toast.show { opacity: 1; }
 
-  .notes-box { margin-top: 16px; }
-  .notes-box label {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: var(--gold); display: block; margin-bottom: 6px;
+  /* MANTRA */
+  .mantra {
+    text-align: center; padding: 20px 0 8px; margin-bottom: 20px;
+    font-family: 'Lora', serif; font-style: italic;
+    font-size: 14px; color: rgba(201,151,91,.5);
+    letter-spacing: .3px;
   }
 
-  /* FIELD INTEL */
-  .intel-section { margin-bottom: 24px; }
-  .intel-lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  @media (max-width: 768px) { .intel-lanes { grid-template-columns: 1fr; } }
-  .intel-lane { border-radius: 14px; padding: 16px; min-height: 200px; }
-  .lane-header {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
-    padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.08);
+  /* MY PLATFORMS QUICK-POST */
+  .post-template {
+    padding: 14px 16px; border-radius: 10px; margin: 8px 0;
+    font-size: 13px; line-height: 1.6;
   }
-  .lane-icon {
-    width: 32px; height: 32px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .lane-icon.fac { background: var(--lav-light); color: var(--lavender); }
-  .lane-icon.np { background: var(--gold-light); color: var(--gold); }
-  .lane-icon.ai { background: var(--green-light); color: var(--green); }
-  .lane-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
-  .lane-title.fac { color: var(--lavender); }
-  .lane-title.np { color: var(--gold); }
-  .lane-title.ai { color: var(--green); }
-
-  .intel-item {
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,.04);
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .intel-item:last-child { border-bottom: none; }
-  .intel-item:hover { padding-left: 6px; }
-  .intel-item a {
-    text-decoration: none; color: var(--cream);
-    font-size: 13px; font-weight: 600; line-height: 1.4;
-    display: block;
-  }
-  .intel-item a:hover { color: var(--gold); }
-  .intel-item .intel-source {
-    font-size: 10px; color: var(--slate); margin-top: 2px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .intel-item .intel-use {
-    display: none; margin-top: 6px; padding: 6px 10px;
-    background: rgba(255,255,255,.04); border-radius: 6px;
-    font-size: 11px; color: var(--slate); line-height: 1.5;
-  }
-  .intel-item.expanded .intel-use { display: block; }
-
-  .intel-refresh {
-    padding: 6px 14px; border-radius: 6px;
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-    color: var(--slate); font-size: 11px; font-weight: 600; cursor: pointer;
-    transition: all .2s; margin-left: auto;
-  }
-  .intel-refresh:hover { border-color: var(--gold); color: var(--gold); }
-  .intel-loading { text-align: center; padding: 20px; font-size: 12px; color: var(--slate); }
-  .intel-tag {
-    display: inline-block; padding: 2px 6px; border-radius: 4px;
-    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
-  }
-  .intel-tag.trending { background: rgba(248,113,113,.15); color: var(--red); }
-  .intel-tag.resource { background: var(--green-light); color: var(--green); }
-  .intel-tag.research { background: var(--lav-light); color: var(--lavender); }
-
-  /* SCRIPT / GUIDE OUTPUT */
-  .phase { display: none; animation: fadeUp .35s ease; }
-  .phase.active { display: block; }
-
-  /* Clarify questions */
-  .clarify-q {
-    padding: 14px 18px; border-radius: 10px; margin: 8px 0;
-    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
-    cursor: pointer; transition: all .2s;
-  }
-  .clarify-q:hover { border-color: var(--gold); background: rgba(201,151,91,.06); }
-  .clarify-q .cq-label { font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
-  .clarify-q .cq-text { font-size: 14px; color: var(--cream); line-height: 1.5; }
-  .clarify-q textarea {
-    margin-top: 8px; font-size: 13px; min-height: 40px; padding: 8px 12px;
-    background: rgba(255,255,255,.04);
-  }
-
-  /* Direction cards */
-  .dir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
-  @media (max-width: 700px) { .dir-grid { grid-template-columns: 1fr; } }
-  .dir-card {
-    padding: 18px; border-radius: 12px; cursor: pointer;
-    transition: all .2s; border: 2px solid transparent;
-  }
-  .dir-card:hover { border-color: rgba(255,255,255,.15); transform: translateY(-1px); }
-  .dir-card.selected { border-color: var(--gold); background: rgba(201,151,91,.08); }
-  .dir-card h4 { font-size: 14px; margin-bottom: 4px; }
-  .dir-card p { font-size: 12px; color: var(--slate); line-height: 1.5; }
-
-  /* Recording guide cards */
-  .guide-section { margin: 20px 0; }
-  .guide-card {
-    padding: 20px; border-radius: 14px; margin: 12px 0;
-    position: relative; overflow: hidden;
-  }
-  .guide-card::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-  }
-  .guide-card.g-joyi::before { background: var(--gold); }
-  .guide-card.g-pencil::before { background: var(--lavender); }
-  .guide-card.g-lesson::before { background: var(--green); }
-  .guide-card.g-cta::before { background: var(--red); }
-
-  .guide-type {
-    display: inline-flex; align-items: center; gap: 6px;
+  .post-template .plat-label {
     font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-    padding: 3px 10px; border-radius: 6px; margin-bottom: 10px;
+    margin-bottom: 6px;
   }
-  .gt-joyi { background: var(--gold-light); color: var(--gold); }
-  .gt-pencil { background: var(--lav-light); color: var(--lavender); }
-  .gt-lesson { background: var(--green-light); color: var(--green); }
-  .gt-cta { background: var(--red-light); color: var(--red); }
+  .post-template textarea {
+    font-size: 12px; min-height: 50px; background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+  }
+  .copy-btn {
+    padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 700;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1);
+    color: var(--slate); cursor: pointer; transition: all .15s; margin-top: 6px;
+  }
+  .copy-btn:hover { color: var(--gold); border-color: var(--gold); }
 
-  .guide-topic { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-  .guide-prompt { font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 8px; }
-  .guide-exact {
-    font-size: 15px; font-weight: 600; color: var(--cream);
-    padding: 10px 14px; border-radius: 8px; margin: 8px 0;
-    background: rgba(201,151,91,.08); border-left: 3px solid var(--gold);
-    font-style: italic; line-height: 1.6;
+  /* EDITABLE GUIDE CARDS */
+  .guide-card[contenteditable="true"]:focus { outline: 1px solid var(--gold); outline-offset: 2px; }
+  .guide-card .edit-hint {
+    position: absolute; top: 8px; right: 12px;
+    font-size: 9px; font-weight: 600; color: rgba(255,255,255,.2);
+    text-transform: uppercase; letter-spacing: .5px;
+    pointer-events: none; transition: opacity .2s;
   }
-  .guide-notes { font-size: 12px; color: rgba(255,255,255,.3); margin-top: 6px; }
+  .guide-card:hover .edit-hint { opacity: 1; }
+  .guide-card:focus .edit-hint { opacity: 0; }
 
-  /* Visual asset cards */
-  .visual-card {
-    padding: 16px; border-radius: 12px; margin: 8px 0;
-    display: flex; gap: 14px; align-items: flex-start;
+  /* ===== VISUAL PRESENTER — fullscreen slides + camera ===== */
+  .presenter {
+    position: fixed; inset: 0; z-index: 500;
+    background: var(--deep); display: none;
+    flex-direction: column;
   }
-  .vis-thumb {
-    width: 80px; height: 60px; border-radius: 8px; flex-shrink: 0;
+  .presenter.open { display: flex; }
+
+  /* Top bar — minimal */
+  .pres-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 20px;
+    background: rgba(10,18,32,.95);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    flex-shrink: 0; z-index: 10;
+  }
+  .pres-bar-left { display: flex; align-items: center; gap: 12px; }
+  .pres-bar h3 { font-family:'Lora',serif; font-size: 13px; color: var(--gold); }
+  .pres-counter { font-size: 12px; color: var(--slate); font-weight: 600; }
+  .pres-close {
+    width: 32px; height: 32px; border-radius: 6px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+    color: var(--slate); font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all .15s;
+  }
+  .pres-close:hover { background: rgba(248,113,113,.15); color: var(--red); border-color: var(--red); }
+
+  /* Main slide area */
+  .pres-stage {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 40px;
+  }
+
+  /* The slide itself — beautiful branded card */
+  .pres-slide {
+    width: 100%; max-width: 900px;
+    animation: slideFade .5s ease;
+    text-align: center;
+    padding: 60px 50px;
+  }
+  @keyframes slideFade { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  .pres-slide .ps-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    padding: 4px 12px; border-radius: 6px; display: inline-block; margin-bottom: 20px;
+  }
+  .pres-slide .ps-label.joyi { background: var(--gold-light); color: var(--gold); }
+  .pres-slide .ps-label.pencil { background: var(--lav-light); color: var(--lavender); }
+  .pres-slide .ps-label.lesson { background: var(--green-light); color: var(--green); }
+  .pres-slide .ps-label.cta { background: var(--red-light); color: var(--red); }
+
+  .pres-slide .ps-topic {
+    font-family: 'Lora', serif;
+    font-size: 36px; font-weight: 700; color: var(--cream);
+    line-height: 1.3; margin-bottom: 16px;
+  }
+  .pres-slide .ps-prompt {
+    font-size: 18px; color: var(--slate); line-height: 1.8;
+    max-width: 700px; margin: 0 auto 20px;
+  }
+  .pres-slide .ps-exact {
+    font-family: 'Lora', serif; font-style: italic;
+    font-size: 28px; font-weight: 600; color: var(--gold);
+    line-height: 1.5; padding: 20px 28px;
+    background: rgba(201,151,91,.06);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    text-align: left;
+    max-width: 700px; margin: 0 auto 16px;
+  }
+  .pres-slide .ps-notes {
+    font-size: 13px; color: rgba(255,255,255,.2);
+    margin-top: 12px;
+  }
+
+  /* Decorative slide elements */
+  .pres-slide::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(201,151,91,.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .pres-slide::after {
+    content: ''; position: absolute; bottom: -80px; left: -80px;
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(124,141,200,.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Nav arrows */
+  .pres-nav {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 16px; z-index: 10;
+  }
+  .pres-arrow {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+    color: var(--cream); font-size: 20px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
-    text-align: center; line-height: 1.3;
+    transition: all .15s; backdrop-filter: blur(8px);
   }
-  .vis-thumb.pencil { background: linear-gradient(135deg, rgba(124,141,200,.2), rgba(201,151,91,.15)); color: var(--lavender); border: 1px solid rgba(124,141,200,.2); }
-  .vis-thumb.screen { background: var(--green-light); color: var(--green); border: 1px solid rgba(74,222,128,.15); }
-  .vis-desc { flex: 1; }
-  .vis-desc strong { font-size: 13px; display: block; margin-bottom: 2px; }
-  .vis-desc span { font-size: 12px; color: var(--slate); line-height: 1.4; }
+  .pres-arrow:hover { background: rgba(201,151,91,.15); border-color: var(--gold); color: var(--gold); }
+  .pres-arrow:disabled { opacity:.2; cursor:default; }
+  .pres-dots {
+    display: flex; gap: 6px; align-items: center;
+  }
+  .pres-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,.15); transition: all .2s; cursor: pointer;
+  }
+  .pres-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+
+  /* Camera PIP overlay — bottom right of slide */
+  .pres-cam {
+    position: absolute; bottom: 80px; right: 30px;
+    width: 200px; height: 150px; border-radius: 12px;
+    overflow: hidden; border: 2px solid rgba(201,151,91,.3);
+    box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    z-index: 10; cursor: move;
+    background: #111;
+  }
+  .pres-cam video {
+    width: 100%; height: 100%; object-fit: cover;
+    transform: scaleX(-1);
+  }
+  .pres-cam .cam-label {
+    position: absolute; bottom: 6px; left: 8px;
+    font-size: 9px; font-weight: 700; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 1px;
+    text-shadow: 0 1px 4px rgba(0,0,0,.8);
+  }
+  .pres-cam-dot {
+    position: absolute; top: 8px; left: 8px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--red);
+    animation: rec-blink 1.2s ease-in-out infinite;
+  }
+  @keyframes rec-blink { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+
+  /* Brand watermark */
+  .pres-brand {
+    position: absolute; bottom: 28px; right: 30px;
+    font-size: 10px; font-weight: 600; color: rgba(201,151,91,.25);
+    letter-spacing: 1px; z-index: 5;
+  }
+
+  /* Launch button */
+  .tp-launch {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--gold), #a07840);
+    color: var(--deep); font-size: 14px; font-weight: 700;
+    border: none; border-radius: 10px; cursor: pointer; transition: all .2s;
+    margin-top: 16px; margin-left: 8px;
+  }
+  .tp-launch:hover { transform: translateY(-1px); box-shadow: 0 8px 24px var(--gold-glow); }
 </style>
 </head>
 <body>
 
 <div class="top">
-  <h1>WEEKLY CONTENT MACHINE</h1>
+  <div class="top-left">
+    <h1>Marketing Monday</h1>
+    <span class="tagline">JoYi Rhyss</span>
+  </div>
   <div class="links">
     <a href="https://drive.google.com" target="_blank">Drive</a>
     <a href="https://discord.com/channels/" target="_blank">Discord</a>
+    <a href="https://aidedeq.org/tools" target="_blank">Tools</a>
   </div>
 </div>
 
 <div class="main">
 
-  <!-- STEPS -->
+  <div class="mantra" id="mantra"></div>
+
+  <!-- 3 STEPS: Talk → Guide → Go -->
   <div class="steps-bar">
-    <div class="step-dot active" data-step="0" onclick="goStep(0)">1<span class="step-label">Dump</span></div>
+    <div class="step-dot active" data-step="0" onclick="goStep(0)">1<span class="step-label">Talk</span></div>
     <div class="step-line"></div>
-    <div class="step-dot" data-step="1" onclick="goStep(1)">2<span class="step-label">Script</span></div>
+    <div class="step-dot" data-step="1" onclick="goStep(1)">2<span class="step-label">Guide</span></div>
     <div class="step-line"></div>
-    <div class="step-dot" data-step="2" onclick="goStep(2)">3<span class="step-label">Record</span></div>
-    <div class="step-line"></div>
-    <div class="step-dot" data-step="3" onclick="goStep(3)">4<span class="step-label">Upload</span></div>
-    <div class="step-line"></div>
-    <div class="step-dot" data-step="4" onclick="goStep(4)">5<span class="step-label">Gabby</span></div>
-    <div class="step-line"></div>
-    <div class="step-dot" data-step="5" onclick="goStep(5)">6<span class="step-label">Post</span></div>
+    <div class="step-dot" data-step="2" onclick="goStep(2)">3<span class="step-label">Go</span></div>
   </div>
 
-  <!-- ============================== -->
-  <!-- STEP 1: BRAIN DUMP (VOICE)     -->
-  <!-- ============================== -->
+  <!-- =============================== -->
+  <!-- STEP 1: TALK IT OUT             -->
+  <!-- =============================== -->
   <div class="step-panel active" id="step-0">
-    <h2>Brain Dump</h2>
-    <p class="subtitle">Scan the field intel, then talk it out. What's relevant? What's missing? What do people need to hear from you?</p>
+    <h2>Talk It Out</h2>
+    <p class="subtitle">What's on your mind this week? Hit the mic and ramble. Type if you prefer. The guide builds itself from what you say.</p>
 
-    <!-- FIELD INTEL -->
-    <div class="intel-section">
-      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
-        <div class="section-label" style="margin:0;">Field Intel</div>
-        <button class="intel-refresh" onclick="loadAllFeeds()">Refresh</button>
+    <!-- MIC + TEXTAREA -->
+    <div class="card glass" style="padding:20px;">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+        <button class="mic-btn" id="micBtn" onclick="toggleVoice()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:24px;height:24px;color:var(--deep);">
+            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+            <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <div>
+          <div id="voiceStatus" style="font-size:14px; font-weight:600; color:var(--cream);">Tap to talk</div>
+          <div style="font-size:11px; color:var(--slate);">Voice adds to your text. Use both.</div>
+        </div>
       </div>
+      <textarea id="brainDump" rows="6" placeholder="What happened this week? What are you building? What do people need to hear? What's the lesson? Just talk..." oninput="autoSave()" style="font-size:15px; line-height:1.7;"></textarea>
+    </div>
+
+    <!-- FIELD INTEL — collapsed by default -->
+    <div class="intel-toggle" onclick="toggleIntel()">
+      <span class="arrow" id="intelArrow">&#9654;</span>
+      <span>Field Intel — what's happening in your world</span>
+      <button style="margin-left:auto; padding:4px 10px; border-radius:4px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); color:var(--slate); font-size:10px; font-weight:600; cursor:pointer;" onclick="event.stopPropagation(); loadAllFeeds();">Refresh</button>
+    </div>
+    <div class="intel-content" id="intelContent">
       <div class="intel-lanes">
-        <!-- LANE 1: Facilitation + PYD -->
         <div class="intel-lane glass">
           <div class="lane-header">
-            <div class="lane-icon fac"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div class="lane-icon fac"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
             <div class="lane-title fac">Facilitation + PYD</div>
           </div>
           <div id="feed-facilitation"><div class="intel-loading">Loading...</div></div>
         </div>
-        <!-- LANE 2: Nonprofit + Mission -->
         <div class="intel-lane glass">
           <div class="lane-header">
-            <div class="lane-icon np"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></div>
+            <div class="lane-icon np"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></div>
             <div class="lane-title np">Nonprofit + Mission</div>
           </div>
           <div id="feed-nonprofit"><div class="intel-loading">Loading...</div></div>
         </div>
-        <!-- LANE 3: AI Tools + Tech -->
         <div class="intel-lane glass">
           <div class="lane-header">
-            <div class="lane-icon ai"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div class="lane-icon ai"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
             <div class="lane-title ai">AI Tools + Tech</div>
           </div>
           <div id="feed-ai"><div class="intel-loading">Loading...</div></div>
@@ -537,362 +584,211 @@
       </div>
     </div>
 
-    <!-- COMBINED VOICE + TEXT DUMP -->
-    <div class="card glass" style="padding:20px;">
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-        <button class="mic-btn" id="micBtn" onclick="toggleVoice()" style="width:52px;height:52px;margin:0;">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:22px;height:22px;">
-            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
-            <path d="M19 10v2a7 7 0 01-14 0v-2"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-            <line x1="8" y1="23" x2="16" y2="23"/>
-          </svg>
-        </button>
-        <div>
-          <div class="voice-status" id="voiceStatus" style="font-size:14px; font-weight:600;">Tap mic to talk, or just type below</div>
-          <div style="font-size:11px; color:var(--slate);">Voice adds to your text. Use both. Edit anytime.</div>
-        </div>
-      </div>
-      <div id="voiceZone"></div>
-      <textarea id="brainDump" rows="8" placeholder="Talk into the mic or type here. Both go to the same place. Ramble freely — the script generator will sort it out." oninput="autoSave()" style="font-size:15px; line-height:1.7;"></textarea>
-    </div>
-
-    <button class="btn-next" onclick="startGuide()">Build My Guide &#8594;</button>
+    <button class="btn-next" onclick="buildGuide()">Build My Guide &#8594;</button>
   </div>
 
-  <!-- ============================== -->
-  <!-- STEP 2: GUIDED SCRIPT BUILDER  -->
-  <!-- ============================== -->
+  <!-- =============================== -->
+  <!-- STEP 2: YOUR GUIDE              -->
+  <!-- =============================== -->
   <div class="step-panel" id="step-1">
+    <h2>Your Recording Guide</h2>
+    <p class="subtitle">Not a script. Topics to riff on, questions to answer on camera, and exact words for the high-impact moments only.</p>
 
-    <!-- PHASE A: CLARIFYING QUESTIONS -->
-    <div class="phase active" id="phase-clarify">
-      <h2>Quick Clarify</h2>
-      <p class="subtitle">Based on your dump, answer what feels right. Skip any that don't apply.</p>
-      <div id="clarifyQuestions"></div>
-      <div class="nav-buttons">
-        <button class="btn-back" onclick="goStep(0)">&#8592; Dump</button>
-        <button class="btn-next" onclick="showDirections()">See My Options &#8594;</button>
-      </div>
-    </div>
-
-    <!-- PHASE B: DIRECTION CHOICES -->
-    <div class="phase" id="phase-directions">
-      <h2>Pick Your Direction</h2>
-      <p class="subtitle">Choose one path for TPC and one for AIdedEQ. These shape your recording guide.</p>
-
-      <div class="section-label">The Practice Center angle</div>
+    <!-- Quick direction picks — inline, not a separate phase -->
+    <div id="directionPicker" style="margin-bottom:20px;">
+      <div class="section-label">TPC Angle</div>
       <div class="dir-grid" id="tpcOptions"></div>
-
-      <div class="section-label">AIdedEQ angle</div>
+      <div class="section-label">AIdedEQ Angle</div>
       <div class="dir-grid" id="aeqOptions"></div>
-
-      <div class="section-label">Content tone</div>
+      <div class="section-label">Tone</div>
       <div class="dir-grid" id="toneOptions">
-        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="reflective">
-          <h4>Reflective</h4><p>Looking back, lessons learned, personal growth</p>
-        </div>
-        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="teaching">
-          <h4>Teaching</h4><p>Here's how to do this, step by step, try it yourself</p>
-        </div>
-        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="builder">
-          <h4>Builder Energy</h4><p>Watch me build this, behind the scenes, work in progress</p>
-        </div>
-        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="calling-in">
-          <h4>Calling In</h4><p>This matters, here's why, come be part of this</p>
-        </div>
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="reflective"><h4>Reflective</h4><p>Looking back, lessons, growth</p></div>
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="teaching"><h4>Teaching</h4><p>Here's how, try this</p></div>
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="builder"><h4>Builder</h4><p>Watch me build, behind the scenes</p></div>
+        <div class="dir-card glass" onclick="selectCard(this,'tone')" data-val="calling-in"><h4>Calling In</h4><p>This matters, come be part of it</p></div>
       </div>
-
-      <div class="section-label">Relevant from the field</div>
-      <div id="relevantLinks" class="card glass" style="padding:16px;"></div>
-
-      <div class="nav-buttons">
-        <button class="btn-back" onclick="showPhase('phase-clarify')">&#8592; Clarify</button>
-        <button class="btn-next" onclick="buildRecordingGuide()">Build My Recording Guide &#8594;</button>
-      </div>
+      <button class="btn-next" onclick="generateGuide()" style="margin-top:12px;">Generate Guide &#8594;</button>
     </div>
 
-    <!-- PHASE C: RECORDING GUIDE -->
-    <div class="phase" id="phase-guide">
-      <h2>Your Recording Guide</h2>
-      <p class="subtitle">Not a script. Topics to riff on, questions to answer on camera, and the exact words for high-impact moments.</p>
+    <!-- The actual guide cards (editable) -->
+    <div id="recordingGuide"></div>
 
-      <div id="recordingGuide"></div>
-
-      <div class="section-label">Visual Assets (Gabby creates these)</div>
-      <div id="visualAssets"></div>
-
-      <div class="nav-buttons">
-        <button class="btn-back" onclick="showPhase('phase-directions')">&#8592; Directions</button>
-        <button class="btn-next" onclick="goStep(2)">Next: Record &#8594;</button>
-      </div>
+    <div class="nav-buttons">
+      <button class="btn-back" onclick="goStep(0)">&#8592; Talk</button>
+      <button class="tp-launch" onclick="openPresenter()" id="tpBtn" style="display:none;">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Present + Record
+      </button>
+      <button class="btn-next" onclick="goStep(2)" id="goBtn" style="display:none;">Done Recording &#8594;</button>
     </div>
   </div>
 
-  <!-- ============================== -->
-  <!-- STEP 3: RECORD                 -->
-  <!-- ============================== -->
+  <!-- =============================== -->
+  <!-- STEP 3: GO — Record, Upload, Done -->
+  <!-- =============================== -->
   <div class="step-panel" id="step-2">
-    <h2>Record</h2>
-    <p class="subtitle">Record yourself doing the work. That is the content.</p>
+    <h2>Go</h2>
+    <p class="subtitle">Record yourself. Upload raw files. Gabby handles the rest.</p>
 
-    <div class="section-label">Screen Record (Mac)</div>
-    <div class="rec-grid">
-      <div class="rec-card glass">
-        <div class="rec-num">1</div>
-        <div class="rec-act">Cmd + Shift + 5</div>
-        <div class="rec-detail">Opens screen recording</div>
-      </div>
-      <div class="rec-card glass">
-        <div class="rec-num">2</div>
-        <div class="rec-act">Narrate as you go</div>
-        <div class="rec-detail">Talk through it like you're showing Gabby</div>
-      </div>
-      <div class="rec-card glass">
-        <div class="rec-num">3</div>
-        <div class="rec-act">Do the actual work</div>
-        <div class="rec-detail">Build, prep, write, demo</div>
-      </div>
-      <div class="rec-card glass">
-        <div class="rec-num">4</div>
-        <div class="rec-act">Stop + Save</div>
-        <div class="rec-detail">Click stop in menu bar</div>
-      </div>
-    </div>
-
-    <div class="section-label">iPhone Selfie (personal hook)</div>
-    <div class="rec-grid">
-      <div class="rec-card glass">
-        <div class="rec-num">1</div>
-        <div class="rec-act">Face a window</div>
-        <div class="rec-detail">Natural light, phone at eye level</div>
-      </div>
-      <div class="rec-card glass">
-        <div class="rec-num">2</div>
-        <div class="rec-act">Say the hook</div>
-        <div class="rec-detail">One sentence, look at the lens</div>
-      </div>
-      <div class="rec-card glass">
-        <div class="rec-num">3</div>
-        <div class="rec-act">Tell the story (60s)</div>
-        <div class="rec-detail">No script needed, just talk</div>
-      </div>
-      <div class="rec-card glass">
-        <div class="rec-num">4</div>
-        <div class="rec-act">One take is enough</div>
-        <div class="rec-detail">Real > polished. Always.</div>
-      </div>
-    </div>
-
-    <div class="section-label">What to record this week</div>
-    <div class="type-grid">
-      <div class="type-card glass">
-        <div class="type-icon tool"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-        <div class="type-name">Demo a Tool</div>
-        <div class="type-desc">anchorED, ROP, Snapshots</div>
-      </div>
-      <div class="type-card glass">
-        <div class="type-icon event"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-        <div class="type-name">Prep for Event</div>
-        <div class="type-desc">Women Build Safety, retreats, FIT</div>
-      </div>
-      <div class="type-card glass">
-        <div class="type-icon write"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-        <div class="type-name">Write Curriculum</div>
-        <div class="type-desc">Build a lesson live</div>
-      </div>
-      <div class="type-card glass">
-        <div class="type-icon meta"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
-        <div class="type-name">Behind the Build</div>
-        <div class="type-desc">This dashboard, your process</div>
-      </div>
-    </div>
-
-    <div class="nav-buttons">
-      <button class="btn-back" onclick="goStep(1)">&#8592; Script</button>
-      <button class="btn-next" onclick="goStep(3)">Next: Upload &#8594;</button>
-    </div>
-  </div>
-
-  <!-- ============================== -->
-  <!-- STEP 4: UPLOAD                 -->
-  <!-- ============================== -->
-  <div class="step-panel" id="step-3">
-    <h2>Upload to Drive</h2>
-    <p class="subtitle">Drop your raw files. Ping Gabby. You're done for the week.</p>
-
-    <div class="card glass-bright" style="padding:24px;">
-      <div class="dm-row">
-        <div class="dm-icon you"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-        <div><div class="dm-name">RAW FROM JOYI</div><div class="dm-desc">Drop raw video + screen recordings here</div></div>
-        <div class="dm-who j">JOYI</div>
-      </div>
-      <div style="padding:4px 0 4px 54px; font-size:12px; color:var(--slate);">
-        Name: <strong style="color:var(--gold);">[date]-[topic].mov</strong>
-      </div>
-      <div class="dm-row" style="margin-top:8px;">
-        <div class="dm-icon gab"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
-        <div><div class="dm-name">GABBY WORKSPACE</div><div class="dm-desc">Gabby clips, captions, thumbnails</div></div>
-        <div class="dm-who g">GABBY</div>
-      </div>
-      <div class="dm-row" style="margin-top:8px;">
-        <div class="dm-icon done-i"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div><div class="dm-name">READY TO POST</div><div class="dm-desc">Final content by platform</div></div>
-        <div class="dm-who g">GABBY</div>
-      </div>
-      <div style="padding:4px 0 4px 54px; display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
-        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">linkedin/</span>
-        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">instagram/</span>
-        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">tiktok/</span>
-        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">youtube/</span>
-        <span style="font-size:11px; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); color:var(--slate);">facebook/</span>
-      </div>
-    </div>
-
-    <div class="section-label">iPhone Upload (4 taps)</div>
-    <div class="rec-grid">
-      <div class="rec-card glass"><div class="rec-num">1</div><div class="rec-act">Photos</div><div class="rec-detail">Find the video</div></div>
-      <div class="rec-card glass"><div class="rec-num">2</div><div class="rec-act">Share</div><div class="rec-detail">Box with arrow</div></div>
-      <div class="rec-card glass"><div class="rec-num">3</div><div class="rec-act">Save to Files</div><div class="rec-detail">Drive > RAW FROM JOYI</div></div>
-      <div class="rec-card glass"><div class="rec-num">4</div><div class="rec-act">Discord</div><div class="rec-detail">"raw uploaded"</div></div>
-    </div>
-
-    <div class="nav-buttons">
-      <button class="btn-back" onclick="goStep(2)">&#8592; Record</button>
-      <button class="btn-next" onclick="goStep(4)">Next: Gabby &#8594;</button>
-    </div>
-  </div>
-
-  <!-- ============================== -->
-  <!-- STEP 5: GABBY                  -->
-  <!-- ============================== -->
-  <div class="step-panel" id="step-4">
-    <h2>Gabby's Turn</h2>
-    <p class="subtitle">Pull from Drive, build assets, check them off, ping JoYi.</p>
-
-    <div class="card glass-bright" style="padding:24px;">
-      <div id="gabbyTasks">
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Pull raw video from Drive</span></div>
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut 60s hook clip (Reels + TikTok)</span></div>
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Cut full 2-3 min (YouTube + LinkedIn)</span></div>
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Add captions to all clips</span></div>
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Create thumbnail (1280x720)</span></div>
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Write post captions per platform</span></div>
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Move assets to READY TO POST</span></div>
-        <div class="ga-task"><input type="checkbox" onchange="saveGabby()"><span>Ping JoYi in Discord</span></div>
-      </div>
-      <div class="notes-box">
-        <label>Notes between JoYi + Gabby</label>
-        <textarea id="gabbyNotes" placeholder="Leave notes, questions, feedback." oninput="autoSave()"></textarea>
-      </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
-      <div class="card glass" style="padding:18px;">
-        <div class="section-label" style="margin-top:0;">Platform Specs</div>
-        <table style="width:100%; font-size:13px; border-collapse:collapse;">
-          <tr><td style="padding:5px 0; color:var(--slate);">YouTube</td><td>16:9, 1080p+</td></tr>
-          <tr><td style="padding:5px 0; color:var(--slate);">LinkedIn</td><td>16:9 or 1:1</td></tr>
-          <tr><td style="padding:5px 0; color:var(--slate);">IG Reels</td><td>9:16, 60-90s</td></tr>
-          <tr><td style="padding:5px 0; color:var(--slate);">TikTok</td><td>9:16, 60-90s</td></tr>
-          <tr><td style="padding:5px 0; color:var(--slate);">Carousel</td><td>1080x1080</td></tr>
-          <tr><td style="padding:5px 0; color:var(--slate);">Thumbnail</td><td>1280x720</td></tr>
-        </table>
-      </div>
-      <div class="card glass" style="padding:18px;">
-        <div class="section-label" style="margin-top:0;">Brand</div>
-        <div class="swatches">
-          <div class="swatch" style="background:#0f1a2e;" data-hex="#0f1a2e"></div>
-          <div class="swatch" style="background:#faf9f6;" data-hex="#faf9f6"></div>
-          <div class="swatch" style="background:#c9975b;" data-hex="#c9975b"></div>
-          <div class="swatch" style="background:#7c8dc8;" data-hex="#7c8dc8"></div>
-          <div class="swatch" style="background:#4a5568;" data-hex="#4a5568"></div>
+    <!-- RECORD -->
+    <div class="card glass-bright" style="padding:20px;">
+      <div class="section-label" style="margin-top:0;">Record</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+        <div style="padding:14px; border-radius:10px; background:rgba(255,255,255,.04);">
+          <div style="font-size:13px; font-weight:700; margin-bottom:4px;">Screen Record</div>
+          <div style="font-size:12px; color:var(--slate); line-height:1.5;">
+            <strong style="color:var(--gold);">Cmd + Shift + 5</strong><br>
+            Narrate as you work. Do the actual work. That is the content.
+          </div>
         </div>
-        <ul style="font-size:12px; padding-left:16px; color:var(--slate); line-height:2; margin-top:8px;">
-          <li>No emojis on final assets</li>
-          <li>Max 2 fonts</li>
-          <li>Always include CTA URL</li>
-          <li>Warm + professional</li>
-        </ul>
+        <div style="padding:14px; border-radius:10px; background:rgba(255,255,255,.04);">
+          <div style="font-size:13px; font-weight:700; margin-bottom:4px;">iPhone Selfie</div>
+          <div style="font-size:12px; color:var(--slate); line-height:1.5;">
+            Face a window. Say the hook. Tell the story in 60 seconds. One take is enough.
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="card glass" style="padding:20px;">
+      <div class="section-label" style="margin-top:0;">Upload to Drive</div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 0;">
+        <div style="width:36px; height:36px; border-radius:8px; background:var(--gold-light); color:var(--gold); display:flex; align-items:center; justify-content:center;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px; font-weight:700;">RAW FROM JOYI</div>
+          <div style="font-size:11px; color:var(--slate);">Drop raw video + recordings here</div>
+        </div>
+      </div>
+      <div style="font-size:11px; color:var(--slate); padding-left:48px;">
+        Name files: <strong style="color:var(--gold);">[date]-[topic].mov</strong>
+      </div>
+    </div>
+
+    <!-- GABBY'S CHECKLIST -->
+    <div class="card glass" style="padding:20px;">
+      <div class="section-label" style="margin-top:0;">Gabby Takes It From Here</div>
+      <div id="gabbyTasks">
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Pull raw video from Drive</span></div>
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Cut 60s hook clip (Reels + TikTok)</span></div>
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Cut full 2-3 min (YouTube + LinkedIn)</span></div>
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Add captions to all clips</span></div>
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Create thumbnail (1280x720)</span></div>
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Write captions per platform</span></div>
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Move to READY TO POST</span></div>
+        <div class="check-item"><input type="checkbox" onchange="saveGabby()"><span>Ping JoYi</span></div>
+      </div>
+    </div>
+
+    <!-- YOUR PLATFORMS — where it goes -->
+    <div class="card glass" style="padding:20px;">
+      <div class="section-label" style="margin-top:0;">Your Platforms — Same Story, Every Channel</div>
+      <div class="platform-row">
+        <div class="plat-card glass"><div class="p-li" style="font-size:20px;">in</div><div class="plat-name">LinkedIn</div><div class="plat-format">Text + video</div></div>
+        <div class="plat-card glass"><div class="p-ig" style="font-size:20px;">IG</div><div class="plat-name">Instagram</div><div class="plat-format">Reels + carousel</div></div>
+        <div class="plat-card glass"><div class="p-tk" style="font-size:20px;">TK</div><div class="plat-name">TikTok</div><div class="plat-format">60s clip</div></div>
+        <div class="plat-card glass"><div class="p-yt" style="font-size:20px;">YT</div><div class="plat-name">YouTube</div><div class="plat-format">Full video</div></div>
+        <div class="plat-card glass"><div class="p-fb" style="font-size:20px;">FB</div><div class="plat-name">Facebook</div><div class="plat-format">Story + video</div></div>
+      </div>
+      <div style="text-align:center; font-size:12px; color:var(--slate); margin-top:4px;">
+        1 recording &#8594; 7+ posts. Same message. Every platform. Every week.
+      </div>
+    </div>
+
+    <!-- POST CAPTIONS — auto-generated -->
+    <div id="postCaptions"></div>
+
+    <!-- WEEK COMPLETE -->
+    <div class="card glass" style="padding:20px; text-align:center; margin-top:16px;">
+      <h3 style="font-family:'Lora',serif; font-size:18px;">Week Done</h3>
+      <p style="color:var(--slate); font-size:12px; margin:6px 0;">Content is consistency. You showed up. Reset and go again.</p>
+      <button class="btn-next" onclick="resetWeek()" style="margin-top:8px;">Reset for Next Week</button>
     </div>
 
     <div class="dev-note">
-      <strong>Gabby — this is your platform too.</strong> Clone the repo. Change anything. Add features. Break it and fix it. This dashboard should evolve with our workflow, not stay frozen. Push updates anytime. JoYi will see them on next refresh.
+      <strong>Gabby</strong> — this is your platform too. Clone the repo. Change anything. Push updates. This evolves with us.
     </div>
 
     <div class="nav-buttons">
-      <button class="btn-back" onclick="goStep(3)">&#8592; Upload</button>
-      <button class="btn-next" onclick="goStep(5)">Next: Post &#8594;</button>
+      <button class="btn-back" onclick="goStep(1)">&#8592; Guide</button>
     </div>
   </div>
 
-  <!-- ============================== -->
-  <!-- STEP 6: POST                   -->
-  <!-- ============================== -->
-  <div class="step-panel" id="step-5">
-    <h2>Post</h2>
-    <p class="subtitle">One video becomes 5+ posts. Same schedule every week.</p>
-
-    <div class="post-row">
-      <div class="post-day glass"><strong>Mon</strong><span class="post-platform p-li">LinkedIn</span><div class="post-type">Text post</div></div>
-      <div class="post-day glass"><strong>Tue</strong><span class="post-platform p-ig">IG</span><span class="post-platform p-tk">TK</span><div class="post-type">60s clip</div></div>
-      <div class="post-day glass"><strong>Wed</strong><span class="post-platform p-yt">YT</span><span class="post-platform p-li">LI</span><div class="post-type">Full video</div></div>
-      <div class="post-day glass"><strong>Thu</strong><span class="post-platform p-fb">FB</span><div class="post-type">Story + video</div></div>
-      <div class="post-day glass"><strong>Fri</strong><span class="post-platform p-ig">IG</span><div class="post-type">Carousel</div></div>
-    </div>
-
-    <div class="card glass-bright" style="padding:24px; margin-top:16px;">
-      <h3 style="margin-bottom:12px;">1 video &#8594; 7+ pieces</h3>
-      <div style="display:grid; grid-template-columns:auto 1fr; gap:8px 16px; font-size:13px;">
-        <span style="color:var(--gold); font-weight:700;">Full video</span><span style="color:var(--slate);">YouTube + LinkedIn</span>
-        <span style="color:var(--gold); font-weight:700;">Hook clip</span><span style="color:var(--slate);">IG Reels + TikTok (60s)</span>
-        <span style="color:var(--gold); font-weight:700;">Text post</span><span style="color:var(--slate);">LinkedIn</span>
-        <span style="color:var(--gold); font-weight:700;">Carousel</span><span style="color:var(--slate);">Instagram</span>
-        <span style="color:var(--gold); font-weight:700;">Personal post</span><span style="color:var(--slate);">Facebook</span>
-        <span style="color:var(--gold); font-weight:700;">Shorts</span><span style="color:var(--slate);">2-3 extra clips</span>
-        <span style="color:var(--gold); font-weight:700;">Newsletter</span><span style="color:var(--slate);">Monthly Substack</span>
-      </div>
-    </div>
-
-    <div class="card glass" style="padding:24px; margin-top:16px; text-align:center;">
-      <h3>Week Complete</h3>
-      <p style="color:var(--slate); font-size:13px; margin-top:4px;">Reset and start fresh.</p>
-      <button class="btn-next" onclick="resetWeek()" style="margin-top:12px;">Reset for Next Week</button>
-    </div>
-
-    <div class="nav-buttons">
-      <button class="btn-back" onclick="goStep(4)">&#8592; Gabby</button>
-    </div>
-  </div>
-
-  <!-- ============================== -->
-  <!-- FEEDBACK LOG (always visible)  -->
-  <!-- ============================== -->
-  <div class="feedback-section" style="margin-top:48px; padding-top:24px; border-top:1px solid rgba(255,255,255,.06);">
-    <div class="section-label">Bugs + Update Requests</div>
-    <p style="font-size:12px; color:var(--slate); margin-bottom:12px;">Log issues and ideas here. Both JoYi and Gabby can add entries. This persists between weeks.</p>
+  <!-- FEEDBACK LOG -->
+  <div class="feedback-section">
+    <div class="section-label">Bugs + Updates</div>
     <div id="feedbackLog"></div>
     <div class="fb-input-row">
-      <select id="fbWho">
-        <option value="joyi">JoYi</option>
-        <option value="gabby">Gabby</option>
-      </select>
-      <input type="text" id="fbInput" placeholder="Describe the bug, request, or idea..." onkeydown="if(event.key==='Enter')addFeedback()">
+      <select id="fbWho"><option value="joyi">JoYi</option><option value="gabby">Gabby</option></select>
+      <input type="text" id="fbInput" placeholder="Bug, request, or idea..." onkeydown="if(event.key==='Enter')addFeedback()">
       <button class="fb-submit" onclick="addFeedback()">Add</button>
     </div>
   </div>
 
 </div>
 
+<!-- VISUAL PRESENTER — fullscreen slides + camera PIP -->
+<div class="presenter" id="presenter">
+  <div class="pres-bar">
+    <div class="pres-bar-left">
+      <h3>Marketing Monday</h3>
+      <span class="pres-counter" id="presCounter">1 / 6</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <span style="font-size:10px; color:var(--slate);">&#8592; &#8594; arrows or click to advance &middot; Esc to close</span>
+      <button class="pres-close" onclick="closePresenter()">&#10005;</button>
+    </div>
+  </div>
+
+  <div class="pres-stage" id="presStage">
+    <div class="pres-slide" id="presSlide"></div>
+
+    <div class="pres-cam" id="presCam" style="display:none;">
+      <video id="presCamVideo" autoplay muted playsinline></video>
+      <div class="cam-label">JoYi</div>
+      <div class="pres-cam-dot"></div>
+    </div>
+
+    <div class="pres-brand">thepracticecenter.org &middot; aidedeq.org</div>
+
+    <div class="pres-nav">
+      <button class="pres-arrow" id="presPrev" onclick="presGo(-1)">&#8592;</button>
+      <div class="pres-dots" id="presDots"></div>
+      <button class="pres-arrow" id="presNext" onclick="presGo(1)">&#8594;</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+  // ========================================
+  // MARKETING MONDAY — JoYi's Content Engine
+  // ========================================
+
   let currentStep = 0;
-  const SAVE_KEY = 'wcm_v3';
-  const GABBY_KEY = 'wcm_v3_gabby';
-  const STEP_KEY = 'wcm_v3_step';
-  const FB_KEY = 'wcm_v3_feedback';
+  const SAVE_KEY = 'mm_v4';
+  const GABBY_KEY = 'mm_v4_gabby';
+  const STEP_KEY = 'mm_v4_step';
+  const FB_KEY = 'mm_v4_feedback';
+  const GUIDE_KEY = 'mm_v4_guide';
+
+  // --- MANTRAS ---
+  const MANTRAS = [
+    "Practice makes present.",
+    "Show up. That's the whole strategy.",
+    "Real > polished. Always.",
+    "The content is you doing the work.",
+    "Consistency is the only algorithm that matters.",
+    "One recording. Seven posts. Same message. Every week.",
+    "Not optimization. Presence.",
+    "Follow your curiosity.",
+    "Be interesting, not interested in being interesting.",
+    "The best content is the truth told simply.",
+  ];
+  document.getElementById('mantra').textContent = MANTRAS[Math.floor(Math.random() * MANTRAS.length)];
 
   // --- STEPS ---
   function goStep(n) {
@@ -908,29 +804,35 @@
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  // --- VOICE RECORDING (Web Speech API) ---
-  let recognition = null;
-  let isRecording = false;
-  let fullTranscript = '';
+  // --- VOICE (mic permission requested ONCE at init, not per-click) ---
+  let recognition = null, isRecording = false, fullTranscript = '';
+  let micPermissionGranted = false;
 
-  function initSpeech() {
+  async function initSpeech() {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) {
-      document.getElementById('voiceStatus').textContent = 'Voice not supported in this browser. Use Chrome.';
-      return;
+    if (!SR) { document.getElementById('voiceStatus').textContent = 'Voice not supported — use Chrome'; return; }
+
+    // Request mic permission once at startup so it doesn't re-prompt
+    if (!micPermissionGranted) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(t => t.stop()); // release immediately
+        micPermissionGranted = true;
+      } catch(e) {
+        console.warn('Mic permission denied:', e);
+        document.getElementById('voiceStatus').textContent = 'Mic access denied — check browser settings';
+        return;
+      }
     }
+
     recognition = new SR();
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
-
     recognition.onresult = (e) => {
-      let interim = '';
       let final = '';
       for (let i = e.resultIndex; i < e.results.length; i++) {
-        const t = e.results[i][0].transcript;
-        if (e.results[i].isFinal) { final += t + ' '; }
-        else { interim = t; }
+        if (e.results[i].isFinal) final += e.results[i][0].transcript + ' ';
       }
       if (final) {
         fullTranscript += final;
@@ -940,114 +842,89 @@
         autoSave();
       }
     };
-
-    recognition.onerror = (e) => {
-      if (e.error === 'no-speech') return; // ignore silence
-      console.error('Speech error:', e.error);
-      stopVoice();
-    };
-
-    recognition.onend = () => {
-      // Auto-restart if still recording (speech API stops after silence)
-      if (isRecording) {
-        try { recognition.start(); } catch(e) {}
-      }
-    };
+    recognition.onerror = (e) => { if (e.error !== 'no-speech') stopVoice(); };
+    recognition.onend = () => { if (isRecording) try { recognition.start(); } catch(e) {} };
   }
 
-  function toggleVoice() {
-    if (isRecording) { stopVoice(); } else { startVoice(); }
-  }
-
-  function startVoice() {
-    if (!recognition) initSpeech();
+  function toggleVoice() { isRecording ? stopVoice() : startVoice(); }
+  async function startVoice() {
+    if (!recognition) await initSpeech();
     if (!recognition) return;
     isRecording = true;
-    // Always pick up from what's currently in the textarea
     fullTranscript = document.getElementById('brainDump').value;
     if (fullTranscript && !fullTranscript.endsWith(' ') && !fullTranscript.endsWith('\n')) fullTranscript += ' ';
     try { recognition.start(); } catch(e) {}
     document.getElementById('micBtn').classList.add('recording');
-    document.getElementById('voiceStatus').classList.add('live');
-    document.getElementById('voiceStatus').textContent = 'Listening... tap mic to stop';
+    document.getElementById('voiceStatus').textContent = 'Listening... tap to stop';
+    document.getElementById('voiceStatus').style.color = 'var(--red)';
   }
-
   function stopVoice() {
     isRecording = false;
     if (recognition) try { recognition.stop(); } catch(e) {}
     document.getElementById('micBtn').classList.remove('recording');
-    document.getElementById('voiceStatus').classList.remove('live');
-    document.getElementById('voiceStatus').textContent = 'Tap mic to talk, or just type below';
+    document.getElementById('voiceStatus').textContent = 'Tap to talk';
+    document.getElementById('voiceStatus').style.color = 'var(--cream)';
+  }
+  // Pre-request mic permission (async, non-blocking)
+  initSpeech().catch(() => {});
+
+  // --- INTEL TOGGLE ---
+  function toggleIntel() {
+    const c = document.getElementById('intelContent');
+    const a = document.getElementById('intelArrow');
+    const t = c.classList.toggle('open');
+    document.querySelector('.intel-toggle').classList.toggle('open', t);
   }
 
-  initSpeech();
-
-  // --- AUTO SAVE ---
+  // --- SAVE / LOAD ---
   function autoSave() {
     const data = {};
-    document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+    document.querySelectorAll('textarea, input[type="text"]').forEach(el => {
       if (el.id && el.id !== 'fbInput') data[el.id] = el.value;
     });
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   }
   function loadSaved() {
-    const raw = localStorage.getItem(SAVE_KEY);
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    Object.keys(data).forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = data[id];
-    });
+    try {
+      const data = JSON.parse(localStorage.getItem(SAVE_KEY));
+      if (data) Object.keys(data).forEach(id => { const el = document.getElementById(id); if (el) el.value = data[id]; });
+    } catch(e) {}
   }
-
-  // --- GABBY TASKS ---
   function saveGabby() {
     const states = [];
-    document.querySelectorAll('#gabbyTasks .ga-task input').forEach(cb => {
+    document.querySelectorAll('#gabbyTasks .check-item input').forEach(cb => {
       states.push(cb.checked);
       cb.parentElement.classList.toggle('done', cb.checked);
     });
     localStorage.setItem(GABBY_KEY, JSON.stringify(states));
   }
   function loadGabby() {
-    const raw = localStorage.getItem(GABBY_KEY);
-    if (!raw) return;
-    JSON.parse(raw).forEach((s, i) => {
-      const cbs = document.querySelectorAll('#gabbyTasks .ga-task input');
-      if (cbs[i]) { cbs[i].checked = s; cbs[i].parentElement.classList.toggle('done', s); }
-    });
+    try {
+      JSON.parse(localStorage.getItem(GABBY_KEY))?.forEach((s, i) => {
+        const cbs = document.querySelectorAll('#gabbyTasks .check-item input');
+        if (cbs[i]) { cbs[i].checked = s; cbs[i].parentElement.classList.toggle('done', s); }
+      });
+    } catch(e) {}
   }
 
-  // --- FEEDBACK LOG ---
+  // --- FEEDBACK ---
   function loadFeedback() {
-    const raw = localStorage.getItem(FB_KEY);
-    const items = raw ? JSON.parse(raw) : [];
+    const items = JSON.parse(localStorage.getItem(FB_KEY) || '[]');
     renderFeedback(items);
   }
   function renderFeedback(items) {
     const el = document.getElementById('feedbackLog');
-    if (!items.length) {
-      el.innerHTML = '<div style="font-size:13px; color:rgba(255,255,255,.2); padding:12px; text-align:center;">No entries yet. Add bugs, requests, or ideas below.</div>';
-      return;
-    }
-    el.innerHTML = items.map((f,i) => `
-      <div class="fb-entry">
-        <span class="fb-who ${f.who}">${f.who === 'joyi' ? 'JoYi' : 'Gabby'}</span>
-        <span class="fb-text">${esc(f.text)}</span>
-        <span class="fb-time">${f.date}</span>
-      </div>
-    `).join('');
+    if (!items.length) { el.innerHTML = '<div style="font-size:12px; color:rgba(255,255,255,.2); padding:10px; text-align:center;">No entries yet</div>'; return; }
+    el.innerHTML = items.map(f => `<div class="fb-entry"><span class="fb-who ${f.who}">${f.who==='joyi'?'JoYi':'Gabby'}</span><span class="fb-text">${esc(f.text)}</span><span class="fb-time">${f.date}</span></div>`).join('');
   }
   function addFeedback() {
     const input = document.getElementById('fbInput');
     const text = input.value.trim();
     if (!text) return;
     const who = document.getElementById('fbWho').value;
-    const raw = localStorage.getItem(FB_KEY);
-    const items = raw ? JSON.parse(raw) : [];
+    const items = JSON.parse(localStorage.getItem(FB_KEY) || '[]');
     const now = new Date();
-    const date = (now.getMonth()+1) + '/' + now.getDate() + ' ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
-    items.unshift({ who, text, date });
+    items.unshift({ who, text, date: (now.getMonth()+1)+'/'+now.getDate()+' '+now.getHours()+':'+String(now.getMinutes()).padStart(2,'0') });
     localStorage.setItem(FB_KEY, JSON.stringify(items));
     renderFeedback(items);
     input.value = '';
@@ -1055,182 +932,47 @@
   }
   function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-  // --- RESET ---
   function resetWeek() {
-    if (!confirm('Clear this week and start fresh? (Feedback log is kept.)')) return;
+    if (!confirm('Clear this week and start fresh? Feedback log is kept.')) return;
     localStorage.removeItem(SAVE_KEY);
     localStorage.removeItem(GABBY_KEY);
-    localStorage.removeItem(SCRIPT_SAVE_KEY);
-    document.querySelectorAll('input[type="text"], textarea').forEach(el => { if (el.id !== 'fbInput') el.value = ''; });
-    document.querySelectorAll('#gabbyTasks .ga-task input').forEach(cb => { cb.checked = false; cb.parentElement.classList.remove('done'); });
-    // Clear guide outputs
-    ['recordingGuide','visualAssets','clarifyQuestions','tpcOptions','aeqOptions','relevantLinks'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = '';
-    });
-    guideData = { clarify: {}, tpcDir: '', aeqDir: '', tone: '', guide: null };
+    localStorage.removeItem(GUIDE_KEY);
+    document.querySelectorAll('textarea, input[type="text"]').forEach(el => { if (el.id !== 'fbInput') el.value = ''; });
+    document.querySelectorAll('#gabbyTasks .check-item input').forEach(cb => { cb.checked = false; cb.parentElement.classList.remove('done'); });
+    ['recordingGuide','tpcOptions','aeqOptions','postCaptions'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+    document.getElementById('directionPicker').style.display = 'block';
+    document.getElementById('goBtn').style.display = 'none';
     fullTranscript = '';
+    guideData = { tpcDir:'', aeqDir:'', tone:'' };
     goStep(0);
     showToast('Reset for next week');
   }
-
-  // --- TOAST ---
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2000);
   }
 
-  // --- GUIDE GENERATION ENGINE ---
-  const SCRIPT_SAVE_KEY = 'wcm_v3_script';
-  let guideData = { clarify: {}, tpcDir: '', aeqDir: '', tone: '', guide: null };
+  // ========================================
+  // GUIDE ENGINE
+  // ========================================
+  let guideData = { tpcDir: '', aeqDir: '', tone: '' };
 
-  const THEME_KEYS = {
-    tpc: ['practice','mindfulness','forgiveness','healing','meditation','pray','shrine','temple','peace',
-          'present','attitudinal','facilitate','facilitation','facilitated','bonding','family','sons',
-          'daughter','traveled','travel','journey','mountain','fuji','korea','japan','philippines',
-          'osaka','busan','culture','spirit','heart','soul','fear','courage','leap','quit','left',
-          'director','career','workforce','personal','reflection','learn','grew','growth','love',
-          'connection','belonging','wholeness','awe','meaning','essence'],
-    aeq: ['tool','tools','built','build','building','code','coding','vibe','agentic','ai','aidedeq',
-          'tech','technology','software','app','platform','nonprofit','nonprofits','organization',
-          'mission','anchored','rop','snapshots','saas','consulting','curriculum','training',
-          'retreats','team','created','vision','partnership','startup','entrepreneur','women',
-          'safety','girls','moxie'],
-    personal: ['quit','left','scared','year','ago','moved','sons','daughter','family','climbed',
-               'traveled','prayed','collapsed','born','new','started','learned','pivot']
-  };
+  const TPC_KEYS = ['practice','mindfulness','forgiveness','healing','meditation','peace','present','attitudinal',
+    'facilitate','facilitation','bonding','family','sons','daughter','travel','journey','mountain','fuji',
+    'japan','korea','philippines','shrine','temple','spirit','heart','soul','fear','courage','quit',
+    'director','reflection','growth','love','connection','belonging','wholeness','awe','meaning','essence'];
+
+  const AEQ_KEYS = ['tool','tools','built','build','code','coding','vibe','agentic','ai','aidedeq','tech',
+    'software','app','platform','nonprofit','organization','mission','anchored','rop','snapshots','consulting',
+    'curriculum','training','team','created','startup','entrepreneur','women','safety','moxie'];
+
+  const HOOK_KEYS = ['quit','left','year','scared','changed','decided','everything','started','collapsed','vision','born','traveled','climbed'];
 
   function splitSentences(text) {
-    return text.replace(/\n/g, '. ').split(/(?<=[.!?])\s+|(?<=\w)\s{2,}/)
-      .map(s => s.trim()).filter(s => s.length > 8);
+    return text.replace(/\n/g, '. ').split(/(?<=[.!?])\s+|(?<=\w)\s{2,}/).map(s => s.trim()).filter(s => s.length > 8);
   }
   function score(s, keys) { const l = s.toLowerCase(); return keys.filter(k => l.includes(k)).length; }
-
-  // PHASE A: Generate clarifying questions from the dump
-  function startGuide() {
-    const dump = document.getElementById('brainDump').value.trim();
-    if (!dump || dump.length < 20) { showToast('Need more material — talk or type first'); return; }
-
-    const sentences = splitSentences(dump);
-    const hasTPC = sentences.some(s => score(s, THEME_KEYS.tpc) >= 2);
-    const hasAEQ = sentences.some(s => score(s, THEME_KEYS.aeq) >= 2);
-    const hasPersonal = sentences.some(s => score(s, THEME_KEYS.personal) >= 2);
-
-    const questions = [];
-    questions.push({
-      id: 'audience',
-      label: 'Who is this for?',
-      text: 'Who do you want watching this — practitioners, nonprofit leaders, potential clients, your community, or the general public?'
-    });
-    if (hasPersonal) {
-      questions.push({
-        id: 'depth',
-        label: 'How personal?',
-        text: 'You mentioned personal experiences. How deep do you want to go — surface-level context, or full story with the emotional weight?'
-      });
-    }
-    questions.push({
-      id: 'takeaway',
-      label: 'One thing they walk away with',
-      text: 'If the viewer remembers one thing, what is it? A feeling? A tool? A practice they can try today?'
-    });
-    if (hasAEQ) {
-      questions.push({
-        id: 'demo',
-        label: 'What can you show?',
-        text: 'You mentioned tools/building. What could you screen record or demo right now — even rough?'
-      });
-    }
-    questions.push({
-      id: 'cta',
-      label: 'What do you want them to do?',
-      text: 'Book a call? Subscribe? Try a tool? Follow you? Just one ask.'
-    });
-
-    const el = document.getElementById('clarifyQuestions');
-    el.innerHTML = questions.map(q => `
-      <div class="clarify-q" onclick="this.querySelector('textarea')?.focus()">
-        <div class="cq-label">${q.label}</div>
-        <div class="cq-text">${q.text}</div>
-        <textarea id="cq-${q.id}" rows="2" placeholder="Quick answer..." oninput="guideData.clarify['${q.id}']=this.value"></textarea>
-      </div>
-    `).join('');
-
-    goStep(1);
-    showPhase('phase-clarify');
-  }
-
-  function showPhase(id) {
-    document.querySelectorAll('#step-1 .phase').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-
-  // PHASE B: Generate direction options
-  function showDirections() {
-    const dump = document.getElementById('brainDump').value.trim();
-    const sentences = splitSentences(dump);
-
-    // Extract key themes for TPC options
-    const tpcThemes = sentences.filter(s => score(s, THEME_KEYS.tpc) >= 1);
-    const aeqThemes = sentences.filter(s => score(s, THEME_KEYS.aeq) >= 1);
-
-    // Generate TPC direction options based on dump content
-    const tpcOpts = [];
-    if (tpcThemes.some(s => s.toLowerCase().match(/forgiv|heal|peace|attitud/)))
-      tpcOpts.push({ val: 'forgiveness', title: 'Forgiveness / Attitudinal Healing', desc: 'Lead with the practice — what forgiveness actually looks like in daily life' });
-    if (tpcThemes.some(s => s.toLowerCase().match(/travel|fuji|japan|korea|phil|shrine|temple|climb/)))
-      tpcOpts.push({ val: 'journey', title: 'The Journey / Pilgrimage', desc: 'The physical journey as metaphor for inner transformation' });
-    if (tpcThemes.some(s => s.toLowerCase().match(/family|son|daughter|bond|parent/)))
-      tpcOpts.push({ val: 'family', title: 'Family as Practice', desc: 'Practicing with the people closest to you — real, messy, daily' });
-    tpcOpts.push({ val: 'presence', title: 'Showing Up / Presence', desc: 'The practice of being fully here — in your body, your work, this moment' });
-    if (tpcOpts.length < 2) tpcOpts.push({ val: 'wholeness', title: 'Five Sources of Wholeness', desc: 'Essence, connection, belonging, meaning, awe' });
-
-    document.getElementById('tpcOptions').innerHTML = tpcOpts.map(o => `
-      <div class="dir-card glass" onclick="selectCard(this,'tpc')" data-val="${o.val}">
-        <h4>${o.title}</h4><p>${o.desc}</p>
-      </div>
-    `).join('');
-
-    // AEQ direction options
-    const aeqOpts = [];
-    if (aeqThemes.some(s => s.toLowerCase().match(/tool|built|build|creat/)))
-      aeqOpts.push({ val: 'tools', title: 'Tool Showcase', desc: 'Show what you built — screen record a real use case' });
-    if (aeqThemes.some(s => s.toLowerCase().match(/team|partner|vision|startup/)))
-      aeqOpts.push({ val: 'founder', title: 'Founder Story', desc: 'The builder journey — from vision to reality' });
-    if (aeqThemes.some(s => s.toLowerCase().match(/consult|nonprofit|mission|org/)))
-      aeqOpts.push({ val: 'consulting', title: 'Nonprofit AI Gap', desc: 'The problem you solve — tech that fits mission-driven orgs' });
-    aeqOpts.push({ val: 'curriculum', title: 'Curriculum + Training', desc: 'What you\'re teaching and building for facilitators' });
-    if (aeqOpts.length < 2) aeqOpts.push({ val: 'process', title: 'How I Build', desc: 'Vibe coding, agentic engineering — the actual process' });
-
-    document.getElementById('aeqOptions').innerHTML = aeqOpts.map(o => `
-      <div class="dir-card glass" onclick="selectCard(this,'aeq')" data-val="${o.val}">
-        <h4>${o.title}</h4><p>${o.desc}</p>
-      </div>
-    `).join('');
-
-    // Pull relevant intel links
-    const allIntel = [];
-    ['facilitation','nonprofit','ai'].forEach(lane => {
-      const cached = getCachedIntel(lane);
-      if (cached) allIntel.push(...cached.map(i => ({...i, lane})));
-    });
-    const rl = document.getElementById('relevantLinks');
-    if (allIntel.length > 0) {
-      const top = allIntel.slice(0, 4);
-      rl.innerHTML = top.map(i => `
-        <div style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:13px;">
-          <a href="${esc(i.link)}" target="_blank" style="color:var(--cream); text-decoration:none; font-weight:600;">${esc(i.title)}</a>
-          <span style="font-size:11px; color:var(--slate); margin-left:8px;">${esc(i.source)}</span>
-        </div>
-      `).join('');
-    } else {
-      rl.innerHTML = '<span style="font-size:12px; color:var(--slate);">No cached articles. Refresh intel on Step 1.</span>';
-    }
-
-    showPhase('phase-directions');
-  }
 
   function selectCard(el, group) {
     el.parentElement.querySelectorAll('.dir-card').forEach(c => c.classList.remove('selected'));
@@ -1240,116 +982,118 @@
     if (group === 'tone') guideData.tone = el.dataset.val;
   }
 
-  // PHASE C: Build the actual recording guide
-  function buildRecordingGuide() {
+  // Step 1 → Step 2: Analyze dump and show direction options
+  function buildGuide() {
+    const dump = document.getElementById('brainDump').value.trim();
+    if (!dump || dump.length < 20) { showToast('Talk or type first — need more to work with'); return; }
+
+    const sentences = splitSentences(dump);
+
+    // Auto-detect TPC options from content
+    const tpcOpts = [];
+    if (sentences.some(s => s.toLowerCase().match(/forgiv|heal|peace|attitud/)))
+      tpcOpts.push({ val:'forgiveness', title:'Forgiveness / Healing', desc:'What forgiveness looks like in daily life' });
+    if (sentences.some(s => s.toLowerCase().match(/travel|fuji|japan|korea|phil|shrine|temple|climb/)))
+      tpcOpts.push({ val:'journey', title:'The Journey', desc:'Physical journey as metaphor for transformation' });
+    if (sentences.some(s => s.toLowerCase().match(/family|son|daughter|bond|parent/)))
+      tpcOpts.push({ val:'family', title:'Family as Practice', desc:'Practicing with people closest to you' });
+    tpcOpts.push({ val:'presence', title:'Presence', desc:'Being fully here in your body, your work, this moment' });
+    if (tpcOpts.length < 2) tpcOpts.push({ val:'wholeness', title:'Five Sources', desc:'Essence, connection, belonging, meaning, awe' });
+
+    document.getElementById('tpcOptions').innerHTML = tpcOpts.map(o => `
+      <div class="dir-card glass" onclick="selectCard(this,'tpc')" data-val="${o.val}"><h4>${o.title}</h4><p>${o.desc}</p></div>
+    `).join('');
+
+    // AEQ options
+    const aeqOpts = [];
+    if (sentences.some(s => s.toLowerCase().match(/tool|built|build|creat/)))
+      aeqOpts.push({ val:'tools', title:'Tool Showcase', desc:'Demo a real use case' });
+    if (sentences.some(s => s.toLowerCase().match(/team|partner|vision|startup/)))
+      aeqOpts.push({ val:'founder', title:'Founder Story', desc:'From vision to reality' });
+    if (sentences.some(s => s.toLowerCase().match(/consult|nonprofit|mission|org/)))
+      aeqOpts.push({ val:'consulting', title:'The Gap', desc:'Tech that fits mission-driven orgs' });
+    aeqOpts.push({ val:'process', title:'How I Build', desc:'Vibe coding, agentic engineering' });
+    if (aeqOpts.length < 2) aeqOpts.push({ val:'curriculum', title:'Teaching', desc:'What you\'re building for facilitators' });
+
+    document.getElementById('aeqOptions').innerHTML = aeqOpts.map(o => `
+      <div class="dir-card glass" onclick="selectCard(this,'aeq')" data-val="${o.val}"><h4>${o.title}</h4><p>${o.desc}</p></div>
+    `).join('');
+
+    // Auto-select first option in each group
+    document.querySelector('#tpcOptions .dir-card')?.click();
+    document.querySelector('#aeqOptions .dir-card')?.click();
+
+    goStep(1);
+  }
+
+  // Generate the actual recording guide
+  function generateGuide() {
     const dump = document.getElementById('brainDump').value.trim();
     const sentences = splitSentences(dump);
-    const cl = guideData.clarify;
     const tone = guideData.tone || 'reflective';
 
-    // Find the strongest personal sentence for the exact-words hook
-    const hookKeys = ['quit','left','year','ago','scared','changed','decided','everything','started','collapsed','vision','born'];
-    let hookSentence = '';
-    let best = 0;
-    sentences.forEach(s => { const sc = score(s, hookKeys); if (sc > best) { best = sc; hookSentence = s; }});
+    // Find strongest hook sentence
+    let hookSentence = '', best = 0;
+    sentences.forEach(s => { const sc = score(s, HOOK_KEYS); if (sc > best) { best = sc; hookSentence = s; } });
     if (!hookSentence) hookSentence = sentences[0] || '';
-    if (hookSentence.length > 100) hookSentence = hookSentence.slice(0,97) + '...';
+    if (hookSentence.length > 100) hookSentence = hookSentence.slice(0, 97) + '...';
 
-    // Find TPC-rich and AEQ-rich sentences
-    const tpcRich = sentences.filter(s => score(s, THEME_KEYS.tpc) >= 2).slice(0,3);
-    const aeqRich = sentences.filter(s => score(s, THEME_KEYS.aeq) >= 2).slice(0,3);
+    const tpcRich = sentences.filter(s => score(s, TPC_KEYS) >= 2).slice(0, 3);
+    const aeqRich = sentences.filter(s => score(s, AEQ_KEYS) >= 2).slice(0, 3);
 
-    const guide = [];
-
-    // --- SEGMENT 1: JoYi to Camera (Hook + Personal) ---
-    guide.push({
-      type: 'joyi', typeLabel: 'JoYi to Camera', typeClass: 'gt-joyi', cardClass: 'g-joyi',
-      topic: 'The Hook',
-      prompt: 'Look at the camera. Say this line, then riff on why it matters.',
-      exact: hookSentence,
-      notes: '5 seconds. Don\'t explain. Just say it and pause.'
-    });
-
-    // TPC segment
     const tpcTopics = {
-      'forgiveness': { topic: 'The Practice That Changed Everything', prompt: 'Talk about forgiveness as a real practice — not a concept. What does it look like on a hard Tuesday morning? How did it change how you show up?' },
-      'journey': { topic: 'The Journey', prompt: 'You traveled. You climbed. You prayed. What did the physical journey teach you that staying home couldn\'t have?' },
-      'family': { topic: 'Family as Practice Ground', prompt: 'Your sons, your daughter, the people closest to you. How is practice different when it\'s with family — not clients, not strangers?' },
-      'presence': { topic: 'Showing Up', prompt: 'What does it mean to be present — not in theory, but right now, in your actual life, with all the uncertainty?' },
-      'wholeness': { topic: 'Five Sources of Wholeness', prompt: 'Essence, connection, belonging, meaning, awe. Pick one that is most alive for you this week. Talk about it.' }
+      'forgiveness': { topic:'The Practice That Changed Everything', prompt:'Talk about forgiveness as a real practice — not a concept. What does it look like on a hard Tuesday morning?' },
+      'journey': { topic:'The Journey', prompt:'You traveled. You climbed. You prayed. What did the physical journey teach you that staying home couldn\'t have?' },
+      'family': { topic:'Family as Practice Ground', prompt:'Your sons, your daughter. How is practice different with family — not clients, not strangers?' },
+      'presence': { topic:'Showing Up', prompt:'What does it mean to be present — not in theory, but right now, in your actual life, with all the uncertainty?' },
+      'wholeness': { topic:'Five Sources of Wholeness', prompt:'Essence, connection, belonging, meaning, awe. Pick one that is most alive for you this week.' }
     };
-    const tpcT = tpcTopics[guideData.tpcDir] || tpcTopics['presence'];
-    const tpcExact = tpcRich.length > 0 ? tpcRich[0] : '';
-
-    guide.push({
-      type: 'joyi', typeLabel: 'JoYi to Camera', typeClass: 'gt-joyi', cardClass: 'g-joyi',
-      topic: tpcT.topic + ' (TPC)',
-      prompt: tpcT.prompt,
-      exact: tpcExact || '',
-      notes: '45-60 seconds. Speak from the heart. Don\'t teach yet — just share.'
-    });
-
-    // --- SEGMENT 2: Pencil-drawn visual ---
-    guide.push({
-      type: 'pencil', typeLabel: 'Pencil + Watercolor Visual', typeClass: 'gt-pencil', cardClass: 'g-pencil',
-      topic: 'Key Concept Illustration',
-      prompt: 'Gabby creates a pencil-drawn watercolor card that visualizes the core idea. This plays as B-roll while JoYi\'s voice continues.',
-      exact: '',
-      notes: 'Gabby: create 2-3 hand-drawn style frames. Navy/cream/gold palette. Text overlay of the key phrase.'
-    });
-
-    // --- SEGMENT 3: AIdedEQ / Builder ---
     const aeqTopics = {
-      'tools': { topic: 'The Tool', prompt: 'What tool did you build or use this week? Show it. Open it up. Walk through one real scenario — a practitioner stuck at 9am on a Monday. What does the tool do for them?' },
-      'founder': { topic: 'The Builder Journey', prompt: 'What does building look like right now? What broke? What worked? What surprised you? Talk about building as a founder, not a marketer.' },
-      'consulting': { topic: 'The Gap You Fill', prompt: 'Most nonprofit tech is built for someone else. Name the specific problem. Name who has it. Name what you built instead.' },
-      'curriculum': { topic: 'What You\'re Teaching', prompt: 'What curriculum are you writing or delivering? Who is it for? What makes it different from what already exists?' },
-      'process': { topic: 'How You Build', prompt: 'Vibe coding, agentic engineering, AI as partner. Show the actual screen. Talk through your process.' }
+      'tools': { topic:'The Tool', prompt:'What tool did you build or use this week? Show it. Walk through one real scenario.' },
+      'founder': { topic:'The Builder Journey', prompt:'What does building look like right now? What broke? What worked? What surprised you?' },
+      'consulting': { topic:'The Gap You Fill', prompt:'Most nonprofit tech is built for someone else. Name the problem. Name who has it. Name what you built.' },
+      'curriculum': { topic:'What You\'re Teaching', prompt:'What curriculum are you writing or delivering? What makes it different?' },
+      'process': { topic:'How You Build', prompt:'Vibe coding, agentic engineering, AI as partner. Show the actual screen. Talk through your process.' }
     };
+
+    const tpcT = tpcTopics[guideData.tpcDir] || tpcTopics['presence'];
     const aeqT = aeqTopics[guideData.aeqDir] || aeqTopics['tools'];
-    const aeqExact = aeqRich.length > 0 ? aeqRich[0] : '';
 
-    guide.push({
-      type: 'joyi', typeLabel: 'JoYi to Camera or Screen Share', typeClass: 'gt-joyi', cardClass: 'g-joyi',
-      topic: aeqT.topic + ' (AIdedEQ)',
-      prompt: aeqT.prompt,
-      exact: aeqExact || '',
-      notes: '30-45 seconds. Show, don\'t just tell. Screen share if possible.'
-    });
+    const guide = [
+      { type:'joyi', typeLabel:'JoYi to Camera', typeClass:'gt-joyi', cardClass:'g-joyi',
+        topic:'The Hook', prompt:'Look at the camera. Say this line, then riff on why it matters.',
+        exact: hookSentence, notes:'5 seconds. Don\'t explain. Just say it and pause.' },
 
-    // --- SEGMENT 4: Lesson / Value for audience ---
-    const takeaway = cl.takeaway || 'a practice they can try today';
-    guide.push({
-      type: 'lesson', typeLabel: 'Lesson for the Audience', typeClass: 'gt-lesson', cardClass: 'g-lesson',
-      topic: 'Try This',
-      prompt: `Give them something real to do. Based on your dump, the takeaway is: "${takeaway}". Frame it as one clear action they can take right now.`,
-      exact: '',
-      notes: 'This can be a practice, a tool link, a question to sit with, or a simple exercise. 15-20 seconds.'
-    });
+      { type:'joyi', typeLabel:'JoYi to Camera', typeClass:'gt-joyi', cardClass:'g-joyi',
+        topic: tpcT.topic + ' (TPC)', prompt: tpcT.prompt,
+        exact: tpcRich[0] || '', notes:'45-60 seconds. Speak from the heart.' },
 
-    // --- SEGMENT 5: Pencil visual for lesson ---
-    guide.push({
-      type: 'pencil', typeLabel: 'Pencil + Watercolor Visual', typeClass: 'gt-pencil', cardClass: 'g-pencil',
-      topic: 'Practice / Takeaway Card',
-      prompt: 'Gabby creates a visual card with the specific practice or action step. This is what people screenshot and share.',
-      exact: '',
-      notes: 'Make this the most shareable frame. Clear text. Beautiful. Simple.'
-    });
+      { type:'pencil', typeLabel:'Pencil + Watercolor', typeClass:'gt-pencil', cardClass:'g-pencil',
+        topic:'Visual B-Roll', prompt:'Moxie girl illustration card — pencil-drawn watercolor style. Gabby creates or selects from story-frames.',
+        exact:'', notes:'Navy/cream/gold palette. Hand-lettered text overlay of key phrase.' },
 
-    // --- SEGMENT 6: CTA ---
-    const ctaText = cl.cta || 'Book a free consultation at aidedeq.org/book';
-    guide.push({
-      type: 'cta', typeLabel: 'Call to Action', typeClass: 'gt-cta', cardClass: 'g-cta',
-      topic: 'The Ask',
-      prompt: 'One clear ask. Say it directly. Mean it.',
-      exact: ctaText,
-      notes: '10 seconds. Look at the camera. Say the URL slowly.'
-    });
+      { type:'joyi', typeLabel:'JoYi to Camera or Screen', typeClass:'gt-joyi', cardClass:'g-joyi',
+        topic: aeqT.topic + ' (AIdedEQ)', prompt: aeqT.prompt,
+        exact: aeqRich[0] || '', notes:'30-45 seconds. Show, don\'t just tell.' },
 
-    // Render the guide
-    const guideEl = document.getElementById('recordingGuide');
-    guideEl.innerHTML = guide.map((g, i) => `
-      <div class="guide-card glass ${g.cardClass}">
+      { type:'lesson', typeLabel:'Lesson', typeClass:'gt-lesson', cardClass:'g-lesson',
+        topic:'Try This', prompt:'Give them one real thing to do. A practice, a tool link, a question to sit with.',
+        exact:'', notes:'15-20 seconds. Make it actionable.' },
+
+      { type:'cta', typeLabel:'CTA', typeClass:'gt-cta', cardClass:'g-cta',
+        topic:'The Ask', prompt:'One clear ask. Say it directly.',
+        exact:'Book a free consultation at aidedeq.org/book', notes:'10 seconds. Look at the camera. Say the URL slowly.' }
+    ];
+
+    // Render — cards are editable so JoYi can tweak before teleprompter
+    document.getElementById('recordingGuide').innerHTML = `
+      <div style="font-size:11px; color:var(--slate); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Click any card to edit before recording
+      </div>
+    ` + guide.map((g, i) => `
+      <div class="guide-card glass ${g.cardClass}" contenteditable="true" data-idx="${i}" onblur="saveGuideEdits()">
+        <span class="edit-hint">click to edit</span>
         <div class="guide-type ${g.typeClass}">${g.typeLabel}</div>
         <div class="guide-topic">${g.topic}</div>
         <div class="guide-prompt">${g.prompt}</div>
@@ -1358,198 +1102,314 @@
       </div>
     `).join('');
 
-    // Render visual asset list for Gabby
-    const visuals = [
-      { type: 'pencil', title: 'Hook Title Card', desc: `Pencil-drawn watercolor: "${hookSentence.slice(0,50)}..." — navy background, gold text, hand-lettered feel` },
-      { type: 'pencil', title: 'TPC Concept Card', desc: `Illustrate: ${tpcT.topic}. Watercolor wash background, minimal line art, the key principle in elegant text` },
-      { type: 'screen', title: 'Screen Recording', desc: `Capture: ${aeqT.topic} demo. JoYi records this live — Gabby cuts to the cleanest segment` },
-      { type: 'pencil', title: 'Takeaway / Practice Card', desc: `The shareable frame. One clear action step. Pencil-drawn border, cream background, bold statement.` },
-      { type: 'pencil', title: 'CTA Card', desc: `${ctaText} — clean, branded, with TPC or AIdedEQ logo` },
-    ];
+    // Store guide data for teleprompter
+    window._currentGuide = guide;
 
-    document.getElementById('visualAssets').innerHTML = visuals.map(v => `
-      <div class="visual-card glass">
-        <div class="vis-thumb ${v.type}">${v.type === 'pencil' ? 'Pencil +<br>Watercolor' : 'Screen<br>Capture'}</div>
-        <div class="vis-desc">
-          <strong>${v.title}</strong>
-          <span>${v.desc}</span>
+    // Generate platform captions
+    generateCaptions(hookSentence, tpcT, aeqT);
+
+    // Hide direction picker, show Go + Teleprompter buttons
+    document.getElementById('directionPicker').style.display = 'none';
+    document.getElementById('goBtn').style.display = 'inline-flex';
+    document.getElementById('tpBtn').style.display = 'inline-flex';
+
+    localStorage.setItem(GUIDE_KEY, JSON.stringify({ guide, hookSentence, tpcTopic: tpcT.topic, aeqTopic: aeqT.topic }));
+    showToast('Guide ready — edit then open teleprompter');
+  }
+
+  // Auto-generate platform captions
+  function generateCaptions(hook, tpcT, aeqT) {
+    const captions = {
+      linkedin: `${hook}\n\nThis week I'm exploring ${tpcT.topic.toLowerCase()} and ${aeqT.topic.toLowerCase()}.\n\nAs someone who left a director position to build tools for mission-driven organizations, I've learned that the best work happens when you stop optimizing and start being present.\n\nWhat I'm building at AIdedEQ isn't just software — it's a bridge between human wisdom and AI capability.\n\n→ Book a free consultation: aidedeq.org/book\n→ Explore our tools: aidedeq.org/tools\n\n#NonprofitTech #SocialImpact #AIforGood #PracticeCenter #Facilitation`,
+      instagram: `${hook}\n\nThis is what happens when you follow your curiosity instead of a plan. 🌊\n\nNew video is up — link in bio.\n\n#ThePracticeCenter #AIdedEQ #NonprofitLeadership #Presence #BuildInPublic`,
+      tiktok: `${hook} // Full story on my page`,
+    };
+
+    document.getElementById('postCaptions').innerHTML = `
+      <div class="card glass" style="padding:20px;">
+        <div class="section-label" style="margin-top:0;">Ready-to-Post Captions</div>
+        <div class="post-template glass" style="margin:8px 0;">
+          <div class="plat-label p-li">LinkedIn</div>
+          <textarea id="cap-linkedin" rows="4" style="font-size:11px;">${captions.linkedin}</textarea>
+          <button class="copy-btn" onclick="copyCaption('cap-linkedin')">Copy</button>
+        </div>
+        <div class="post-template glass" style="margin:8px 0;">
+          <div class="plat-label p-ig">Instagram</div>
+          <textarea id="cap-instagram" rows="3" style="font-size:11px;">${captions.instagram}</textarea>
+          <button class="copy-btn" onclick="copyCaption('cap-instagram')">Copy</button>
+        </div>
+        <div class="post-template glass" style="margin:8px 0;">
+          <div class="plat-label p-tk">TikTok</div>
+          <textarea id="cap-tiktok" rows="1" style="font-size:11px;">${captions.tiktok}</textarea>
+          <button class="copy-btn" onclick="copyCaption('cap-tiktok')">Copy</button>
         </div>
       </div>
-    `).join('');
-
-    // Save
-    localStorage.setItem(SCRIPT_SAVE_KEY, JSON.stringify({ guide, visuals, guideData }));
-
-    showPhase('phase-guide');
-    showToast('Recording guide ready');
+    `;
   }
 
-  function loadScript() {
-    // Restore guide data if exists
-    const raw = localStorage.getItem(SCRIPT_SAVE_KEY);
-    if (!raw) return;
-    try {
-      const data = JSON.parse(raw);
-      if (data.guideData) guideData = data.guideData;
-    } catch(e) {}
+  function copyCaption(id) {
+    const el = document.getElementById(id);
+    el.select();
+    document.execCommand('copy');
+    showToast('Copied');
   }
 
-  // --- FIELD INTEL (RSS FEEDS) ---
+  // ========================================
+  // FIELD INTEL
+  // ========================================
   const FEED_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=';
-  const INTEL_CACHE_KEY = 'wcm_v3_intel';
-  const INTEL_CACHE_TTL = 4 * 60 * 60 * 1000; // 4 hours
+  const INTEL_CACHE_KEY = 'mm_v4_intel';
+  const INTEL_CACHE_TTL = 4 * 60 * 60 * 1000;
 
   const FEED_SOURCES = {
     facilitation: [
-      { url: 'https://ssir.org/site/rss', name: 'Stanford Social Innovation Review', tag: 'research' },
-      { url: 'https://www.searchinstitute.org/feed/', name: 'Search Institute', tag: 'research' },
-      { url: 'https://forumfyi.org/feed/', name: 'Forum for Youth Investment', tag: 'resource' },
+      { url:'https://ssir.org/site/rss', name:'SSIR', tag:'research' },
+      { url:'https://www.searchinstitute.org/feed/', name:'Search Institute', tag:'research' },
+      { url:'https://forumfyi.org/feed/', name:'Forum for Youth Investment', tag:'resource' },
     ],
     nonprofit: [
-      { url: 'https://nonprofitquarterly.org/feed/', name: 'Nonprofit Quarterly', tag: 'trending' },
-      { url: 'https://ssir.org/site/rss', name: 'SSIR', tag: 'research' },
-      { url: 'https://philanthropynewsdigest.org/feeds/news', name: 'Philanthropy News Digest', tag: 'trending' },
+      { url:'https://nonprofitquarterly.org/feed/', name:'NPQ', tag:'trending' },
+      { url:'https://ssir.org/site/rss', name:'SSIR', tag:'research' },
+      { url:'https://philanthropynewsdigest.org/feeds/news', name:'Philanthropy News', tag:'trending' },
     ],
     ai: [
-      { url: 'https://techcrunch.com/category/artificial-intelligence/feed/', name: 'TechCrunch AI', tag: 'trending' },
-      { url: 'https://blog.techsoup.org/rss.xml', name: 'TechSoup', tag: 'resource' },
-      { url: 'https://www.nten.org/feed/', name: 'NTEN', tag: 'resource' },
+      { url:'https://techcrunch.com/category/artificial-intelligence/feed/', name:'TechCrunch AI', tag:'trending' },
+      { url:'https://blog.techsoup.org/rss.xml', name:'TechSoup', tag:'resource' },
+      { url:'https://www.nten.org/feed/', name:'NTEN', tag:'resource' },
     ]
-  };
-
-  // Content angle suggestions based on lane
-  const ANGLE_HINTS = {
-    facilitation: 'How does this connect to your facilitation practice or PYD work? Could you teach this concept in 60 seconds?',
-    nonprofit: 'Is this a problem your tools solve? Could you react to this with a real example from your work?',
-    ai: 'Can you demo a tool that addresses this? Is this relevant to nonprofits you work with?'
   };
 
   async function fetchFeed(source) {
     try {
-      const res = await fetch(FEED_PROXY + encodeURIComponent(source.url) + '&count=5');
+      const res = await fetch(FEED_PROXY + encodeURIComponent(source.url) + '&count=4');
       const data = await res.json();
       if (data.status === 'ok' && data.items) {
-        return data.items.slice(0, 4).map(item => ({
-          title: item.title,
-          link: item.link,
-          source: source.name,
-          tag: source.tag,
-          date: item.pubDate ? new Date(item.pubDate).toLocaleDateString('en-US', { month:'short', day:'numeric' }) : ''
+        return data.items.slice(0, 3).map(item => ({
+          title: item.title, link: item.link, source: source.name, tag: source.tag,
+          date: item.pubDate ? new Date(item.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : ''
         }));
       }
-    } catch(e) { console.warn('Feed failed:', source.name, e); }
+    } catch(e) {}
     return [];
   }
 
   async function loadLane(lane) {
     const el = document.getElementById('feed-' + lane);
-    const sources = FEED_SOURCES[lane];
-    let allItems = [];
-
-    // Try cache first
     const cached = getCachedIntel(lane);
-    if (cached) {
-      renderLane(el, cached, lane);
-      return;
-    }
-
+    if (cached) { renderLane(el, cached); return; }
     el.innerHTML = '<div class="intel-loading">Loading...</div>';
-
-    for (const source of sources) {
-      const items = await fetchFeed(source);
-      allItems = allItems.concat(items);
-    }
-
-    // Deduplicate by title
+    let items = [];
+    for (const s of FEED_SOURCES[lane]) { items = items.concat(await fetchFeed(s)); }
     const seen = new Set();
-    allItems = allItems.filter(item => {
-      const key = item.title.toLowerCase().slice(0, 50);
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    }).slice(0, 5);
-
-    if (allItems.length === 0) {
-      // Fallback curated content
-      allItems = getFallback(lane);
-    }
-
-    cacheIntel(lane, allItems);
-    renderLane(el, allItems, lane);
+    items = items.filter(i => { const k = i.title.toLowerCase().slice(0,50); if (seen.has(k)) return false; seen.add(k); return true; }).slice(0,4);
+    if (!items.length) items = getFallback(lane);
+    cacheIntel(lane, items);
+    renderLane(el, items);
   }
 
-  function renderLane(el, items, lane) {
-    if (!items.length) {
-      el.innerHTML = '<div class="intel-loading">No articles found. Check connection.</div>';
-      return;
-    }
-    el.innerHTML = items.map((item, i) => `
-      <div class="intel-item" onclick="this.classList.toggle('expanded')">
-        <a href="${esc(item.link)}" target="_blank" onclick="event.stopPropagation()">${esc(item.title)}</a>
-        <div class="intel-source">
-          <span class="intel-tag ${item.tag}">${item.tag}</span>
-          ${esc(item.source)} ${item.date ? '&middot; ' + item.date : ''}
-        </div>
-        <div class="intel-use">${ANGLE_HINTS[lane]}</div>
+  function renderLane(el, items) {
+    if (!items.length) { el.innerHTML = '<div class="intel-loading">No articles found</div>'; return; }
+    el.innerHTML = items.map(i => `
+      <div class="intel-item">
+        <a href="${esc(i.link)}" target="_blank">${esc(i.title)}</a>
+        <div class="intel-source"><span class="intel-tag ${i.tag}">${i.tag}</span> ${esc(i.source)} ${i.date ? '&middot; '+i.date : ''}</div>
       </div>
     `).join('');
   }
 
   function getCachedIntel(lane) {
-    try {
-      const raw = localStorage.getItem(INTEL_CACHE_KEY + '_' + lane);
-      if (!raw) return null;
-      const { items, ts } = JSON.parse(raw);
-      if (Date.now() - ts > INTEL_CACHE_TTL) return null;
-      return items;
-    } catch(e) { return null; }
+    try { const {items,ts} = JSON.parse(localStorage.getItem(INTEL_CACHE_KEY+'_'+lane)); return Date.now()-ts < INTEL_CACHE_TTL ? items : null; } catch(e) { return null; }
   }
-
-  function cacheIntel(lane, items) {
-    localStorage.setItem(INTEL_CACHE_KEY + '_' + lane, JSON.stringify({ items, ts: Date.now() }));
-  }
-
+  function cacheIntel(lane, items) { localStorage.setItem(INTEL_CACHE_KEY+'_'+lane, JSON.stringify({items,ts:Date.now()})); }
   function loadAllFeeds() {
-    // Clear cache on manual refresh
     ['facilitation','nonprofit','ai'].forEach(lane => {
-      localStorage.removeItem(INTEL_CACHE_KEY + '_' + lane);
-      document.getElementById('feed-' + lane).innerHTML = '<div class="intel-loading">Loading...</div>';
+      localStorage.removeItem(INTEL_CACHE_KEY+'_'+lane);
+      document.getElementById('feed-'+lane).innerHTML = '<div class="intel-loading">Loading...</div>';
+      loadLane(lane);
     });
-    ['facilitation','nonprofit','ai'].forEach(lane => loadLane(lane));
   }
 
-  // Curated fallbacks if feeds fail (offline or blocked)
   function getFallback(lane) {
-    const fallbacks = {
+    const f = {
       facilitation: [
-        { title: 'The Power of Restorative Circles in Youth Programs', link: 'https://ssir.org', source: 'SSIR', tag: 'research', date: '' },
-        { title: 'Positive Youth Development: What Works in 2026', link: 'https://forumfyi.org', source: 'Forum for Youth Investment', tag: 'resource', date: '' },
-        { title: 'Trauma-Informed Facilitation Practices', link: 'https://searchinstitute.org', source: 'Search Institute', tag: 'research', date: '' },
+        { title:'Restorative Circles in Youth Programs', link:'https://ssir.org', source:'SSIR', tag:'research', date:'' },
+        { title:'Positive Youth Development: What Works', link:'https://forumfyi.org', source:'Forum', tag:'resource', date:'' },
       ],
       nonprofit: [
-        { title: 'Small Nonprofits and the AI Adoption Gap', link: 'https://nonprofitquarterly.org', source: 'NPQ', tag: 'trending', date: '' },
-        { title: 'Building Tech Capacity Without Enterprise Budgets', link: 'https://techsoup.org', source: 'TechSoup', tag: 'resource', date: '' },
-        { title: 'Mission Drift in the Age of AI: Staying Grounded', link: 'https://ssir.org', source: 'SSIR', tag: 'research', date: '' },
+        { title:'Small Nonprofits and the AI Adoption Gap', link:'https://nonprofitquarterly.org', source:'NPQ', tag:'trending', date:'' },
+        { title:'Building Tech Capacity Without Enterprise Budgets', link:'https://techsoup.org', source:'TechSoup', tag:'resource', date:'' },
       ],
       ai: [
-        { title: 'AI Tools Built for Nonprofits, Not Adapted From Enterprise', link: 'https://nten.org', source: 'NTEN', tag: 'resource', date: '' },
-        { title: 'Voice-First Interfaces for Community Organizations', link: 'https://techsoup.org', source: 'TechSoup', tag: 'resource', date: '' },
-        { title: 'The Case for AI Co-Pilots in Youth Work', link: 'https://nten.org', source: 'NTEN', tag: 'trending', date: '' },
+        { title:'AI Tools Built for Nonprofits', link:'https://nten.org', source:'NTEN', tag:'resource', date:'' },
+        { title:'The Case for AI Co-Pilots in Youth Work', link:'https://nten.org', source:'NTEN', tag:'trending', date:'' },
       ]
     };
-    return fallbacks[lane] || [];
+    return f[lane] || [];
   }
 
   // --- INIT ---
   loadSaved();
-  loadScript();
   loadGabby();
   loadFeedback();
   const savedStep = localStorage.getItem(STEP_KEY);
   if (savedStep !== null) goStep(parseInt(savedStep));
-
-  // Load intel feeds
   ['facilitation','nonprofit','ai'].forEach(lane => loadLane(lane));
+
+  // Restore guide if saved
+  try {
+    const saved = JSON.parse(localStorage.getItem(GUIDE_KEY));
+    if (saved && saved.guide && saved.guide.length) {
+      window._currentGuide = saved.guide;
+      document.getElementById('recordingGuide').innerHTML = `
+        <div style="font-size:11px; color:var(--slate); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Click any card to edit before recording
+        </div>
+      ` + saved.guide.map((g, i) => `
+        <div class="guide-card glass ${g.cardClass}" contenteditable="true" data-idx="${i}" onblur="saveGuideEdits()">
+          <span class="edit-hint">click to edit</span>
+          <div class="guide-type ${g.typeClass}">${g.typeLabel}</div>
+          <div class="guide-topic">${g.topic}</div>
+          <div class="guide-prompt">${g.prompt}</div>
+          ${g.exact ? `<div class="guide-exact">"${esc(g.exact)}"</div>` : ''}
+          <div class="guide-notes">${g.notes}</div>
+        </div>
+      `).join('');
+      document.getElementById('directionPicker').style.display = 'none';
+      document.getElementById('goBtn').style.display = 'inline-flex';
+      document.getElementById('tpBtn').style.display = 'inline-flex';
+    }
+  } catch(e) {}
+
+  // ========================================
+  // VISUAL PRESENTER + CAMERA
+  // ========================================
+  let camStream = null;
+  let presSlides = [];
+  let presIndex = 0;
+
+  function saveGuideEdits() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(GUIDE_KEY));
+      if (saved) localStorage.setItem(GUIDE_KEY, JSON.stringify(saved));
+    } catch(e) {}
+  }
+
+  function openPresenter() {
+    const guide = window._currentGuide;
+    if (!guide || !guide.length) { showToast('Generate your guide first'); return; }
+
+    // Read current edited DOM content for each card
+    const cards = document.querySelectorAll('#recordingGuide .guide-card');
+    presSlides = [];
+    cards.forEach((card, i) => {
+      const g = guide[i] || {};
+      presSlides.push({
+        type: g.type || 'joyi',
+        typeLabel: g.typeLabel || '',
+        topic: card.querySelector('.guide-topic')?.textContent || g.topic || '',
+        prompt: card.querySelector('.guide-prompt')?.textContent || g.prompt || '',
+        exact: card.querySelector('.guide-exact')?.textContent || '',
+        notes: card.querySelector('.guide-notes')?.textContent || g.notes || '',
+      });
+    });
+
+    // Build dots
+    document.getElementById('presDots').innerHTML = presSlides.map((_, i) =>
+      `<div class="pres-dot ${i===0?'active':''}" onclick="presGoTo(${i})"></div>`
+    ).join('');
+
+    presIndex = 0;
+    renderSlide();
+
+    document.getElementById('presenter').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Start camera
+    startPresCamera();
+
+    // Hint
+    showToast('Cmd+Shift+5 to screen record this view');
+  }
+
+  function renderSlide() {
+    const s = presSlides[presIndex];
+    if (!s) return;
+
+    document.getElementById('presSlide').innerHTML = `
+      <div class="ps-label ${s.type}">${esc(s.typeLabel)}</div>
+      <div class="ps-topic">${esc(s.topic)}</div>
+      <div class="ps-prompt">${esc(s.prompt)}</div>
+      ${s.exact ? `<div class="ps-exact">${esc(s.exact)}</div>` : ''}
+      <div class="ps-notes">${esc(s.notes)}</div>
+    `;
+
+    // Re-trigger animation
+    const slide = document.getElementById('presSlide');
+    slide.style.animation = 'none';
+    slide.offsetHeight; // force reflow
+    slide.style.animation = '';
+
+    // Update counter + dots
+    document.getElementById('presCounter').textContent = `${presIndex + 1} / ${presSlides.length}`;
+    document.querySelectorAll('.pres-dot').forEach((d, i) => d.classList.toggle('active', i === presIndex));
+
+    // Arrow states
+    document.getElementById('presPrev').disabled = presIndex === 0;
+    document.getElementById('presNext').disabled = presIndex === presSlides.length - 1;
+  }
+
+  function presGo(dir) {
+    const next = presIndex + dir;
+    if (next < 0 || next >= presSlides.length) return;
+    presIndex = next;
+    renderSlide();
+  }
+  function presGoTo(i) {
+    presIndex = i;
+    renderSlide();
+  }
+
+  function closePresenter() {
+    document.getElementById('presenter').classList.remove('open');
+    document.body.style.overflow = '';
+    if (camStream) {
+      camStream.getTracks().forEach(t => t.stop());
+      camStream = null;
+    }
+    document.getElementById('presCam').style.display = 'none';
+  }
+
+  // Keyboard controls
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('presenter').classList.contains('open')) return;
+    if (e.key === 'Escape') closePresenter();
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); presGo(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); presGo(-1); }
+  });
+
+  // Click on slide area to advance
+  document.getElementById('presStage')?.addEventListener('click', (e) => {
+    // Don't advance if clicking controls, camera, or nav
+    if (e.target.closest('.pres-nav') || e.target.closest('.pres-cam') || e.target.closest('.pres-brand')) return;
+    presGo(1);
+  });
+
+  async function startPresCamera() {
+    try {
+      camStream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+        audio: false
+      });
+      const video = document.getElementById('presCamVideo');
+      video.srcObject = camStream;
+      document.getElementById('presCam').style.display = 'block';
+    } catch(e) {
+      console.warn('Camera access denied:', e);
+      // Still works without camera — just no PIP
+      document.getElementById('presCam').style.display = 'none';
+    }
+  }
 </script>
 </body>
 </html>
