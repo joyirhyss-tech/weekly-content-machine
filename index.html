@@ -1317,14 +1317,16 @@
     document.getElementById('goBtn').style.display = 'inline-flex';
     document.getElementById('tpBtn').style.display = 'inline-flex';
 
-    localStorage.setItem(GUIDE_KEY, JSON.stringify({ guide, hookSentence, tpcTopic: tpcT.topic, aeqTopic: aeqT.topic }));
-    showToast('Guide ready — edit then open teleprompter');
+    localStorage.setItem(GUIDE_KEY, JSON.stringify({ guide, hookSentence, tpcTopic: tpcDir.topic, aeqTopic: aeqDir.topic }));
+
+    // Auto-open the presenter — she's ready to record
+    setTimeout(() => openPresenter(), 300);
   }
 
   // Auto-generate platform captions
   function generateCaptions(hook, tpcT, aeqT) {
     const captions = {
-      linkedin: `${hook}\n\nThis week I'm exploring ${tpcT.topic.toLowerCase()} and ${aeqT.topic.toLowerCase()}.\n\nAs someone who left a director position to build tools for mission-driven organizations, I've learned that the best work happens when you stop optimizing and start being present.\n\nWhat I'm building at AIdedEQ isn't just software — it's a bridge between human wisdom and AI capability.\n\n→ Book a free consultation: aidedeq.org/book\n→ Explore our tools: aidedeq.org/tools\n\n#NonprofitTech #SocialImpact #AIforGood #PracticeCenter #Facilitation`,
+      linkedin: `${hook}\n\nThis week I'm exploring ${tpcT.toLowerCase()} and ${aeqT.toLowerCase()}.\n\nAs someone who left a director position to build tools for mission-driven organizations, I've learned that the best work happens when you stop optimizing and start being present.\n\nWhat I'm building at AIdedEQ isn't just software — it's a bridge between human wisdom and AI capability.\n\n→ Book a free consultation: aidedeq.org/book\n→ Explore our tools: aidedeq.org/tools\n\n#NonprofitTech #SocialImpact #AIforGood #PracticeCenter #Facilitation`,
       instagram: `${hook}\n\nThis is what happens when you follow your curiosity instead of a plan. 🌊\n\nNew video is up — link in bio.\n\n#ThePracticeCenter #AIdedEQ #NonprofitLeadership #Presence #BuildInPublic`,
       tiktok: `${hook} // Full story on my page`,
     };
