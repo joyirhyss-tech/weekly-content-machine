@@ -1246,10 +1246,26 @@
     return f[lane] || [];
   }
 
+  // --- JOYI'S ORIGIN STORY — pre-loaded so she never has to retype it ---
+  const ORIGIN_STORY = `I quit my job a year ago. I left my position as a director in youth work after 30 years. I was scared but I knew I had to go. I traveled with my sons to Japan, the Philippines, and Korea. We climbed Mount Fuji — full moon on top of Mt Fuji in September 2025. Sometimes you need to get out of your comfort zone to really think differently. I like to shock my senses. I had a friend who could guide me and do it with me. Awe changes you.
+
+I prayed at shrines and temples. I collapsed on the side of a mountain and got back up. I meditated on this new phase of my life. I followed my curiosity instead of a plan. I never set out with an outcome in mind. I go to be present. Always.
+
+Then I started building. I learned to vibe code. I became an agentic engineer. I built AIdedEQ — 23 tools for mission-driven organizations that can't afford enterprise software but deserve better than spreadsheets. Tools like anchorED, ROP Tracker, Snapshots. I built The Practice Center as a nonprofit to hold the healing and facilitation work.
+
+The lesson is: go and try stuff. Hard stuff, fun stuff, interesting stuff. Not optimization — presence. Not a plan — curiosity. I'm not interested in people optimizing for optimization's sake. I'm interested in authenticity, connection, peace, joy, being present, authentic responsibility, and life being silly and unpredictable. Follow your curiosity. Life is about this moment.`;
+
   // --- INIT ---
   loadSaved();
   loadGabby();
   loadFeedback();
+
+  // Pre-fill brain dump if empty (first visit or after reset)
+  const bd = document.getElementById('brainDump');
+  if (!bd.value || bd.value.trim().length === 0) {
+    bd.value = ORIGIN_STORY;
+    autoSave();
+  }
   const savedStep = localStorage.getItem(STEP_KEY);
   if (savedStep !== null) goStep(parseInt(savedStep));
   ['facilitation','nonprofit','ai'].forEach(lane => loadLane(lane));
